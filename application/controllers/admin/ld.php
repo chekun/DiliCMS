@@ -1,4 +1,4 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php if ( ! defined('IN_DiliCMS')) exit('No direct script access allowed');
 
 
 class Ld extends CI_Controller {
@@ -6,6 +6,7 @@ class Ld extends CI_Controller {
 	function __construct()
 	{
 		parent::__construct();
+		$this->load->library('dili/platform');
 	}
 	
 	function json($model = '' , $name = '')
@@ -13,7 +14,7 @@ class Ld extends CI_Controller {
 		if(!$model || !$name){return;}
 		$parentid = $this->input->get('parentid');
 		if($parentid == ''){echo  '[]';return;}
-		include_once(FCPATH.'settings/category/data_'.$model.EXT);
+		@eval('?>'.$this->platform->cache_read(FCPATH.'settings/category/data_'.$model.EXT));
 		$json_str = "[";
 		$json = array();
 		foreach($setting['category'][$model] as $v) {

@@ -28,9 +28,6 @@
         </p>
 	</div>
 	<div id="info_bar">
-    <label class="navindex" >
-    	<a href="http://www.dilicms.com/user_guide" target="_blank">使用手册</a>
-    </label>
     <span class="nav_sec">    	
         <?php $this->plugin_manager->trigger_navigation(); ?>
 	</span></div>
@@ -38,10 +35,6 @@
 		<ul class="submenu">
             <?php $this->acl->show_left_menus(); ?>
         </ul>
-		<div id="copyright" style="display:block">
-			<p>版本：DiliCMS <?php echo DiliCMS_VERSION; ?></p>
-			<p><a target="_blank" href="http://www.jooyea.net/" >感谢iWebShop开源提供的UI</a></p>
-		</div>
 	</div>
 	<div id="admin_right">
     	<?php if($this->uri->rsegment(1) != 'module'): ?>

@@ -45,65 +45,7 @@
                 	<td><input type="checkbox" name="classid[]" value="<?php echo $v->classid; ?>" /></td>
                 	<?php foreach($model['listable'] as $vt): ?>
                     <td>
-                    <?php
-                        if($model['fields'][$vt]['type'] == 'radio' || $model['fields'][$vt]['type'] == 'select')
-                        {
-                            echo isset($model['fields'][$vt]['values'][$v->$model['fields'][$vt]['name']]) ?  $model['fields'][$vt]['values'][$v->$model['fields'][$vt]['name']] : 'undefined' ;
-                        }
-                        else if($model['fields'][$vt]['type'] == 'checkbox')
-                        {
-                            foreach(explode(',',$v->$model['fields'][$vt]['name']) as $t)
-                            {
-                                echo isset($model['fields'][$vt]['values'][$t]) ?  $model['fields'][$vt]['values'][$t].'<br />' : 'undefined'.'<br />';
-                            }
-                        }
-						else if($model['fields'][$vt]['type'] == 'radio_from_model')
-						{
-							$options = explode('|',$model['fields'][$vt]['values']);
-                            $this->settings->load('category/data_'.$options[0]);
-                            $setting = &setting('category');
-                            echo isset($setting[$options[0]][$v->$model['fields'][$vt]['name']][$options[1]]) ? $setting[$options[0]][$v->$model['fields'][$vt]['name']][$options[1]] : 'undefined' ;
-						}
-						else if($model['fields'][$vt]['type'] == 'checkbox_from_model')
-						{
-							$options = explode('|',$model['fields'][$vt]['values']);
-                            $this->settings->load('category/data_'.$options[0]);
-                            $setting = &setting('category');
-							$checkbox_values = explode(',',$v->$model['fields'][$vt]['name']);
-							foreach($checkbox_values as $checkbox)
-							{
-                            	echo isset($setting[$options[0]][$checkbox][$options[1]]) ? $setting[$options[0]][$checkbox][$options[1]].'<br />' : 'undefined<br />' ;
-							}
-						}
-						else if($model['fields'][$vt]['type'] == 'select_from_model')
-                        {
-                            $options = explode('|',$model['fields'][$vt]['values']);
-                            $this->settings->load('category/data_'.$options[0]);
-                            $setting = &setting('category');
-                            echo isset($setting[$options[0]][$v->$model['fields'][$vt]['name']][$options[1]]) ? $setting[$options[0]][$v->$model['fields'][$vt]['name']][$options[1]] : 'undefined' ;	
-                        }else if($model['fields'][$vt]['type'] == 'linked_menu')
-                        {
-                            $options = explode('|',$model['fields'][$vt]['values']);
-                            $this->settings->load('category/data_'.$options[0]);
-                            $setting = &setting('category');
-                            $temp_out = explode('|',$v->$model['fields'][$vt]['name']);
-                            foreach($temp_out as &$t)
-                            {
-                                $t = str_replace(',','',$t);
-                                $temp = explode('-',$t);
-                                foreach($temp as &$tt)
-                                {
-                                    $tt = (isset($setting[$options[0]][$tt][$options[1]]) ? $setting[$options[0]][$tt][$options[1]] : 'undefined');
-                                }
-                                $t = implode('-',$temp);
-                            }
-                            echo implode(',',$temp_out);
-                        }
-                        else
-                        {
-                            echo $v->$model['fields'][$vt]['name'];	
-                        }
-                     ?>
+                    <?php $this->field_behavior->on_list($model['fields'][$vt],$v); ?>
                     </td>
                  <?php endforeach; ?>
                     <td>
@@ -113,6 +55,7 @@
                         <?php endif; ?>
                     	<a href="<?php echo backend_url('category_content/form/','model='.$model['name'].'&id='.$v->classid); ?>"><img class="operator" src="images/icon_edit.gif" alt="修改" title="修改"></a>
                         <a class="confirm_delete" href="<?php echo backend_url('category_content/del','model='.$model['name'].'&classid='.$v->classid); ?>"><img class="operator" src="images/icon_del.gif" alt="删除" title="删除"></a>
+                        <?php $this->plugin_manager->trigger_model_action('register_list_view', $v); ?>
                     </td>
                 </tr>
             <?php endforeach; ?>

@@ -52,6 +52,10 @@
                 	<td><input type="checkbox" value="plugin" name="cache[]" /></td>
                     <td>插件缓存</td>
                 </tr>
+                <tr>
+                	<td><input type="checkbox" value="fieldtypes" name="cache[]" /></td>
+                    <td>字段类型缓存</td>
+                </tr>
                 
 			</tbody>
 		</table>

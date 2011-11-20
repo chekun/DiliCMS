@@ -1,13 +1,15 @@
-<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php  if ( ! defined('IN_DiliCMS')) exit('No direct script access allowed');
 
 class Settings {
-
+	
+	var $_ci = NULL;
 	var $setting = array();
 	var $is_loaded = array();
 	var $_setting_paths = array(BASEPATH);
 	
 	function __construct()
 	{
+		$this->_ci = &get_instance();
 		$this->load('site');
 	}
 	
@@ -26,13 +28,11 @@ class Settings {
 				continue;
 			}
 
-			if ( ! file_exists($path.'../settings/'.$file.EXT))
+			if ( ! $this->_ci->platform->cache_exists($path.'../settings/'.$file.EXT))
 			{
 				continue;
 			}
-
-			include($file_path);
-
+			@eval('?>'.$this->_ci->platform->cache_read($file_path));
 			if ( ! isset($setting) OR ! is_array($setting))
 			{
 				if ($fail_gracefully === TRUE)

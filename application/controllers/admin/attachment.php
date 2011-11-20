@@ -1,4 +1,4 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php if ( ! defined('IN_DiliCMS')) exit('No direct script access allowed');
 
 
 class Attachment extends Dili_Controller {
@@ -11,13 +11,14 @@ class Attachment extends Dili_Controller {
 	function _upload_post()
 	{
 		$this->load->database();
+		$this->load->library('dili/plugin_manager');
 		$session_id = $this->input->post('hash');
 		$session = $this->db->where('session_id',$session_id)->get('dili_sessions')->row();
 		$status = "ok";
 		$response = "";
 		if($session)
 		{
-			$userdata = $session->user_data ? unserialize($session->user_data) : array(); 
+			$userdata = $session->user_data ? @unserialize($session->user_data) : array(); 
 			$this->load->helper('date');
 			$now = now();
 			if($session->last_activity + $this->config->item('sess_expiration') < $now || !$userdata || $userdata['uid'] != $this->input->post('uid'))
@@ -30,13 +31,6 @@ class Attachment extends Dili_Controller {
 				{
 					$data['folder'] = date('Y/m',$now);
 					$target_path = FCPATH.setting('attachment_dir').'/'.$data['folder'];
-					if(!is_dir($target_path))
-					{
-						if(!mkdir($target_path, 0755, true))
-						{
-							$status = "fail";
-						}
-					}
 					if($status != 'fail')
 					{
 						$realname = explode(".",$_FILES['Filedata']['name']);
@@ -45,7 +39,8 @@ class Attachment extends Dili_Controller {
 						$data['name'] = now().substr(md5($data['realname'].rand()),0,16); 
 						$data['posttime'] = now();
 						$data['uid'] = $userdata['uid'];
-						if(! move_uploaded_file($_FILES['Filedata']['tmp_name'],$target_path.'/'.$data['name'].'.'.$data['type']))
+						$target_file = $target_path.'/'.$data['name'].'.'.$data['type'];
+						if(! $this->platform->file_upload($_FILES['Filedata']['tmp_name'],$target_file))
 						{
 							$status = "fail";	
 						}
@@ -54,6 +49,7 @@ class Attachment extends Dili_Controller {
 							$data['image'] = (in_array($data['type'],array('jpg','gif','png','jpeg','bmp'))) ? 1 : 0;
 							$this->db->insert('dili_attachments',$data);
 							$response = $this->db->insert_id().'|'.$data['realname'].'|'.$data['name'].'|'.$data['image'].'|'.$data['folder'].'|'.$data['type'];
+							$this->plugin_manager->trigger_attachment($target_file);
 						}
 					}
 				}
@@ -73,6 +69,16 @@ class Attachment extends Dili_Controller {
 	
 	function config()
 	{
+		//设置session参数
+		$this->config->set_item('sess_cookie_name' ,'dili_session');
+		$this->config->set_item('sess_expiration' , 7200);
+		$this->config->set_item('sess_expire_on_close' ,FALSE);
+		$this->config->set_item('sess_encrypt_cookie' ,FALSE);
+		$this->config->set_item('sess_use_database' ,TRUE);
+		$this->config->set_item('sess_table_name' ,'dili_sessions')	;
+		$this->config->set_item('sess_match_ip' ,FALSE)	;
+		$this->config->set_item('sess_match_useragent' ,TRUE)	;
+		$this->config->set_item('sess_time_to_update' ,300)	;
 		$this->load->library('session');
 		echo '<?xml version="1.0" encoding="UTF-8"?>
 				<parameter>

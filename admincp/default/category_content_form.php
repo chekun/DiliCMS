@@ -2,7 +2,7 @@
 <script src="js/DatePicker/WdatePicker.js" type="text/javascript"></script>
 <script src="js/colorPicker/colorpicker.js" type="text/javascript"></script>
 <script src="js/dili_utility/jquery.ld.js" type="text/javascript"></script>
-<link rel="stylesheet" media="screen" type="text/css" href="js/colorpicker/css/colorpicker.css" />
+<link rel="stylesheet" media="screen" type="text/css" href="js/colorPicker/css/colorpicker.css" />
 <script src="js/dili_utility/content_form.js" type="text/javascript"></script>
 <div class="headbar">
 	<div class="position">
@@ -36,7 +36,7 @@
                 <tr>
 					<th> <?php echo $v['description'];?>：</th>
 					<td>
-						<?php $this->form->display($v , isset($content[$v['name']]) ? $content[$v['name']] : ''); ?>
+						<?php $this->field_behavior->on_form($v , isset($content[$v['name']]) ? $content[$v['name']] : ''); ?>
 						<?php echo form_error($v['name']); ?>
                     </td>
 				</tr>

@@ -19,7 +19,7 @@
 				</tr>
                 <tr>
 					<th> 后台入口：</th>
-					<td><input type='text' class='normal' name="backend_access_point" value="<?php echo $backend->backend_access_point; ?>" autocomplete="off" /><label>自定义入口，需要对应改掉文件夹或者对应的路由或重写规则</label></td>
+					<td><input type='text' class='normal' name="backend_access_point" value="<?php echo $backend->backend_access_point; ?>" autocomplete="off" /><label>若改变，请务必相应的地方如文件夹名称等.</label></td>
 				</tr>
                 <tr>
 					<th> 后台网页标题：</th>

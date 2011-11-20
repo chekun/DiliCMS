@@ -21,17 +21,7 @@
                         <tr>
                             <td><?php echo $model['fields'][$v]['description']; ?></td>
                             <td>
-                            	<?php 
-									if(in_array($model['fields'][$v]['type'],array('select','checkbox','radio','select_from_model','radio_from_model','checkbox_from_model','linked_menu','datetime','colorpicker')))  
-									{
-										$this->form->display($model['fields'][$v],(isset($provider['where'][$model['fields'][$v]['name']]) ? $provider['where'][$model['fields'][$v]['name']]  : '') , false);
-				
-									}
-									else
-									{
-										echo $this->form->_input($model['fields'][$v] ,(isset($provider['where'][$model['fields'][$v]['name']]) ? $provider['where'][$model['fields'][$v]['name']] : '' ));
-									}
-								?>
+                                <?php $this->field_behavior->on_search($model['fields'][$v],(isset($provider['where'][$model['fields'][$v]['name']]) ? $provider['where'][$model['fields'][$v]['name']] : '' )); ?>
                             </td>
                         </tr>
                         <?php endforeach; ?>
@@ -73,70 +63,13 @@
                 	<td><input type="checkbox" name="id[]" value="<?php echo $v->id; ?>" /></td>
 					<?php foreach($model['listable'] as $vt): ?>
                     <td>
-                    <?php
-                        if($model['fields'][$vt]['type'] == 'radio' || $model['fields'][$vt]['type'] == 'select')
-                        {
-                            echo isset($model['fields'][$vt]['values'][$v->$model['fields'][$vt]['name']]) ?  $model['fields'][$vt]['values'][$v->$model['fields'][$vt]['name']] : 'undefined' ;
-                        }
-                        else if($model['fields'][$vt]['type'] == 'checkbox')
-                        {
-                            foreach(explode(',',$v->$model['fields'][$vt]['name']) as $t)
-                            {
-                                echo isset($model['fields'][$vt]['values'][$t]) ?  $model['fields'][$vt]['values'][$t].'<br />' : 'undefined'.'<br />';
-                            }
-                        }
-						else if($model['fields'][$vt]['type'] == 'radio_from_model')
-						{
-							$options = explode('|',$model['fields'][$vt]['values']);
-                            $this->settings->load('category/data_'.$options[0]);
-                            $setting = &setting('category');
-                            echo isset($setting[$options[0]][$v->$model['fields'][$vt]['name']][$options[1]]) ? $setting[$options[0]][$v->$model['fields'][$vt]['name']][$options[1]] : 'undefined' ;
-						}
-						else if($model['fields'][$vt]['type'] == 'checkbox_from_model')
-						{
-							$options = explode('|',$model['fields'][$vt]['values']);
-                            $this->settings->load('category/data_'.$options[0]);
-                            $setting = &setting('category');
-							$checkbox_values = explode(',',$v->$model['fields'][$vt]['name']);
-							foreach($checkbox_values as $checkbox)
-							{
-                            	echo isset($setting[$options[0]][$checkbox][$options[1]]) ? $setting[$options[0]][$checkbox][$options[1]].'<br />' : 'undefined<br />' ;
-							}
-						}
-						else if($model['fields'][$vt]['type'] == 'select_from_model')
-                        {
-                            $options = explode('|',$model['fields'][$vt]['values']);
-                            $this->settings->load('category/data_'.$options[0]);
-                            $setting = &setting('category');
-                            echo isset($setting[$options[0]][$v->$model['fields'][$vt]['name']][$options[1]]) ? $setting[$options[0]][$v->$model['fields'][$vt]['name']][$options[1]] : 'undefined' ;	
-                        }else if($model['fields'][$vt]['type'] == 'linked_menu')
-                        {
-                            $options = explode('|',$model['fields'][$vt]['values']);
-                            $this->settings->load('category/data_'.$options[0]);
-                            $setting = &setting('category');
-                            $temp_out = explode('|',$v->$model['fields'][$vt]['name']);
-                            foreach($temp_out as &$t)
-                            {
-                                $t = str_replace(',','',$t);
-                                $temp = explode('-',$t);
-                                foreach($temp as &$tt)
-                                {
-                                    $tt = (isset($setting[$options[0]][$tt][$options[1]]) ? $setting[$options[0]][$tt][$options[1]] : 'undefined');
-                                }
-                                $t = implode('-',$temp);
-                            }
-                            echo implode(',',$temp_out);
-                        }
-                        else
-                        {
-                            echo $v->$model['fields'][$vt]['name'];	
-                        }
-                     ?>
+                    <?php $this->field_behavior->on_list($model['fields'][$vt],$v); ?>
                     </td>
                  <?php endforeach; ?>
                     <td>
                     	<a href="<?php echo backend_url('content/form/','model='.$model['name'].'&id='.$v->id); ?>"><img class="operator" src="images/icon_edit.gif" alt="修改" title="修改"></a>
                         <a class="confirm_delete" href="<?php echo backend_url('content/del','model='.$model['name'].'&id='.$v->id); ?>"><img class="operator" src="images/icon_del.gif" alt="删除" title="删除"></a>
+                        <?php $this->plugin_manager->trigger_model_action('register_list_operation_view', $v); ?>
                     </td>
                 </tr>
             <?php endforeach; ?>

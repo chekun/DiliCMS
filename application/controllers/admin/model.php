@@ -1,4 +1,4 @@
-<?php
+<?php if ( ! defined('IN_DiliCMS')) exit('No direct script access allowed');
 
 	class Model extends Admin_Controller
 	{
@@ -274,7 +274,7 @@
 			$data['order'] = $this->input->post('order');
 			if( $data['rules'] &&  is_array($data['rules']) )
 			{
-				$data['rules'] = implode('|',$data['rules']);	
+				$data['rules'] = implode(',',$data['rules']);	
 			}
 			else
 			{

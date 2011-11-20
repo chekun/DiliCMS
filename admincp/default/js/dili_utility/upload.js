@@ -40,10 +40,11 @@
 					
 					function insert_new_attachment(v)
 					{
-						html = "<li id=\"attachment_" + v[0] + "\"><span class=\"title\"><input type=\"text\" class=\"normal\" value=\""+ attachment_dir + v[4] + '/' + v[2] + '.' + v[5] + "\" />(未保存)</span>";
+						v_url = attachment_dir + v[4] + '/' + v[2] + '.' + v[5];
+						html = "<li id=\"attachment_" + v[0] + "\"><span class=\"title\"><input type=\"text\" class=\"normal\" value=\""+ v_url + "\" />(未保存)</span>";
 						if(v[3] == 1)
 						{
-							html += "<a href=\"javascript:void(0);\" onclick=\"\" target=\"_blank\">预览</a>";	
+							html += "<a href=\"" + v_url + "\" target=\"_blank\">预览</a>";	
 						}
 						html += "<a href=\"javascript:void(0);\" onclick=\"if(confirm('是否要删除该附件?')){delete_attachment('"+v[0]+"');}\">删除</a>";	
 						return html;

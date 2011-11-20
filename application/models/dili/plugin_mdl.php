@@ -1,4 +1,4 @@
-<?php 
+<?php  if ( ! defined('IN_DiliCMS')) exit('No direct script access allowed');
 	class Plugin_mdl extends CI_Model{
 		
 		function __construct()
@@ -49,7 +49,7 @@
 			foreach($plugins as $plugin)
 			{
 				$xml = '<?xml version="1.0" encoding="UTF-8"?><root name="DiliCMS"><plugin><name>'.$plugin->name.'</name><title>'.$plugin->title.'</title><version>'.$plugin->version.'</version><description>'.$plugin->description.'</description><author>'.$plugin->author.'</author><link>'.$plugin->link.'</link><copyrights>'.$plugin->copyrights.'</copyrights><access>'.$plugin->access.'</access></plugin></root>';
-				file_put_contents(FCPATH.'plugins/'.$plugin->name.'/plugin_'.$plugin->name.'_install.xml',$xml);
+				//file_put_contents(FCPATH.'plugins/'.$plugin->name.'/plugin_'.$plugin->name.'_install.xml',$xml);
 			}
 		}	
 		

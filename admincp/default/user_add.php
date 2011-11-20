@@ -23,7 +23,7 @@
 					<th> 用户EMAIL：</th>
 					<td><?php $this->form->show('email','input',''); ?><label>*有效的EMAIL地址.</label><?php echo form_error('email'); ?></td>
 				</tr>
-                <tr>
+            <tr>
 					<th> 用户组：</th>
 					<td><?php $this->form->show('role','select',$roles); ?><label>*设置用户组.</label><?php echo form_error('role'); ?></td>
 				</tr>

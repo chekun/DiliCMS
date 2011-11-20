@@ -1,0 +1,14 @@
+#
+# robots.txt for DiliCMS 2.0
+#
+
+User-agent: *
+Disallow: /admincp/
+Disallow: /application/
+Disallow: /attchments/
+Disallow: /templates/
+Disallow: /plugins/
+Disallow: /system/
+Disallow: /admin/
+Disallow: /settings/
+Disallow: /extra/

@@ -18,9 +18,9 @@
                     <?php if(isset($attachment)): ?>
                         <?php foreach($attachment as $v): ?>
                         <li id="attachment_<?php echo $v['aid']; ?>">
-                            <span class="title"><input type="text" class="normal" value="/<?php echo setting('attachment_dir').'/'.$v['folder'].'/'.$v['name'].'.'.$v['type']; ?>" /></span>
+                            <span class="title"><input type="text" class="normal" value="<?php echo $v_url = $this->platform->file_url($v['folder'].'/'.$v['name'].'.'.$v['type']); ?>" /></span>
                             <?php if($v['image'] == 1): ?>
-                            <a href="javascript:void(0);" onclick="" target="_blank">预览</a>
+                            <a href="<?php echo $v_url; ?>" target="_blank">预览</a>
                             <?php endif;?>
                             <a href="javascript:void(0);" onclick="if(confirm('是否要删除该附件?')){delete_attachment('<?php echo $v['aid']; ?>');}">删除</a>
                         </li>
@@ -29,7 +29,7 @@
                     </ul>
                     
                     <script language="javascript">
-                        var base_url = '<?php echo base_url(); ?>' ,backend_url = '<?php echo backend_url($this->uri->rsegment(1)).'/'; ?>',attach_url = base_url + 'attachments/',attachment_dir = '<?php echo '/'.setting('attachment_dir').'/'; ?>';
+                        var base_url = '<?php echo base_url(); ?>' ,backend_url = '<?php echo backend_url($this->uri->rsegment(1)).'/'; ?>',attach_url = base_url + 'attachments/',attachment_dir = '<?php echo $this->platform->file_url(); ?>';
                     </script>
                     <script src="js/dili_utility/upload.js"></script>
 </div>

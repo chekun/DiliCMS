@@ -1,4 +1,4 @@
-<?php 
+<?php  if ( ! defined('IN_DiliCMS')) exit('No direct script access allowed');
 	class Role_mdl extends CI_Model{
 		
 		function __construct()
@@ -59,6 +59,6 @@
 		function del_role($id)
 		{
 			$this->db->where('id',$id)->delete('dili_roles');	
-			@unlink(FCPATH.'settings/acl/role_'.$id.EXT);	
+			$this->platform->cache_delete(FCPATH.'settings/acl/role_'.$id.EXT);	
 		}
 	}

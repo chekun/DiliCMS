@@ -1,4 +1,4 @@
-<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php  if ( ! defined('IN_DiliCMS')) exit('No direct script access allowed');
 
 class Form {
 	
@@ -20,7 +20,6 @@ class Form {
 		{
 			echo  $this->$type($field,$default);	
 		}
-		
 	}
 	
 	function _find_real_value($name, & $default)
@@ -35,7 +34,7 @@ class Form {
 	{
 		$this->_find_real_value($name,$default);
 		$return = '<select name="'. $name .'" id="'. $name .'">'.
-                  '<option value="">'.lang('dili_global_select').'</option>';
+                  '<option value="">请选择</option>';
 	    foreach($category as $v)
 		{
 			$return .= 	'<option value="'.$v['class_id'].'" '.($default == $v['class_id'] ? 'selected="selected"' : '').'>';
@@ -188,7 +187,8 @@ class Form {
 		$html = '';
 		if(!$field['values']) {return '请设置数据源';}
 		if(count($options = explode('|',$field['values'])) != 4 ) {return '数据源格式不正确';}
-		if(!file_exists(FCPATH.'settings/category/data_'.$options[0].EXT)){return '分类模型数据不存在!';}
+		$ci = &get_instance();
+		if(!$ci->platform->cache_exists(FCPATH.'settings/category/data_'.$options[0].EXT)){return '分类模型数据不存在!';}
 		for($i = 1 ; $i <= $options[2] ; $i++)  
 		{
 			$html .= '<select class="linked_menu_'.$options[0].'"><option value="">请选择</option></select>';
@@ -198,7 +198,6 @@ class Form {
 		$html .= '<div class="linked_menu"><ul id="linked_menu_'.$options[0].'_list">';
 		if($default)
 		{
-			$ci = &get_instance();
 			$ci->settings->load('category/data_'.$options[0]);
 			$model_data =  & setting('category');
 			$default = explode('|',$default);
@@ -250,8 +249,8 @@ class Form {
 	{
 		if(!$field['values']) {return false;}
 		if(count($options = explode('|',$field['values'])) != 2 ) {return false;}
-		if(!file_exists(FCPATH.'settings/category/data_'.$options[0].EXT)){return false;}
 		$ci = &get_instance();
+		if(!$ci->platform->cache_exists(FCPATH.'settings/category/data_'.$options[0].EXT)){return false;}
 		$ci->settings->load('category/data_'.$options[0]);
 		$model_data =  & setting('category');
 		$field['values'] = array();

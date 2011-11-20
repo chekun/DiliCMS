@@ -1,4 +1,4 @@
-<?php 
+<?php  if ( ! defined('IN_DiliCMS')) exit('No direct script access allowed');
 
 	class Cache_mdl extends CI_Model
 	{
@@ -10,7 +10,7 @@
 		
 		function _arrayeval($name, $array)
 		{
-			return '<?php '.PHP_EOL . '$' . $name . '=' . var_export($array,true).';'; 
+			return '<?php if ( ! defined(\'IN_DiliCMS\')) exit(\'No direct script access allowed\');'.PHP_EOL . '$' . $name . '=' . var_export($array,true).';'; 
 		}
 		
 		function update_model_cache($target = NULL) 
@@ -65,7 +65,7 @@
 					$model['fields'][$v['id']] = $v;
 				}
 				unset($model['fields_org']);
-				file_put_contents(FCPATH.'settings/model/'.$model['name'].EXT,$this->_arrayeval("setting['models']['".$model['name']."']",$model));
+				$this->platform->cache_write(FCPATH.'settings/model/'.$model['name'].EXT,$this->_arrayeval("setting['models']['".$model['name']."']",$model));
 			}
 		}
 		
@@ -122,14 +122,14 @@
 					$model['fields'][$v['id']] = $v;
 				}
 				unset($model['fields_org']);
-				file_put_contents(FCPATH.'settings/category/cate_'.$model['name'].EXT,$this->_arrayeval("setting['cate_models']['".$model['name']."']",$model));
+				$this->platform->cache_write(FCPATH.'settings/category/cate_'.$model['name'].EXT,$this->_arrayeval("setting['cate_models']['".$model['name']."']",$model));
 				$category = array();
 				$categories =  $this->category_mdl->get_category($model['name']);
 				foreach($categories as $c)
 				{
 					$category[$c['classid']] = $c;	
 				}
-				file_put_contents(FCPATH.'settings/category/data_'.$model['name'].EXT,$this->_arrayeval("setting['category']['".$model['name']."']",$category));
+				$this->platform->cache_write(FCPATH.'settings/category/data_'.$model['name'].EXT,$this->_arrayeval("setting['category']['".$model['name']."']",$category));
 				unset($categories,$category);
 			}
 		}
@@ -160,7 +160,7 @@
 				}
 				$i['sub_menus'] = $level_2_menus;
 			}
-			file_put_contents(FCPATH.'settings/menus'.EXT,$this->_arrayeval("setting['menus']",$level_1_menus));
+			$this->platform->cache_write(FCPATH.'settings/menus'.EXT,$this->_arrayeval("setting['menus']",$level_1_menus));
 		}
 		
 		function update_role_cache($target = NULL)
@@ -183,20 +183,20 @@
 				$role['models'] = explode(',',$role['models']);
 				$role['category_models'] = explode(',',$role['category_models']);
 				$role['plugins'] = explode(',',$role['plugins']);
-				file_put_contents(FCPATH.'settings/acl/role_'.$role['id'].EXT, $this->_arrayeval("setting['current_role']",$role));
+				$this->platform->cache_write(FCPATH.'settings/acl/role_'.$role['id'].EXT, $this->_arrayeval("setting['current_role']",$role));
 			}
 		}
 		
 		function update_site_cache()
 		{
 			$data = $this->db->get('dili_site_settings')->row_array();
-			file_put_contents(FCPATH.'settings/site'.EXT, $this->_arrayeval("setting",$data));	
+			$this->platform->cache_write(FCPATH.'settings/site'.EXT, $this->_arrayeval("setting",$data));	
 		}
 		
 		function update_backend_cache()
 		{
 			$data = $this->db->get('dili_backend_settings')->row_array();
-			file_put_contents(FCPATH.'settings/backend'.EXT, $this->_arrayeval("setting",$data));	
+			$this->platform->cache_write(FCPATH.'settings/backend'.EXT, $this->_arrayeval("setting",$data));	
 		}
 		
 		
@@ -220,7 +220,41 @@
 			}
 			$cached_plugins['plugins'] = $result_plugins;
 			$cached_plugins['model_plugins'] = $model_plugins;
-			file_put_contents(FCPATH.'settings/plugins'.EXT, $this->_arrayeval("setting['active_plugins']",$cached_plugins));
+			$this->platform->cache_write(FCPATH.'settings/plugins'.EXT, $this->_arrayeval("setting['active_plugins']",$cached_plugins));
+		}
+		
+		function update_fieldtypes_cache()
+		{
+			$cached_fieldtypes = array();
+			$cached_fieldtypes['fieldtypes'] = array();
+			$cached_fieldtypes['extra_fieldtypes'] = array();
+			$cached_fieldtypes['validation'] = array();
+			$results = $this->db->get('dili_fieldtypes')->result_array();
+			foreach($results as $v)
+			{
+				$cached_fieldtypes['fieldtypes'][$v['k']] = $v['v'];
+			}
+			$results = $this->db->get('dili_validations')->result_array();
+			foreach($results as $v)
+			{
+				$cached_fieldtypes['validation'][$v['k']] = $v['v'];
+			}
+			$extra_path = FCPATH.'extra/';
+			$this->load->helper('file');
+			$extra_files = get_filenames($extra_path);
+			foreach($extra_files as $v)
+			{
+				if(preg_match("/^extra_field_(.*?)\.php$/",$v))
+				{
+					@include $extra_path.$v;
+					if(class_exists($extra_class = str_replace('.php','',$v)))
+					{
+						$tmp = new $extra_class();
+						$cached_fieldtypes['extra_fieldtypes'][$tmp->k] = $tmp->v;
+					}
+				}
+			}
+			$this->platform->cache_write(FCPATH.'settings/fieldtypes'.EXT, $this->_arrayeval("setting",$cached_fieldtypes));
 		}
 			
 	}

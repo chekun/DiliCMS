@@ -1,4 +1,4 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php if ( ! defined('IN_DiliCMS')) exit('No direct script access allowed');
 	
 	class Acl 
 	{
@@ -104,10 +104,7 @@
 					{
 						$j['current'] = true;
 					}
-					if(!$this->_default_link)
-					{
-						$this->_default_link = backend_url(($vkey == 0 ? 'content' : 'category_content').'/view','model='.$j['extra']);	
-					}
+					
 					if($this->ci->_admin->role == 1){continue;}
 					$right = $j['class_name'].'@'.$j['method_name'];
 					if(!in_array($right,$this->_rights['rights']) || 
@@ -118,8 +115,17 @@
 						unset($this->left_menus[$vkey]['sub_menus'][$jkey]);
 					}
 				} 
-				if(!$v['sub_menus']){unset($this->left_menus[$vkey]);}  
+				if(!$v['sub_menus']){unset($this->left_menus[$vkey]);}
 			}
+			//设定默认链接 
+			if($_item = @reset($this->left_menus[0]['sub_menus']))
+			{
+			    if(!$this->_default_link)
+				{
+				    $this->_default_link = backend_url($_item['class_name'].'/view','model='.$_item['extra']);	
+				}
+			}
+			
 		}
 		
 		function _filter_module_menus($class_name,$method_name)

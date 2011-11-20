@@ -1,4 +1,4 @@
-<?php  
+<?php  if ( ! defined('IN_DiliCMS')) exit('No direct script access allowed');
 	
 	class Plugin_manager
 	{
@@ -9,10 +9,10 @@
 		function __construct()
 		{
 			$this->ci = &get_instance();
-			$this->init();
+			$this->_init();
 		}
 		
-		function init()
+		private function _init()
 		{
 			if(file_exists(FCPATH.'settings/plugins'.EXT))
 			{
@@ -31,7 +31,7 @@
 			}
 		}
 		
-		function _load_plugins( & $plugins , $name_fix = '')
+		private function _load_plugins( & $plugins , $name_fix = '')
 		{
 			foreach($plugins as $key => &$plugin)
 			{
@@ -100,6 +100,14 @@
 			}	
 		}
 		
+		function trigger_attachment($file)
+		{
+			foreach($this->active_plugins as $plugin)
+			{
+				$plugin['instance']->register_attachment($file);
+			}	
+		}
+		
 		function trigger_model_action($name = '' , & $arg1 = '' , & $arg2 = '')
 		{
 			if(!$name){return;}
@@ -129,6 +137,11 @@
 			return backend_url('module/run','plugin='.$this->_name.'&action='.$action).$qs;	
 		}
 		
+		function _check($type = '' , $model = '')
+        {
+            return $this->_ci->uri->segment(2) == $type && $model == $this->_ci->input->get('model');
+        } 
+		
 		function _template($view , $data = array() , $output = true)
 		{
 			extract($data);
@@ -155,25 +168,29 @@
 		//注册操作栏
 		function register_operation(){}
 		//注册模型信息插入前操作
-		function register_before_insert(){}
+		function register_before_insert(){}//& $data
 		//注册模型信息插入后操作
-		function register_after_insert(){}
+		function register_after_insert(){}//& $data ,$id
 		//注册模型信息修改前操作
-		function register_before_update(){}		
+		function register_before_update(){}//& $data ,$id		
 		//注册模型信息修改后操作
-		function register_after_update(){}
+		function register_after_update(){}//& $data ,$id
 		//注册模型信息删除前操作
-		function register_before_delete(){}
+		function register_before_delete(){}//$ids
 		//注册模型信息删除后操作
-		function register_after_delete(){}
+		function register_after_delete(){}//$ids
 		//注册模型信息添加修改页面视图
-		function register_view(){}
+		function register_view(){}//& $content
 		//注册模型信息列表QUERY之前
-		function register_before_query(){}
+		function register_before_query(){}//&$where
 		//注册模型信息列表数据二次处理
-		function register_before_list(){}
+		function register_before_list(){}//& $list
 		//注册模型信息列表显示页面
-		function register_list_view(){}
+		function register_list_view(){}//& $list
+		//注册模型信息列表操作栏
+		function register_list_operation_view(){}// &$data
+		//注册模型信息进入列表信息动作
+		function register_on_reach_model_list(){}//
 	}
 	
 	//DiliCMS EXTENDED 插件接口
@@ -189,6 +206,8 @@
 												  0=>array('class_name'=>$this->_name,'method_name'=>'welcome','menu_name'=>'测试左菜单')
 												)
 						  );*/
+		//注册快速导航栏按钮
+		function register_attachment(){}//参数为路径
 	}
 	
 	

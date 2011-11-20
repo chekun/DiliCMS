@@ -1,5 +1,5 @@
-<?php
-
+<?php if ( ! defined('IN_DiliCMS')) exit('No direct script access allowed');
+ 
 	class User extends Admin_Controller
 	{
 		function __construct()

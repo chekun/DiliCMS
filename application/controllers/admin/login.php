@@ -1,4 +1,4 @@
-<?php
+<?php if ( ! defined('IN_DiliCMS')) exit('No direct script access allowed');
 
 	class Login extends Dili_Controller
 	{
@@ -6,8 +6,19 @@
 		{
 			parent::__construct();
 			$this->settings->load('backend');
+			//设置session参数
+			$this->config->set_item('sess_cookie_name' ,'dili_session');
+			$this->config->set_item('sess_expiration' , 7200);
+			$this->config->set_item('sess_expire_on_close' ,FALSE);
+			$this->config->set_item('sess_encrypt_cookie' ,FALSE);
+			$this->config->set_item('sess_use_database' ,TRUE);
+			$this->config->set_item('sess_table_name' ,'dili_sessions')	;
+			$this->config->set_item('sess_match_ip' ,FALSE)	;
+			$this->config->set_item('sess_match_useragent' ,TRUE)	;
+			$this->config->set_item('sess_time_to_update' ,300)	;
+			
 			$this->load->library('session');
-			$this->_theme_switcher('on',setting('backend_theme'),'admincp/');
+			$this->load->switch_theme('on',setting('backend_theme'),'admincp/');
 			$this->load->database();
 			$this->load->model('dili/user_mdl');
 		}

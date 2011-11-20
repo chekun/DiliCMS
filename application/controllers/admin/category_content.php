@@ -1,4 +1,4 @@
-<?php
+<?php if ( ! defined('IN_DiliCMS')) exit('No direct script access allowed');
 
 	class Category_content extends Admin_Controller
 	{
@@ -16,15 +16,17 @@
 		{
 			$this->_check_permit();
 			$model = $this->input->get('model');
-			if(!file_exists(FCPATH.'settings/category/cate_'.$model.EXT))
+			if(!$this->platform->cache_exists(FCPATH.'settings/category/cate_'.$model.EXT))
 			{
 				$this->_message('不存在的分类模型！','',false);
 			}
+			$this->plugin_manager->trigger_model_action('register_on_reach_model_list');
 			$this->settings->load('category/cate_'.$model);
 			$data['model'] = $this->settings->item('cate_models');
 			$data['model'] = $data['model'][$model];
-			$data['provider'] = $this->_pagination($data['model']);
 			$this->load->library('dili/form');
+			$this->load->library('dili/field_behavior');
+			$data['provider'] = $this->_pagination($data['model']);
 			$this->_template('category_content_list',$data);	
 		}
 		
@@ -37,45 +39,8 @@
 				
 			$condition = array('classid >' => '0');
 			$data['where'] = array();
-					
-			foreach($model['searchable'] as $v)
-			{
-				if($search = $this->input->get_post($model['fields'][$v]['name']))
-				{
-					if(in_array($model['fields'][$v]['type'],array('input','textarea','wysiwyg','wysiwyg_basic')))
-					{
-						$condition[$model['fields'][$v]['name'].' LIKE'] = '%'.$search.'%';
-						$data['where'][$model['fields'][$v]['name']] = $search;
-						$config['suffix'] .= '&'.$model['fields'][$v]['name'].'='.$search;
-					}
-					else if(in_array($model['fields'][$v]['type'],array('select','radio','datetime','colorpicker','int','float','select_from_model','radio_checkbox')))
-					{
-						$condition[$model['fields'][$v]['name'].' ='] = $search;
-						$data['where'][$model['fields'][$v]['name']] = $search;
-						$config['suffix'] .= '&'.$model['fields'][$v]['name'].'='.$search;
-					}
-					else if($model['fields'][$v]['type'] == 'checkbox' || $model['fields'][$v]['type'] == 'checkbox_from_model')
-					{
-						$data['where'][$model['fields'][$v]['name']] = $search;
-						$config['suffix'] .= '&'.$model['fields'][$v]['name'].'='.$search;
-						$search = is_array($search) ? $search : explode(',',$search);
-						foreach($search as $k)
-						{
-							$condition[$model['fields'][$v]['name'].' LIKE'] = '%'.$k.'%';
-						}
-						
-					}else if($model['fields'][$v]['type'] == 'linked_menu')
-					{
-						$data['where'][$model['fields'][$v]['name']] = $search;
-						$config['suffix'] .= '&'.$model['fields'][$v]['name'].'='.$search;
-						$search = is_array($search) ? $search : explode('|',$search);
-						foreach($search as $k)
-						{
-							$condition[$model['fields'][$v]['name'].' LIKE'] = '%'.$k.'%';
-						}
-					}
-				}
-			}
+			
+			//暂时无搜索
 			
 			$level = $this->input->get('u_c_level') ? $this->input->get('u_c_level') : 0;
 			
@@ -99,7 +64,7 @@
 			$this->db->limit($config['per_page']);
 			
 			$data['list'] = $this->db->get()->result();
-			
+
 			$this->plugin_manager->trigger_model_action('register_before_list', $data['list']);
 			
 			if($level != 0)
@@ -177,13 +142,14 @@
 			{
 				if($v['rules'] != '')
 				{
-					$this->form_validation->set_rules($v['name'], $v['description'], $v['rules']);	
+					$this->form_validation->set_rules($v['name'], $v['description'], str_replace(",","|",$v['rules']));	
 				}
 			}
 			
   			if ($this->form_validation->run() == FALSE)
   			{
 				$this->load->library('dili/form');
+				$this->load->library('dili/field_behavior');
    				$this->_template('category_content_form',$data);
   			}
 			else
@@ -282,13 +248,13 @@
 				$attachments = $this->db->select('name , folder , type')->where('model',$model_id)->where_in('content',$ids)->where('from',1)->get('dili_attachments')->result();
 				foreach($attachments as $attachment)
 				{
-					@unlink(FCPATH.$this->settings->item('attachment_dir').'/'.$attachment->folder.'/'.$attachment->name.'.'.$attachment->type);		
+					$this->platform->file_delete(FCPATH.$this->settings->item('attachment_dir').'/'.$attachment->folder.'/'.$attachment->name.'.'.$attachment->type);		
 				}
 				$this->db->where('model',$model_id)->where_in('content',$ids)->where('from',1)->delete('dili_attachments');
 				$this->db->where_in('classid',$ids)->delete('dili_u_c_'.$model);
 				$this->plugin_manager->trigger_model_action('register_after_delete', $ids);
 			}
-			$this->_message('删除操作成功完成!','',false);
+			$this->_message('删除操作成功完成!','',true);
 		}
 		
 		function attachment($action = 'list')
@@ -314,7 +280,7 @@
 								   ->get('dili_attachments')->row(); 
 				if($attach)
 				{
-					@unlink(FCPATH.$this->settings->item('attachment_dir').'/'.$attach->folder.'/'.$attach->name.'.'.$attach->type);		
+					$this->platform->file_delete(FCPATH.$this->settings->item('attachment_dir').'/'.$attach->folder.'/'.$attach->name.'.'.$attach->type);		
 					$this->db->where('aid',$attach->aid)->delete('dili_attachments');
 					echo 'ok';
 				}

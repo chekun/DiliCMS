@@ -26,13 +26,14 @@
 			<col width="40px" />
 			<col />
 			<tbody>
+            <?php $fieldtypes = array_merge(setting('fieldtypes'),setting('extra_fieldtypes')); ?>
             <?php foreach($list as $v) : ?>
             	<tr>
                 	<td></td>
                 	<td><?php echo $v->order; ?></td>
                     <td><?php echo $v->name; ?></td>
                     <td><?php echo $v->description; ?></td>
-                    <td><?php $fieldtypes = & setting('fieldtypes');echo $fieldtypes[$v->type];?></td>
+                    <td><?php echo isset($fieldtypes[$v->type]) ? $fieldtypes[$v->type] : '未知';?></td>
                     <td>
                     	<a href="<?php echo backend_url($this->uri->rsegment(1).'/edit_field/'.$v->id); ?>"><img class="operator" src="images/icon_edit.gif" alt="修改" title="修改"></a>
                         <a class="confirm_delete" href="<?php echo backend_url($this->uri->rsegment(1).'/del_field/'.$v->id); ?>"><img class="operator" src="images/icon_del.gif" alt="删除" title="删除"></a>

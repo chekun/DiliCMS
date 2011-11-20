@@ -18,7 +18,7 @@
 				</tr>
                 <tr>
 					<th> 字段类型：</th>
-					<td><?php $this->form->show('type','select',setting('fieldtypes')); ?><label>*选择一个适当的字段类型。</label><?php echo form_error('type'); ?></td>
+					<td><?php $this->form->show('type','select',array_merge(setting('fieldtypes'),setting('extra_fieldtypes'))); ?><label>*选择一个适当的字段类型。</label><?php echo form_error('type'); ?></td>
 				</tr>
                 <tr>
 					<th> 字段长度：</th>
@@ -27,13 +27,13 @@
                 
                 <tr>
 					<th> 数据源：</th>
-					<td><?php $this->form->show('values','input',''); ?><label>数据源，使用方式见手册。</label><?php echo form_error('values'); ?></td>
+					<td><?php $this->form->show('values','input',''); ?><label>可以为某些字段类型提供数据源或者默认值，使用方式见手册。</label><?php echo form_error('values'); ?></td>
 				</tr>
                 <tr>
 					<th> 显示尺寸：</th>
 					<td>
-						宽：<?php $this->form->show('width','input',''); ?><label>*显示的宽度,单位为px</label><?php echo form_error('width'); ?><br  />
-                    	高：<?php $this->form->show('height','input',''); ?><label>*显示的高度,单位为px</label><?php echo form_error('height'); ?>
+						宽：<?php $this->form->show('width','input',''); ?><label>*表单控件的显示的宽度,单位为px</label><?php echo form_error('width'); ?><br  />
+                    	高：<?php $this->form->show('height','input',''); ?><label>*表单控件的显示的高度,单位为px</label><?php echo form_error('height'); ?>
                     </td>
 				</tr>
                 <tr>

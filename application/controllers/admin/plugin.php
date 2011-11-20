@@ -1,4 +1,4 @@
-<?php
+<?php if ( ! defined('IN_DiliCMS')) exit('No direct script access allowed');
 	class Plugin extends Admin_Controller
 	{
 		
@@ -120,13 +120,13 @@
 		
 		function _export_post()
 		{
-			$ids = $this->input->get_post('id');
+			/*$ids = $this->input->get_post('id');
 			if(!is_array($ids))
 			{
 				$ids = array($ids);	
 			}
 			$this->plugin_mdl->export_plugin($ids);
-			$this->_message('插件导出成功!','plugin/view/',true);	
+			$this->_message('插件导出成功!','plugin/view/',true);*/	
 		}
 		
 		function _check_plugin_name($name)

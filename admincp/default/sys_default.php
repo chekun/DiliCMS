@@ -7,7 +7,7 @@
         <table width="48%" cellspacing="0" cellpadding="5" class="border_table_org" style="float:left">
 			<thead>
 				<tr>
-			  <th>平台信息</th></tr>
+			  <th>平台信息(<?php echo $this->platform->get_name(); ?>)</th></tr>
 			</thead>
 			<tbody>
 				<tr>
@@ -16,7 +16,7 @@
 							<colgroup>
 								<col width="100px">
 								<col />
-								<col width="80px" />
+								<col width="" />
 							</colgroup>
 							<tr>
 							  <th>网站名称</th>
@@ -29,7 +29,7 @@
 							  <td><?php echo 'PHP'.PHP_VERSION; ?></td></tr>
 							<tr>
 							  <th>数据库</th>
-							  <td><?php echo 'MySQL'.mysql_get_server_info();  ?></td></tr>
+							  <td><?php echo 'MySQL'.$this->db->version();  ?></td></tr>
 						</table>
 					</td>
 				</tr>

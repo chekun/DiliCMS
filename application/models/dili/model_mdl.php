@@ -1,4 +1,4 @@
-<?php
+<?php if ( ! defined('IN_DiliCMS')) exit('No direct script access allowed');
 class Model_mdl extends CI_Model
 {
 	function __construct()
@@ -44,7 +44,7 @@ class Model_mdl extends CI_Model
 		if($old_table_name != $data['name'])
 		{
 			$this->dbforge->rename_table('dili_u_m_'.$old_table_name, 'dili_u_m_'.$data['name']);
-			@unlink(FCPATH.'settings/model/'.$old_table_name.EXT);
+			$this->platform->cache_delete(FCPATH.'settings/model/'.$old_table_name.EXT);
 		}
 	}
 	
@@ -60,13 +60,13 @@ class Model_mdl extends CI_Model
 		$attachments = $this->db->select('name , folder , type')->where('model',$model->id)->where('from',0)->get('dili_attachments')->result();
 		foreach($attachments as $attachment)
 		{
-			@unlink(FCPATH.setting('attachment_dir').'/'.$attachment->folder.'/'.$attachment->name.'.'.$attachment->type);		
+			$this->platform->file_delete(FCPATH.setting('attachment_dir').'/'.$attachment->folder.'/'.$attachment->name.'.'.$attachment->type);		
 		}
 		$this->db->where('model',$model->id)->where('from',0)->delete('dili_attachments');
 		//删除记录
 		$this->db->where('id',$model->id)->delete('dili_models');
 		//清除缓存文件
-		@unlink(FCPATH.'settings/model/'.$model->name.EXT);
+		$this->platform->cache_delete(FCPATH.'settings/model/'.$model->name.EXT);
 	}
 	
 	//获取全部字段
@@ -79,10 +79,10 @@ class Model_mdl extends CI_Model
 	function add_field($model , $data)
 	{
 		$this->load->dbforge();
-		$this->load->model('dili/column_mdl');
+		$this->load->library('dili/field_behavior');
 		$data['model'] = $model->id;
 		$this->db->insert('dili_model_fields',$data);
-		$this->dbforge->add_column('dili_u_m_'.$model->name,$this->column_mdl->info($data));
+		$this->dbforge->add_column('dili_u_m_'.$model->name,$this->field_behavior->on_info($data));
 	}
 	//根据字段id获取字段信息
 	function get_field_by_id($id)
@@ -103,10 +103,10 @@ class Model_mdl extends CI_Model
 	function edit_field($model , $field , $data)
 	{
 		$this->load->dbforge();
-		$this->load->model('dili/column_mdl');
+		$this->load->library('dili/field_behavior');
 		$old_name = $field->name;
 		$this->db->where('id',$field->id)->update('dili_model_fields',$data);
-		$this->dbforge->modify_column('dili_u_m_'.$model->name,$this->column_mdl->info($data,$old_name));
+		$this->dbforge->modify_column('dili_u_m_'.$model->name,$this->field_behavior->on_info($data,$old_name));
 	}
 	//删除内容模型字段
 	function del_field($model , $field)

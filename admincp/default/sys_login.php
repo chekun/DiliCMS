@@ -38,7 +38,6 @@
 			</div>
 		</div>
 		<div id="footer">Power by <a href="http://www.dilicms.com/">DiliCMS</a> <b><?php echo DiliCMS_VERSION; ?></b> Copyright &copy; 2011
-        	&nbsp;&nbsp;UI by <a target="_blank" href="http://www.jooyea.net/">iWebShop</a>
         </div>
 	</div>
 </body>

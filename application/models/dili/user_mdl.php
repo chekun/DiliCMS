@@ -1,4 +1,4 @@
-<?php 
+<?php  if ( ! defined('IN_DiliCMS')) exit('No direct script access allowed');
 	class User_mdl extends CI_Model{
 		
 		function __construct()

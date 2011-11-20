@@ -1,25 +1,25 @@
-<?php
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 	
-	define('DiliCMS_VERSION','V1.0 Beta3');
-	define('DiliCMS_BUILDTIME','2011年8月13日 14:48:58');
-	
+	define('IN_DiliCMS',TRUE);
+	define('DiliCMS_VERSION','V2.0.0');
+	define('DiliCMS_BUILDTIME','2011年11月16日 20:01:37');
+	//CI从2.0.3开始放弃该常量，这里做个兼容
+	if(!defined('EXT'))
+	{
+		define('EXT','.php');	
+	}
+		
 	abstract class Dili_Controller extends CI_Controller
 	{
 		
 		function __construct()
 		{
 			parent::__construct();
+			$this->load->library('dili/platform');
 			$this->load->library('dili/settings');
 			$this->load->helper('url');
 		}
-		
-		function _theme_switcher($button = 'on' , $theme = 'default' ,$path = 'templates/'){
-			if($button == 'on')
-			{
-				$this->load->_ci_view_path = FCPATH.$path.$theme.'/';
-			}
-		}
-			
+					
 	}
 	
 	//前台控制器扩展例子
@@ -28,7 +28,7 @@
 		function __construct()
 		{
 			parent::__construct();
-			$this->_theme_switcher('on',setting('site_theme'));
+			$this->load->switch_theme('on',setting('site_theme'));
 		}
 		
 		function _template($template, $data = array())
@@ -46,8 +46,9 @@
 		function __construct()
 		{
 			parent::__construct();
+			date_default_timezone_set('PRC');//强制时区为PRC,以后可增加配置变量
 			$this->settings->load('backend');
-			$this->_theme_switcher('on',setting('backend_theme'),'admincp/');
+			$this->load->switch_theme('on',setting('backend_theme'),'admincp/');
 			//设置session参数
 			$this->config->set_item('sess_cookie_name' ,'dili_session');
 			$this->config->set_item('sess_expiration' , 7200);
@@ -70,7 +71,7 @@
 		function _check_login()
 		{
 			if(! $this->session->userdata('uid'))
-			{
+			{   
 				redirect(setting('backend_access_point').'/login');
 			}
 			else
