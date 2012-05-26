@@ -11,7 +11,6 @@ class Attachment extends Dili_Controller {
 	function _upload_post()
 	{
 		$this->load->database();
-		$this->load->library('dili/plugin_manager');
 		$session_id = $this->input->post('hash');
 		$session = $this->db->where('session_id',$session_id)->get('dili_sessions')->row();
 		$status = "ok";
@@ -27,6 +26,12 @@ class Attachment extends Dili_Controller {
 			}
 			else
 			{
+				//获取用户信息，让插件管理类正确执行(暂时的解决方案)
+				$this->_admin = $this->user_mdl->get_full_user_by_username($userdata['uid'], 'uid');
+				//加载ACL
+				$this->load->library('acl');
+				//加载插件经理
+				$this->load->library('plugin_manager');
 				if(!$_FILES['Filedata']['error'])
 				{
 					$data['folder'] = date('Y/m',$now);
