@@ -1,0 +1,6 @@
+#
+# robots.txt for DiliCMS 3.0 Admin Part
+#
+
+User-agent: *
+Disallow: /
