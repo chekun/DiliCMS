@@ -4,7 +4,7 @@
 	普通平台
 		1.新建数据库，并导入dilicms2.sql
 		2.配置application/config/database.php
-		3.运行http://your-url/index.php/initialize,初始化系统
+		3.运行http://your-url/admin/index.php/initialize,初始化系统
 		4.欢迎来到DiliCMS的世界
 	SAE平台
 		1.使用SAE平台的phpmyadmin导入dilicms2.sql
@@ -16,7 +16,7 @@
 					'type'		=> 'sae',//修改default为sae.
 					'storage'   => ''//这里填写你在SAE上storage的domain名称.
 					);
-		4.运行http://your-url/index.php/initialize,初始化系统
+		4.运行http://your-url/admin/index.php/initialize,初始化系统
 		5.欢迎来到DiliCMS的世界
 
 	默认帐号为：admin,密码为:dilicms
