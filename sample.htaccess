@@ -1,3 +1,0 @@
-RewriteEngine on
-RewriteCond $1 !^(index\.php|images|robots\.txt|templates|admincp|attachments)
-RewriteRule ^(.*)$ /dilicms2/index.php/$1 [L]
