@@ -2,16 +2,14 @@
 
 安装方法
 	普通平台
-		1.新建数据库，并导入dilicms2.sql
-		2.配置application/config/database.php
+		1.新建数据库，并导入db.sql
+		2.配置application(admin)/config/database.php
 		3.运行http://your-url/admin/index.php/initialize,初始化系统
 		4.欢迎来到DiliCMS的世界
 	SAE平台
-		1.使用SAE平台的phpmyadmin导入dilicms2.sql
-		2.配置application/config/database.php
-			数据库驱动最好设为mysqli,即
-			$db['default']['dbdriver'] = 'mysqli';
-		3.配置application/config/platform.php为
+		1.使用SAE平台的phpmyadmin导入db.sql
+		2.配置application(admin)/config/database.php
+		3.配置application(admin)/config/platform.php为
 			$running_platform = array(
 					'type'		=> 'sae',//修改default为sae.
 					'storage'   => ''//这里填写你在SAE上storage的domain名称.
