@@ -462,14 +462,14 @@ class Category extends Admin_Controller
 		$data['type'] = $this->input->post('type', TRUE);
 		$data['length'] = $this->input->post('length', TRUE);
 		$data['values'] = $this->input->post('values', TRUE);
-		$data['width'] = $this->input->post('width', TRUE);
-		$data['height'] = $this->input->post('height', TRUE);
+		$data['width'] = $this->input->post('width', TRUE) ? $this->input->post('width', TRUE) : 0;
+		$data['height'] = $this->input->post('height', TRUE) ? $this->input->post('height', TRUE) : 0;
 		$data['rules'] = $this->input->post('rules', TRUE);
 		$data['ruledescription'] = $this->input->post('ruledescription', TRUE);
 		$data['searchable'] = $this->input->post('searchable', TRUE);
 		$data['listable'] = $this->input->post('listable', TRUE);
 		$data['editable'] = $this->input->post('editable', TRUE);
-		$data['order'] = $this->input->post('order', TRUE);
+		$data['order'] = $this->input->post('order', TRUE) ? $this->input->post('order', TRUE) : 0;
 		if ($data['rules'] AND is_array($data['rules']))
 		{
 			$data['rules'] = implode(',', $data['rules']);	
