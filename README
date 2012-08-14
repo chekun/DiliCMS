@@ -9,7 +9,7 @@
 	SAE平台
 		1.使用SAE平台的phpmyadmin导入db.sql
 		2.配置application(admin)/config/database.php
-		3.配置application(admin)/config/platform.php为
+		3.配置shared/config/platform.php为
 			$running_platform = array(
 					'type'		=> 'sae',//修改default为sae.
 					'storage'   => ''//这里填写你在SAE上storage的domain名称.
