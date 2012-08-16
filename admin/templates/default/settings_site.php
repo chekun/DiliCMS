@@ -5,10 +5,10 @@
 	<div class="position"><span>系统</span><span>></span><span>系统设置</span><span>></span><span>站点设置</span></div>
     <ul class='tab' name='conf_menu'>
 		<li <?php echo $current_tab == 'site_basic' ? 'class="selected"' : ''; ?>><a href="javascript:void(0);" onclick="select_tab('site_basic',this);">基本设置</a></li>
-		<!--<li <?php echo $current_tab == 'site_status' ? 'class="selected"' : ''; ?>><a href="javascript:void(0);" onclick="select_tab('site_status',this);">站点状态</a></li>
+		<li <?php echo $current_tab == 'site_status' ? 'class="selected"' : ''; ?>><a href="javascript:void(0);" onclick="select_tab('site_status',this);">站点状态</a></li>
         <li <?php echo $current_tab == 'site_attachment' ? 'class="selected"' : ''; ?>><a href="javascript:void(0);" onclick="select_tab('site_attachment',this);">附件设置</a></li>
         <li <?php echo $current_tab == 'site_terms' ? 'class="selected"' : ''; ?>><a href="javascript:void(0);" onclick="select_tab('site_terms',this);">注册协议</a></li>
-        <li <?php echo $current_tab == 'site_theme' ? 'class="selected"' : ''; ?>><a href="javascript:void(0);" onclick="select_tab('site_theme',this);">主题设置</a></li>-->
+        <li <?php echo $current_tab == 'site_theme' ? 'class="selected"' : ''; ?>><a href="javascript:void(0);" onclick="select_tab('site_theme',this);">主题设置</a></li>
 	</ul>
 </div>
 <div class="content_box">
