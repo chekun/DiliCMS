@@ -28,7 +28,7 @@
 </div>
 <div class="content_box">
 	<div class="content form_content">
-		<form action="<?php echo backend_url('content/save','model='.$model['name'].'&id='.(isset($content['id']) ? $content['id'] : '')); ?>"  method="post">
+		<form enctype="multipart/form-data" action="<?php echo backend_url('content/save','model='.$model['name'].'&id='.(isset($content['id']) ? $content['id'] : '')); ?>"  method="post">
 			<table class="form_table" >
 				<col width="150px" />
 				<col />

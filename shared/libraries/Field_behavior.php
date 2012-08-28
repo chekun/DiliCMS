@@ -80,10 +80,10 @@ class Field_behavior
 	{
 		if ( ! in_array($type, array_keys($this->_extra_fields)))
 		{
-			$extra_class = 'extra_field_' . $type;
+			$extra_class = 'field_' . $type;
 			if (file_exists(DILICMS_EXTENSION_PATH . 'fields/' . $extra_class . '.php'))
 			{
-				include DILICMS_EXTENSION_PATH . 'fiedls/' . $extra_class . '.php';
+				include DILICMS_EXTENSION_PATH . 'fields/' . $extra_class . '.php';
 				if (class_exists($extra_class))
 				{
 					$this->_extra_fields[$type] = new $extra_class();
@@ -342,7 +342,6 @@ class Field_behavior
      *
      * @access  public
      * @param   array
-     * @param   string
      * @param   array
      * @param   array
      * @param   string
@@ -425,6 +424,46 @@ class Field_behavior
 	}
 	
 	// ------------------------------------------------------------------------
+	
+	
+	/**
+	 * 执行字段提交的行为
+	 *
+	 * @access  public
+	 * @param   array
+	 * @return  void
+	 */
+	public function on_do_post($field, & $post)
+	{
+		if ($this->_is_extra($field['type']))
+		{
+			$this->_load_extra_field($field['type']);
+			$this->_extra_fields[$field['type']]->on_do_post($field, $post);
+		}
+		else
+		{
+			$return  = $this->_ci->input->post($field['name']);
+			switch($field['type'])
+			{
+				case 'checkbox' :
+				case 'checkbox_from_model' :
+						if (is_array($return) AND $return)
+						{
+							$return = implode(',', $return);
+						}
+						else
+						{
+							$return  = '';
+						}
+				default :
+						break;
+			}
+			$post[$field['name']] = $return;
+		}
+	}
+	
+	// ------------------------------------------------------------------------
+	
 
     /**
      * 设置/清除额外的查询条件

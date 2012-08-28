@@ -239,10 +239,10 @@ class Category_content extends Admin_Controller
 			}
 		}
 		
+		$this->load->library('form');
+		$this->load->library('field_behavior');
 		if ($this->form_validation->run() == FALSE)
 		{
-			$this->load->library('form');
-			$this->load->library('field_behavior');
 			$this->_template('category_content_form', $data);
 		}
 		else
@@ -253,11 +253,7 @@ class Category_content extends Admin_Controller
 			{
 				if ($v['editable'])
 				{
-					$data[$v['name']] = $this->input->post($v['name']);
-					if (($v['type'] == 'checkbox' OR $v['type'] == 'checkbox_from_model') AND is_array($data[$v['name']]))
-					{
-						$data[$v['name']] = $data[$v['name']] ? implode(',', $data[$v['name']]) : '';	           
-					}
+					$this->field_behavior->on_do_post($v, $data);
 				}
 			}
 			$data['parentid'] = $this->input->post('parentid', TRUE);

@@ -397,7 +397,7 @@ class Cache_mdl extends CI_Model
 		$extra_files = get_filenames($extra_path);
 		foreach ($extra_files as $v)
 		{
-			if (preg_match("/^extra_field_(.*?)\.php$/", $v))
+			if (preg_match("/^field_(.*?)\.php$/", $v))
 			{
 				include $extra_path . $v;
 				if (class_exists($extra_class = str_replace('.php', '', $v)))
