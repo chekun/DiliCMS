@@ -23,6 +23,12 @@
 
 版本号 2.0 Final
 
+发布时间: 2012年8月28日
+        更新内容
+		1.修改自定义字段类名的命名规则，去掉extra_的前缀.
+		2.增加自定义字段对表单数据二次处理的程序on_on_post方法.
+		3.新增自定义字段实例,文件上传字段类型field_file.php,地址：https://github.com/DiliCMS/DiliCMS-extensions
+
 发布时间：2012年8月13日
 
 	更新内容
