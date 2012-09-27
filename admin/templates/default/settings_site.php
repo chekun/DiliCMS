@@ -43,14 +43,14 @@
 					<th>平台简介：</th>
 					<td><textarea name='site_footer'  id="site_footer" style="height:300px;width:100%" class="xheditor {skin:'nostyle'}"><?php echo $site->site_footer;?></textarea></td>
 				</tr>
-				<!--<tr>
+				<tr>
 					<th>站点关键字：</th>
 					<td><input type='text' class='normal'  name='site_keyword' id="site_keyword" value="<?php echo $site->site_keyword; ?>"  /></td>
 				</tr>
 				<tr>
 					<th>站点描述：</th>
 					<td><input type='text' class='normal'  name='site_description' id="site_description" value="<?php echo $site->site_description; ?>"  /></td>
-				</tr>-->
+				</tr>
 				<tr>
 					<th></th>
 					<td>
