@@ -49,17 +49,19 @@ class User_mdl extends CI_Model
      */
 	public function get_full_user_by_username($username = '', $type = 'username')
 	{
+		$table_admins = $this->db->dbprefix('admins');
+		$table_roles = $this->db->dbprefix('roles');
 		if ($type == 'uid')
 		{
-			$this->db->where('dili_admins.uid', $username);
+			$this->db->where($table_admins . '.uid', $username);
 		}
 		else
 		{
-			$this->db->where('dili_admins.username', $username);
+			$this->db->where($table_admins . '.username', $username);
 		}
-		return $this->db->select('dili_admins.uid, dili_admins.username, dili_admins.password, dili_admins.role, dili_roles.name, dili_admins.status')
-							  ->from('dili_admins')
-							  ->join('dili_roles', 'dili_roles.id = dili_admins.role')
+		return $this->db->select("$table_admins.uid, $table_admins.username, $table_admins.password, $table_admins.role, $table_roles.name, $table_admins.status")
+							  ->from($table_admins)
+							  ->join($table_roles, "$table_roles.id = $table_admins.role")
 							  ->get()
 							  ->row();
 	}
@@ -75,7 +77,7 @@ class User_mdl extends CI_Model
      */
 	public function get_user_by_uid($uid = 0)
 	{
-		return $this->db->where('uid', $uid)->get('dili_admins')->row();
+		return $this->db->where('uid', $uid)->get($this->db->dbprefix('admins'))->row();
 	}
 
 	// ------------------------------------------------------------------------
@@ -89,7 +91,7 @@ class User_mdl extends CI_Model
      */
 	public function get_user_by_name($name)
 	{
-		return $this->db->where('username', $name)->get('dili_admins')->row();
+		return $this->db->where('username', $name)->get($this->db->dbprefix('admins'))->row();
 	}
 	
 	// ------------------------------------------------------------------------
@@ -103,7 +105,7 @@ class User_mdl extends CI_Model
 	public function update_user_password()
 	{
 		$data['password'] = md5($this->input->post('new_pass'));
-		return $this->db->where('uid', $this->session->userdata('uid'))->update('dili_admins', $data);		
+		return $this->db->where('uid', $this->session->userdata('uid'))->update($this->db->dbprefix('admins'), $data);		
 	}
 
 	// ------------------------------------------------------------------------
@@ -117,7 +119,7 @@ class User_mdl extends CI_Model
 	public function get_roles()
 	{
 		$roles = array();
-		foreach ($this->db->select('id, name')->where('id <>', 1)->get('dili_roles')->result_array() as $v)
+		foreach ($this->db->select('id, name')->where('id <>', 1)->get($this->db->dbprefix('roles'))->result_array() as $v)
 		{
 			$roles[$v['id']] = $v['name'];	
 		}
@@ -140,7 +142,7 @@ class User_mdl extends CI_Model
 		{
 			$this->db->where('role', $role_id);
 		}
-		return $this->db->count_all_results('dili_admins');
+		return $this->db->count_all_results($this->db->dbprefix('admins'));
 	}
 
 	// ------------------------------------------------------------------------
@@ -156,10 +158,12 @@ class User_mdl extends CI_Model
      */
 	public function get_users($role_id = 0, $limit = 0, $offset = 0)
 	{
-		$this->db->where('dili_admins.uid <>', 1);
+		$table_admins = $this->db->dbprefix('admins');
+		$table_roles = $this->db->dbprefix('roles');
+		$this->db->where("$table_admins.uid <>", 1);
 		if ($role_id)
 		{
-			$this->db->where('dili_admins.role', $role_id);
+			$this->db->where("$table_admins.role", $role_id);
 		}
 		if ($limit)
 		{
@@ -169,8 +173,8 @@ class User_mdl extends CI_Model
 		{
 			$this->db->offset($offset);
 		}
-		return $this->db->from('dili_admins')
-						->join('dili_roles', 'dili_roles.id = dili_admins.role')
+		return $this->db->from($table_admins)
+						->join($table_roles, "$table_roles.id = $table_admins.role")
 						->get()
 						->result();
 	}
@@ -186,7 +190,7 @@ class User_mdl extends CI_Model
      */
 	public function add_user($data)
 	{
-		return $this->db->insert('dili_admins', $data);
+		return $this->db->insert($this->db->dbprefix('admins'), $data);
 	}
 	
 	// ------------------------------------------------------------------------
@@ -201,7 +205,7 @@ class User_mdl extends CI_Model
      */
 	public function edit_user($uid, $data)
 	{
-		return $this->db->where('uid', $uid)->update('dili_admins', $data);	
+		return $this->db->where('uid', $uid)->update($this->db->dbprefix('admins'), $data);	
 	}
 	
 	// ------------------------------------------------------------------------
@@ -215,7 +219,7 @@ class User_mdl extends CI_Model
      */
 	public function del_user($uid)
 	{
-		return $this->db->where('uid', $uid)->delete('dili_admins');
+		return $this->db->where('uid', $uid)->delete($this->db->dbprefix('admins'));
 	}
 
 	// ------------------------------------------------------------------------

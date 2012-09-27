@@ -6,12 +6,7 @@
 <link rel="stylesheet" media="screen" type="text/css" href="js/colorPicker/css/colorpicker.css" />
 <script src="js/dili_utility/content_form.js" type="text/javascript"></script>
 <div class="headbar">
-	<div class="position">
-    	<span>内容管理</span><span>></span>
-        <span><?php echo $model['description']; ?></span>
-        <span>></span>
-        <span><?php echo $button_name = (isset($content['id']) ? '修改' : '添加'); ?></span>
-    </div>
+	<div class="position"><?=$bread?></div>
     <div class="operating" style="overflow:visible">
     	<?php if($model['hasattach']): ?>
 		<div class="search f_r" style="position:relative">

@@ -281,10 +281,12 @@ class Form
 	private function _radio($field, $default)
 	{
 		$return = '<ul class="attr_list">';
+		$count = 1;
 	    foreach ($field['values'] as $key=>$v)
 		{
-			$return .= '<li><lable class="attr"><input name="' . $field['name'] . '" type="radio" value="' . 
-			           $key . '" ' . ($default == $key ? 'checked="checked"' : '') . ' />' . $v . '</lable></li>';
+			$return .= '<li><input id="rad_' . $field['name'] . '_' . $count . '" name="' . $field['name'] . '" type="radio" value="' . 
+			           $key . '" ' . ($default == $key ? 'checked="checked"' : '') . ' /><lable class="attr" for="rad_' . $field['name'] . '_' . $count . '">' . $v . '</lable></li>';
+			$count ++;
 		}
 		$return .= '</ul>';
 		return $return;
@@ -309,16 +311,18 @@ class Form
 			{
 				$default = ($default != '' ? explode(',', $default) : array());
 			}
+			$count = 1;
 			foreach ($field['values'] as $key => $v)
 			{
-				$return .= 	'<li><lable class="attr"><input name="' . $field['name'] . '[]" type="checkbox" value="' . 
-				            $key . '" ' . (in_array($key, $default) ? 'checked="checked"' : '') . ' />&nbsp;' . $v . '</lable></li>'; 
+				$return .= 	'<li><input id="chk_' . $field['name'] . '_' . $count . '" name="' . $field['name'] . '[]" type="checkbox" value="' . 
+				            $key . '" ' . (in_array($key, $default) ? 'checked="checked"' : '') . ' /><lable class="attr" for="chk_' . $field['name'] . '_' . $count . '">' . $v . '</lable></li>'; 
+				$count ++;
 			}
 		}
 		else
 		{
-			$return .= 	'<li><lable class="attr"><input name="' . $field['name'] . '" type="checkbox" value="1" ' . 
-			            ($default == 1 ? 'checked="checked"' : '') . ' />' . $field['values'] . '</lable></li>';
+			$return .= 	'<li><input id="chk_' . $field['name'] . '" name="' . $field['name'] . '" type="checkbox" value="1" ' . 
+			            ($default == 1 ? 'checked="checked"' : '') . ' /><lable class="attr" for="chk_' . $field['name'] . '">' . $field['values'] . '</lable></li>';
 		}
 		$return .= '</ul>';
 		return $return;	

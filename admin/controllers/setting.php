@@ -48,7 +48,7 @@ class Setting extends Admin_Controller
      */
 	public function site()
 	{
-		$data['site'] = $this->db->get('dili_site_settings')->row();
+		$data['site'] = $this->db->get($this->db->dbprefix('site_settings'))->row();
 		$this->_template('settings_site', $data);
 	}
 	
@@ -62,7 +62,7 @@ class Setting extends Admin_Controller
      */
 	public function _site_post()
 	{
-		$this->db->update('dili_site_settings', $this->input->post());
+		$this->db->update($this->db->dbprefix('site_settings'), $this->input->post());
 		update_cache('site');
 		$this->_message("更新成功", 'setting/site', TRUE, ($this->input->get('tab') ? '?tab=' . $this->input->get('tab') : '' ));
 	}
@@ -77,7 +77,7 @@ class Setting extends Admin_Controller
      */
 	public function backend()
 	{
-		$data['backend'] = $this->db->get('dili_backend_settings')->row();
+		$data['backend'] = $this->db->get($this->db->dbprefix('backend_settings'))->row();
 		$this->_template('settings_backend', $data);
 	}
 	
@@ -91,7 +91,7 @@ class Setting extends Admin_Controller
      */
 	public function _backend_post()
 	{
-		$this->db->update('dili_backend_settings', $this->input->post());
+		$this->db->update($this->db->dbprefix('backend_settings'), $this->input->post());
 		update_cache('backend');
 		$this->_message("更新成功", 'setting/backend', TRUE, ($this->input->get('tab') ? '?tab=' . $this->input->get('tab') : '' ));
 	}

@@ -47,7 +47,7 @@ class Role_mdl extends CI_Model
      */
 	public function get_roles()
 	{
-		return $this->db->where('id <>', '1')->get('dili_roles')->result();	
+		return $this->db->where('id <>', '1')->get($this->db->dbprefix('roles'))->result();	
 	}
 	
 	// ------------------------------------------------------------------------
@@ -61,7 +61,7 @@ class Role_mdl extends CI_Model
      */
 	public function get_role_by_id($id)
 	{
-		return $this->db->where('id', $id)->get('dili_roles')->row();	
+		return $this->db->where('id', $id)->get($this->db->dbprefix('roles'))->row();	
 	}
 	
 	// ------------------------------------------------------------------------
@@ -75,7 +75,7 @@ class Role_mdl extends CI_Model
      */
 	public function get_role_by_name($name)
 	{
-		return $this->db->where('name', $name)->get('dili_roles')->row();	
+		return $this->db->where('name', $name)->get($this->db->dbprefix('roles'))->row();	
 	}
 	
 	// ------------------------------------------------------------------------
@@ -109,10 +109,10 @@ class Role_mdl extends CI_Model
      */
 	public function get_form_data()
 	{
-		$data['rights'] = $this->_re_parse_array($this->db->select('right_id,right_name')->get('dili_rights')->result(), 'right_id', 'right_name');	
-		$data['models'] = $this->_re_parse_array($this->db->select('name,description')->get('dili_models')->result(), 'name', 'description');
-		$data['category_models'] = $this->_re_parse_array($this->db->select('name,description')->get('dili_cate_models')->result(), 'name', 'description');
-		$data['plugins'] = $this->_re_parse_array($this->db->select('name,title')->where('active',1)->get('dili_plugins')->result(), 'name', 'title');
+		$data['rights'] = $this->_re_parse_array($this->db->select('right_id,right_name')->get($this->db->dbprefix('rights'))->result(), 'right_id', 'right_name');	
+		$data['models'] = $this->_re_parse_array($this->db->select('name,description')->get($this->db->dbprefix('models'))->result(), 'name', 'description');
+		$data['category_models'] = $this->_re_parse_array($this->db->select('name,description')->get($this->db->dbprefix('cate_models'))->result(), 'name', 'description');
+		$data['plugins'] = $this->_re_parse_array($this->db->select('name,title')->where('active',1)->get($this->db->dbprefix('plugins'))->result(), 'name', 'title');
 		return $data;
 	}
 	
@@ -127,7 +127,7 @@ class Role_mdl extends CI_Model
      */
 	public function add_role($data)
 	{
-		$this->db->insert('dili_roles', $data);
+		$this->db->insert($this->db->dbprefix('roles'), $data);
 		return $this->db->insert_id();
 	}
 	
@@ -143,7 +143,7 @@ class Role_mdl extends CI_Model
      */
 	public function edit_role($id, $data)
 	{
-		return $this->db->where('id', $id)->update('dili_roles', $data);
+		return $this->db->where('id', $id)->update($this->db->dbprefix('roles'), $data);
 	}
 	
 	// ------------------------------------------------------------------------
@@ -157,7 +157,7 @@ class Role_mdl extends CI_Model
      */
 	public function get_role_user_num($id)
 	{
-		return $this->db->where('role', $id)->count_all_results('dili_admins');
+		return $this->db->where('role', $id)->count_all_results($this->db->dbprefix('admins'));
 	}
 	
 	// ------------------------------------------------------------------------
@@ -171,7 +171,7 @@ class Role_mdl extends CI_Model
      */
 	public function del_role($id)
 	{
-		$this->db->where('id', $id)->delete('dili_roles');	
+		$this->db->where('id', $id)->delete($this->db->dbprefix('roles'));	
 		$this->platform->cache_delete(DILICMS_SHARE_PATH . 'settings/acl/role_' . $id . '.php');	
 	}
 

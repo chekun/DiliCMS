@@ -77,7 +77,11 @@ class Content extends Admin_Controller
 		$this->load->library('form');
 		$this->load->library('field_behavior');
 		$data['provider'] = $this->_pagination($data['model']);
-		$this->_template('content_list', $data);	
+		$data['bread'] = make_bread(Array(
+			'内容管理' => '',
+			$data['model']['description'] => site_url('content/view?model=' . $data['model']['name']),
+		));
+		$this->_template('content_list', $data);
 	}
 	
 	// ------------------------------------------------------------------------
@@ -107,9 +111,9 @@ class Content extends Admin_Controller
 		
 		$this->plugin_manager->trigger_model_action('register_before_query', $condition);
 		
-		$config['total_rows'] = $this->db->where($condition)->count_all_results('dili_u_m_' . $model['name']);
+		$config['total_rows'] = $this->db->where($condition)->count_all_results($this->db->dbprefix('u_m_') . $model['name']);
 		
-		$this->db->from('dili_u_m_' . $model['name']);
+		$this->db->from($this->db->dbprefix('u_m_') . $model['name']);
 		$this->db->select('id');
 		$this->db->where($condition);
 		$this->field_behavior->set_extra_condition();
@@ -155,20 +159,27 @@ class Content extends Admin_Controller
      */
 	public function _save_post()
 	{
-		
 		$model = $this->input->get('model', TRUE);
 		$this->settings->load('model/' . $model);
 		$data['model'] = $this->settings->item('models');
 		$data['model'] = $data['model'][$model];
 		$id = $this->input->get('id');
+		
+		$data['button_name'] = $id ? '编辑' : '添加';
+		$data['bread'] = make_bread(Array(
+			'内容管理' => '',
+			$data['model']['description'] => site_url('content/view?model=' . $data['model']['name']),
+			$data['button_name'] => '',
+		));
+		
 		if ($id)
 		{
 			$this->_check_permit('edit');
-			$data['content'] = $this->db->where('id',$id)->get('dili_u_m_' . $model)->row_array();
+			$data['content'] = $this->db->where('id',$id)->get($this->db->dbprefix('u_m_') . $model)->row_array();
 			$data['attachment'] = $this->db->where('model', $data['model']['id'])
 										   ->where('content', $id)
 										   ->where('from', 0)
-										   ->get('dili_attachments')
+										   ->get($this->db->dbprefix('attachments'))
 										   ->result_array();
 		}
 		else
@@ -212,7 +223,7 @@ class Content extends Admin_Controller
 				$this->db->where('id', $id);
 				$data['update_time'] = $this->session->_get_time();
 				$this->plugin_manager->trigger_model_action('register_before_update', $data , $id);
-				$this->db->update('dili_u_m_' . $model,$data);
+				$this->db->update($this->db->dbprefix('u_m_') . $model,$data);
 				$this->plugin_manager->trigger_model_action('register_after_update', $data , $id);
 				if ($attachment != '0')
 				{
@@ -220,7 +231,7 @@ class Content extends Admin_Controller
 							 ->set('from', 0)
 							 ->set('content', $id)
 							 ->where('aid in (' . $attachment . ')')
-							 ->update('dili_attachments');	
+							 ->update($this->db->dbprefix('attachments'));	
 				}
 				$this->_message('修改成功！', 'content/form', TRUE, '?model=' . $modeldata['name'] . '&id=' . $id);
 			}
@@ -229,7 +240,7 @@ class Content extends Admin_Controller
 			    
 				$data['create_time'] = $data['update_time'] = $this->session->_get_time();
 				$this->plugin_manager->trigger_model_action('register_before_insert', $data);
-				$this->db->insert('dili_u_m_' . $model,$data);
+				$this->db->insert($this->db->dbprefix('u_m_') . $model,$data);
 				$id = $this->db->insert_id();
 				$this->plugin_manager->trigger_model_action('register_after_insert', $data,$id);
 				if ($attachment != '0')
@@ -238,7 +249,7 @@ class Content extends Admin_Controller
 							 ->set('from', 0)
 							 ->set('content', $id)
 							 ->where('aid in (' . $attachment . ')')
-							 ->update('dili_attachments');	
+							 ->update($this->db->dbprefix('attachments'));	
 				}
 				$this->_message('添加成功！', 'content/view', TRUE, '?model=' . $modeldata['name']);	
 			}
@@ -273,7 +284,7 @@ class Content extends Admin_Controller
 		$this->_check_permit();
 		$ids = $this->input->get_post('id', TRUE);
 		$model = $this->input->get('model', TRUE);
-		$model_id = $this->db->select('id')->where('name', $model)->get('dili_models')->row()->id;
+		$model_id = $this->db->select('id')->where('name', $model)->get($this->db->dbprefix('models'))->row()->id;
 		if ($ids)
 		{
 			
@@ -286,7 +297,7 @@ class Content extends Admin_Controller
 									->where('model', $model_id)
 									->where('from', 0)
 									->where_in('content', $ids)
-									->get('dili_attachments')
+									->get($this->db->dbprefix('attachments'))
 									->result();
 			foreach ($attachments as $attachment)
 			{
@@ -296,8 +307,8 @@ class Content extends Admin_Controller
 											 $attachment->name . '.' . 
 											 $attachment->type);		
 			}
-			$this->db->where('model', $model_id)->where_in('content', $ids)->where('from', 0)->delete('dili_attachments');
-			$this->db->where_in('id', $ids)->delete('dili_u_m_' . $model);
+			$this->db->where('model', $model_id)->where_in('content', $ids)->where('from', 0)->delete($this->db->dbprefix('attachments'));
+			$this->db->where_in('id', $ids)->delete($this->db->dbprefix('u_m_') . $model);
 			$this->plugin_manager->trigger_model_action('register_after_delete', $ids);
 		}
 		$this->_message('删除成功！', '', TRUE);	
@@ -320,7 +331,7 @@ class Content extends Admin_Controller
 			$ids = $this->input->get('ids', TRUE);
 			$attachments = 	$this->db->select('aid, realname, name, image, folder, type')
 									 ->where("aid in ($ids)")
-									 ->get('dili_attachments')
+									 ->get($this->db->dbprefix('attachments'))
 									 ->result_array();
 			foreach ($attachments as $v)
 			{
@@ -332,7 +343,7 @@ class Content extends Admin_Controller
 		{
 			$attach = $this->db->select('aid, name, folder, type')
 							   ->where('aid', $this->input->get('id', TRUE))
-							   ->get('dili_attachments')
+							   ->get($this->db->dbprefix('attachments'))
 							   ->row(); 
 			if ($attach)
 			{
@@ -341,7 +352,7 @@ class Content extends Admin_Controller
 											 $attach->folder . '/' . 
 											 $attach->name . '.' . 
 											 $attach->type);		
-				$this->db->where('aid', $attach->aid)->delete('dili_attachments');
+				$this->db->where('aid', $attach->aid)->delete($this->db->dbprefix('attachments'));
 				echo 'ok';
 			}
 		}

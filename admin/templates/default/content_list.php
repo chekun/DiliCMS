@@ -4,10 +4,7 @@
 <script src="js/dili_utility/jquery.ld.js" type="text/javascript"></script>
 <link rel="stylesheet" media="screen" type="text/css" href="js/colorpicker/css/colorpicker.css" />
 <div class="headbar">
-	<div class="position">
-    	<span>内容管理</span><span>></span>
-        <span><?php echo $model['description']; ?></span>
-    </div>
+	<div class="position"><?=$bread?></div>
 	<div class="operating" style="position:relative; overflow:visible ">
     	<a href="javascript:void(0)" onclick="selectAll('id[]');"><button class="operating_btn" type="button"><span class="sel_all">全选</span></button></a>
 		<a class="hack_ie" href="<?php echo backend_url('content/form','model='.$model['name']); ?>"><button class="operating_btn" type="button"><span class="addition">添加</span></button></a>
