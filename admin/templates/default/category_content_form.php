@@ -6,17 +6,7 @@
 <link rel="stylesheet" media="screen" type="text/css" href="js/colorPicker/css/colorpicker.css" />
 <script src="js/dili_utility/content_form.js" type="text/javascript"></script>
 <div class="headbar">
-	<div class="position">
-    	<span>分类管理</span><span>></span>
-        <span><?php echo $model['description']; ?></span>
-        <?php if($path): ?>
-		<?php foreach($path as $v): ?>
-        <span>></span><span><?php echo $v; ?></span>
-        <?php endforeach; ?>
-        <?php endif; ?>
-        <span>></span>
-        <span><?php echo $button_name = (isset($content['classid']) ? '修改' : '添加'); ?></span>
-    </div>
+	<div class="position"><?=$bread?></div>
 	<?php if($model['hasattach']): ?>
         <div class="operating" style="overflow:visible">
             <div class="search f_r" style="position:relative">

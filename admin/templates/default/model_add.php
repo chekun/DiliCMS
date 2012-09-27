@@ -1,6 +1,6 @@
 <?php if ( ! defined('IN_DILICMS')) exit('No direct script access allowed');?>
 <div class="headbar">
-	<div class="position"><span>模型</span><span>></span><span>模型管理</span><span>></span><span>添加新内容模型</span></div>
+	<div class="position"><?=$bread?></div>
 </div>
 <div class="content_box">
 	<div class="content form_content">
@@ -18,7 +18,7 @@
 				</tr>
                 <tr>
 					<th> 每页显示条数：</th>
-					<td><?php $this->form->show('perpage','input',''); ?><label>*每页列表的的显示数目。</label><?php echo form_error('perpage'); ?></td>
+					<td><?php $this->form->show('perpage','input','20'); ?><label>*每页列表的的显示数目。</label><?php echo form_error('perpage'); ?></td>
 				</tr>
                 <tr>
 					<th> 是否使用上传控件：</th>

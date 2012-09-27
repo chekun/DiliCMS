@@ -48,7 +48,7 @@ class Category_mdl extends CI_Model
      */
 	public function get_cate_by_id($id)
 	{
-		return $this->db->where('id',$id)->get('dili_cate_models')->row()->name;
+		return $this->db->where('id',$id)->get($this->db->dbprefix('cate_models'))->row()->name;
 	}
 
 	// ------------------------------------------------------------------------
@@ -68,7 +68,7 @@ class Category_mdl extends CI_Model
 		{
 			$this->db->where('parentid', $level);	
 		}
-		$query = $this->db->get('dili_u_c_' . $model);
+		$query = $this->db->get($this->db->dbprefix('u_c_') . $model);
 		foreach ($query->result_array() as $row)
 		{
 			$row['children'] = $this->get_child_num($row['classid'], $model);
@@ -91,7 +91,7 @@ class Category_mdl extends CI_Model
 	{
 		$data = $this->db->select("COUNT(*) as children")
 						 ->where("parentid", $classid)
-						 ->get('dili_u_c_' . $model)
+						 ->get($this->db->dbprefix('u_c_') . $model)
 						 ->row_array();
 		return $data['children'];
 	}
@@ -153,7 +153,7 @@ class Category_mdl extends CI_Model
                'parent_id' => $to
         );
 		$this->db->where('class_id', $from);
-		$this->db->update('dili_categories', $data);
+		$this->db->update($this->db->dbprefix('categories'), $data);
 		return TRUE;
 	}
 	
@@ -167,7 +167,7 @@ class Category_mdl extends CI_Model
      */
 	public function get_category_models()
 	{
-		return $this->db->get('dili_cate_models')->result();	
+		return $this->db->get($this->db->dbprefix('cate_models'))->result();	
 	}
 
 	// ------------------------------------------------------------------------
@@ -181,7 +181,7 @@ class Category_mdl extends CI_Model
      */
 	public function get_category_model_by_id($id)
 	{
-		return $this->db->where('id', $id)->get('dili_cate_models')->row();	
+		return $this->db->where('id', $id)->get($this->db->dbprefix('cate_models'))->row();	
 	}
 
 	// ------------------------------------------------------------------------
@@ -195,7 +195,7 @@ class Category_mdl extends CI_Model
      */
 	public function get_category_model_by_name($name)
 	{
-		return $this->db->where('name', $name)->get('dili_cate_models')->row();	
+		return $this->db->where('name', $name)->get($this->db->dbprefix('cate_models'))->row();	
 	}
 	
 	// ------------------------------------------------------------------------
@@ -209,16 +209,17 @@ class Category_mdl extends CI_Model
      */
 	public function add_new_category($data)
 	{
-		if ($this->db->insert('dili_cate_models', $data))
+		if ($this->db->insert($this->db->dbprefix('cate_models'), $data))
 		{
 			$this->load->dbforge();
-			$this->dbforge->drop_table('dili_u_c_' . $data['name']);
+			$table = 'u_c_' . $data['name'];
+			$this->dbforge->drop_table($table);
 			$this->dbforge->add_field(array('classid' => array('type' => 'INT', 'constraint' => 5, 'unsigned' => TRUE, 'auto_increment' => TRUE)));
 			$this->dbforge->add_key('classid',TRUE);
 			$this->dbforge->add_field(array('parentid' => array('type' => 'INT', 'constraint' => 5, 'unsigned' => TRUE, 'default'=>0)));
 			$this->dbforge->add_field(array('level' => array('type' => 'INT', 'constraint' => 2, 'unsigned' => TRUE, 'default'=>1)));
 			$this->dbforge->add_field(array('path' => array('type' => 'VARCHAR', 'constraint' => 50)));
-			$this->dbforge->create_table('dili_u_c_' . $data['name']);
+			$this->dbforge->create_table($table);
 			return TRUE;
 		}
 		return FALSE;	
@@ -236,13 +237,13 @@ class Category_mdl extends CI_Model
      */
 	public function edit_category_model($target_model, $data)
 	{
-		if ($this->db->where('id', $target_model->id)->update('dili_cate_models', $data))
+		if ($this->db->where('id', $target_model->id)->update($this->db->dbprefix('cate_models'), $data))
 		{
 			$this->load->dbforge();
 			$old_table_name = $target_model->name;
 			if ($old_table_name != $data['name'])
 			{
-				$this->dbforge->rename_table('dili_u_c_' . $old_table_name, 'dili_u_c_' . $data['name']);
+				$this->dbforge->rename_table('u_c_' . $old_table_name, 'u_c_' . $data['name']);
 				$this->platform->cache_delete(DILICMS_SHARE_PATH . 'settings/category/cate_' . $old_table_name . '.php');
 				$this->platform->cache_delete(DILICMS_SHARE_PATH . 'settings/category/data_' . $old_table_name . '.php');
 			}
@@ -264,22 +265,22 @@ class Category_mdl extends CI_Model
 	{
 		$this->load->dbforge();
 		//删除表
-		$this->dbforge->drop_table('dili_u_c_'.$model->name);
+		$this->dbforge->drop_table('u_c_' . $model->name);
 		//删除字段
-		$this->db->where('model',$model->id)->delete('dili_cate_fields');
+		$this->db->where('model',$model->id)->delete($this->db->dbprefix('cate_fields'));
 		//删除附件
 		$attachments = $this->db->select('name, folder, type')
 								->where('model', $model->id)
 								->where('from', 1)
-								->get('dili_attachments')
+								->get($this->db->dbprefix('attachments'))
 								->result();
 		foreach($attachments as $attachment)
 		{
 			$this->platform->file_delete(DILICMS_SHARE_PATH . '../' . setting('attachment_dir') . '/' . $attachment->folder . '/' . $attachment->name . '.' . $attachment->type);		
 		}
-		$this->db->where('model', $model->id)->where('from', 1)->delete('dili_attachments');
+		$this->db->where('model', $model->id)->where('from', 1)->delete($this->db->dbprefix('attachments'));
 		//删除记录
-		$this->db->where('id', $model->id)->delete('dili_cate_models');
+		$this->db->where('id', $model->id)->delete($this->db->dbprefix('cate_models'));
 		//清除缓存文件
 		$this->platform->cache_delete(DILICMS_SHARE_PATH.'settings/category/cate_' . $model->name . '.php');
 		$this->platform->cache_delete(DILICMS_SHARE_PATH.'settings/category/data_' . $model->name . '.php');
@@ -296,7 +297,7 @@ class Category_mdl extends CI_Model
      */
 	public function get_model_fields($id)
 	{
-		return $this->db->where('model', $id)->order_by('order', 'ASC')->get('dili_cate_fields')->result();
+		return $this->db->where('model', $id)->order_by('order', 'ASC')->get($this->db->dbprefix('cate_fields'))->result();
 	}
 
 	// ------------------------------------------------------------------------
@@ -314,9 +315,9 @@ class Category_mdl extends CI_Model
 		$this->load->dbforge();
 		$this->load->library('field_behavior');
 		$data['model'] = $model->id;
-		if ($this->db->insert('dili_cate_fields', $data))
+		if ($this->db->insert($this->db->dbprefix('cate_fields'), $data))
 		{
-			$this->dbforge->add_column('dili_u_c_'.$model->name,$this->field_behavior->on_info($data));
+			$this->dbforge->add_column('u_c_'.$model->name,$this->field_behavior->on_info($data));
 			return TRUE;
 		}
 		return FALSE;
@@ -333,7 +334,7 @@ class Category_mdl extends CI_Model
      */
 	public function get_field_by_id($id)
 	{
-		return $this->db->where('id', $id)->get('dili_cate_fields')->row();	
+		return $this->db->where('id', $id)->get($this->db->dbprefix('cate_fields'))->row();	
 	}
 
 	// ------------------------------------------------------------------------
@@ -347,7 +348,7 @@ class Category_mdl extends CI_Model
      */
 	public function get_field_by_name($name)
 	{
-		return $this->db->where('name', $name)->get('dili_cate_fields')->row();	
+		return $this->db->where('name', $name)->get($this->db->dbprefix('cate_fields'))->row();	
 	}
 
 	// ------------------------------------------------------------------------
@@ -362,7 +363,7 @@ class Category_mdl extends CI_Model
      */
 	public function check_field_unique($model, $name)
 	{
-		return $this->db->where('model', $model)->where('name', $name)->get('dili_cate_fields')->row();
+		return $this->db->where('model', $model)->where('name', $name)->get($this->db->dbprefix('cate_fields'))->row();
 	}
 
 	// ------------------------------------------------------------------------
@@ -381,9 +382,9 @@ class Category_mdl extends CI_Model
 		$this->load->dbforge();
 		$this->load->library('field_behavior');
 		$old_name = $field->name;
-		if ($this->db->where('id', $field->id)->update('dili_cate_fields', $data))
+		if ($this->db->where('id', $field->id)->update($this->db->dbprefix('cate_fields'), $data))
 		{
-			$this->dbforge->modify_column('dili_u_c_' . $model->name, $this->field_behavior->on_info($data, $old_name));
+			$this->dbforge->modify_column('u_c_' . $model->name, $this->field_behavior->on_info($data, $old_name));
 			return TRUE;
 		}
 		return FALSE;
@@ -402,8 +403,8 @@ class Category_mdl extends CI_Model
 	public function del_category_field($model, $field)
 	{
 		$this->load->dbforge();
-		$this->dbforge->drop_column('dili_u_c_' . $model->name, $field->name);
-		$this->db->where('id', $field->id)->delete('dili_cate_fields');	
+		$this->dbforge->drop_column('u_c_' . $model->name, $field->name);
+		$this->db->where('id', $field->id)->delete($this->db->dbprefix('cate_fields'));	
 	}
 
 	// ------------------------------------------------------------------------

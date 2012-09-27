@@ -59,6 +59,10 @@ class Category extends Admin_Controller
 	public function view()
 	{
 		$data['list'] = $this->category_mdl->get_category_models();
+		$data['bread'] = make_bread(Array(
+			'模型管理' => '',
+			'分类模型管理' => site_url('category/view'),
+		));
 		$this->_template('category_list', $data);
 	}
 	
@@ -104,7 +108,12 @@ class Category extends Admin_Controller
 		}
 		else
 		{
-			$this->_template('category_add');
+			$data['bread'] = make_bread(Array(
+				'模型管理' => '',
+				'分类模型管理' => site_url('category/view'),
+				'添加分类模型' => '',
+			));
+			$this->_template('category_add', $data);
 		}
 	}
 	
@@ -177,7 +186,13 @@ class Category extends Admin_Controller
 		}
 		else
 		{
-			$this->_template('category_edit', array('model' => $target_model));
+			$data['model'] = $target_model;
+			$data['bread'] = make_bread(Array(
+				'模型管理' => '',
+				'分类模型管理' => site_url('category/view'),
+				'编辑 :: ' . $target_model->description => '',
+			));
+			$this->_template('category_edit', $data);
 		}
 	}
 	
@@ -249,6 +264,11 @@ class Category extends Admin_Controller
 		$data['model'] = $this->category_mdl->get_category_model_by_id($id);
 		! $data['model'] AND $this->_message('不存在的分类模型!', '', FALSE);
 		$data['list']  = $this->category_mdl->get_model_fields($id);
+		$data['bread'] = make_bread(Array(
+			'模型管理' => '',
+			'分类模型管理' => site_url('category/view'),
+			$data['model']->description => site_url('category/fields/' . $data['model']->id),
+		));
 		$this->settings->load('fieldtypes');
 		$this->load->library('form');
 		$this->_template('fields_list', $data);
@@ -284,6 +304,12 @@ class Category extends Admin_Controller
 		$this->settings->load('fieldtypes');
 		if ( ! $this->_validate_field_form($id))
 		{
+			$data['bread'] = make_bread(Array(
+				'模型管理' => '',
+				'分类模型管理' => site_url('category/view'),
+				$data['model']->description => site_url('category/fields/' . $data['model']->id),
+				'添加字段' => '',
+			));
 			$this->_template('fields_add', $data);
 		}
 		else
@@ -336,7 +362,13 @@ class Category extends Admin_Controller
 			$this->_message('分类模型字段修改成功!', 'category/edit_field/' . $id, TRUE);		
 		}
 		else
-		{	
+		{
+			$data['bread'] = make_bread(Array(
+				'模型管理' => '',
+				'分类模型管理' => site_url('category/view'),
+				$data['model']->description => site_url('category/fields/' . $data['model']->id),
+				'编辑字段' => '',
+			));
 			$this->_template('fields_edit', $data);	
 		}
 	}

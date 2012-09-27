@@ -51,7 +51,7 @@ class Attachment extends CI_Controller
 	{
 		//不能加载SESSION类库
 		$session_id = $this->input->post('hash', TRUE);
-		$session = $this->db->where('session_id', $session_id)->get('dili_sessions')->row();
+		$session = $this->db->where('session_id', $session_id)->get($this->db->dbprefix('sessions'))->row();
 		$status = "ok";
 		$response = "";
 		if ($session)
@@ -97,7 +97,7 @@ class Attachment extends CI_Controller
 						else
 						{
 							$data['image'] = (in_array($data['type'], array('jpg', 'gif', 'png', 'jpeg', 'bmp'))) ? 1 : 0;
-							$this->db->insert('dili_attachments', $data);
+							$this->db->insert($this->db->dbprefix('attachments'), $data);
 							$response = $this->db->insert_id() . '|' . $data['realname'] . '|' . $data['name'] . '|' . $data['image'].'|'.$data['folder'].'|'.$data['type'];
 							$this->plugin_manager->trigger_attachment($target_file);
 						}
