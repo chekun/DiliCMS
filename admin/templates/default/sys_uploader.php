@@ -23,14 +23,18 @@
                             <?php if($v['image'] == 1): ?>
                             <a href="<?php echo $v_url; ?>" target="_blank">预览</a>
                             <?php endif;?>
+                            <a href="javascript:void(0);" data-url="<?php echo $v_url; ?>" data-image="<?php echo $v['image']; ?>" data-type="<?php echo $v['type']; ?>" data-name="<?php echo $v['realname']; ?>" class="contextMenu" target="_blank">插入</a>
                             <a href="javascript:void(0);" onclick="if(confirm('是否要删除该附件?')){delete_attachment('<?php echo $v['aid']; ?>');}">删除</a>
                         </li>
-                        <?php endforeach; ?>
+                        <?php endforeach; ?> 
                     <?php endif; ?>
                     </ul>
                     
                     <script language="javascript">
                         var base_url = '<?php echo base_url(); ?>' ,backend_url = '<?php echo backend_url($this->uri->rsegment(1)).'/'; ?>',attach_url = base_url + 'attachments/',attachment_dir = '<?php echo $this->platform->file_url(); ?>';
                     </script>
+                    <link rel="stylesheet" href="js/contextMenu/jquery.contextMenu.css" />
+                    <script src="js/contextMenu/jquery.contextMenu.js"></script>
+                    <script src="js/contextMenu/jquery.ui.position.js"></script>
                     <script src="js/dili_utility/upload.js"></script>
 </div>
