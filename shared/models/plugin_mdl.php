@@ -49,7 +49,7 @@ class Plugin_mdl extends CI_Model
 	public function get_plugins()
 	{
 		return $this->db->select('id, name, title, author, link, active')
-						->get('dili_plugins')
+						->get($this->db->dbprefix('plugins'))
 						->result();
 	}
 	
@@ -64,7 +64,7 @@ class Plugin_mdl extends CI_Model
      */
 	public function check_plugin_name($name)
 	{
-		return $this->db->select('id')->where('name', $name)->get('dili_plugins')->row();
+		return $this->db->select('id')->where('name', $name)->get($this->db->dbprefix('plugins'))->row();
 	}
 	
 	// ------------------------------------------------------------------------
@@ -78,7 +78,7 @@ class Plugin_mdl extends CI_Model
      */
 	public function get_plugin_by_id($id)
 	{
-		return $this->db->where('id', $id)->get('dili_plugins')->row();	
+		return $this->db->where('id', $id)->get($this->db->dbprefix('plugins'))->row();	
 	}
 	
 	// ------------------------------------------------------------------------
@@ -92,7 +92,7 @@ class Plugin_mdl extends CI_Model
      */
 	public function add_plugin($data)
 	{
-		return $this->db->insert('dili_plugins', $data);
+		return $this->db->insert($this->db->dbprefix('plugins'), $data);
 	}
 	
 	// ------------------------------------------------------------------------
@@ -107,7 +107,7 @@ class Plugin_mdl extends CI_Model
      */
 	public function edit_plugin($plugin_id, $data)
 	{
-		return $this->db->where('id', $plugin_id)->update('dili_plugins', $data);	
+		return $this->db->where('id', $plugin_id)->update($this->db->dbprefix('plugins'), $data);	
 	}
 	
 	// ------------------------------------------------------------------------
@@ -122,7 +122,7 @@ class Plugin_mdl extends CI_Model
      */
 	public function active_plugins($id, $status = 1)
 	{
-		return $this->db->where_in('id', $id)->set('active', $status)->update('dili_plugins');
+		return $this->db->where_in('id', $id)->set('active', $status)->update($this->db->dbprefix('plugins'));
 	}
 	
 	// ------------------------------------------------------------------------
@@ -136,7 +136,7 @@ class Plugin_mdl extends CI_Model
      */
 	public function del_plugin($ids)
 	{
-		return $this->db->where_in('id', $ids)->delete('dili_plugins');
+		return $this->db->where_in('id', $ids)->delete($this->db->dbprefix('plugins'));
 	}	
 	
 	// ------------------------------------------------------------------------
@@ -150,7 +150,7 @@ class Plugin_mdl extends CI_Model
      */
 	public function export_plugin($ids)
 	{
-		$plugins = $this->db->where_in('id', $ids)->get('dili_plugins')->result();
+		$plugins = $this->db->where_in('id', $ids)->get($this->db->dbprefix('plugins'))->result();
 		foreach ($plugins as $plugin)
 		{
 			$xml = '<?xml version="1.0" encoding="UTF-8"?>

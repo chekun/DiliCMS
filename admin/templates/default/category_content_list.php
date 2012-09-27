@@ -1,14 +1,6 @@
 <?php if ( ! defined('IN_DILICMS')) exit('No direct script access allowed');?>
 <div class="headbar">
-	<div class="position">
-    	<span>分类管理</span><span>></span>
-        <span><?php echo $model['description']; ?></span>
-        <?php if($provider['path']): ?>
-		<?php foreach($provider['path'] as $v): ?>
-        <span>></span><span><?php echo $v; ?></span>
-        <?php endforeach; ?>
-        <?php endif; ?>
-    </div>
+	<div class="position"><?=$bread?></div>
 	<div class="operating">
     	<a href="javascript:void(0)" onclick="selectAll('classid[]');"><button class="operating_btn" type="button"><span class="sel_all">全选</span></button></a>
 		<a class="hack_ie" href="<?php echo backend_url('category_content/form','model='.$model['name'].'&u_c_level='.$provider['where']['u_c_level']); ?>"><button class="operating_btn" type="button"><span class="addition">添加</span></button></a>

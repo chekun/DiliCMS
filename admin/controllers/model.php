@@ -57,6 +57,10 @@ class Model extends Admin_Controller
 	public function view()
 	{
 		$data['list'] = $this->model_mdl->get_models();
+		$data['bread'] = make_bread(Array(
+			'模型管理' => '',
+			'内容模型管理' => site_url('model/view'),
+		));
 		$this->_template('model_list', $data);
 	}
 	
@@ -100,7 +104,12 @@ class Model extends Admin_Controller
 		}
 		else
 		{
-			$this->_template('model_add');
+			$data['bread'] = make_bread(Array(
+				'模型管理' => '',
+				'内容模型管理' => site_url('model/view'),
+				'添加内容模型' => '',
+			));
+			$this->_template('model_add', $data);
 		}
 	}
 	
@@ -170,7 +179,13 @@ class Model extends Admin_Controller
 		}
 		else
 		{
-			$this->_template('model_edit', array('model' => $target_model));
+			$data['model'] = $target_model;
+			$data['bread'] = make_bread(Array(
+				'模型管理' => '',
+				'内容模型管理' => site_url('model/view'),
+				'编辑 :: ' . $target_model->description => '',
+			));
+			$this->_template('model_edit', $data);
 		}
 	}
 	
@@ -242,6 +257,11 @@ class Model extends Admin_Controller
 		$data['model'] = $this->model_mdl->get_model_by_id($id);
 		! $data['model'] AND $this->_message('不存在的内容模型!', '', FALSE);
 		$data['list']  = $this->model_mdl->get_model_fields($id);
+		$data['bread'] = make_bread(Array(
+			'模型管理' => '',
+			'内容模型管理' => site_url('model/view'),
+			$data['model']->description => '',
+		));
 		$this->settings->load('fieldtypes');
 		$this->load->library('form');
 		$this->_template('fields_list', $data);
@@ -277,6 +297,12 @@ class Model extends Admin_Controller
 		$this->settings->load('fieldtypes');
 		if ( ! $this->_validate_field_form($id))
 		{
+			$data['bread'] = make_bread(Array(
+				'模型管理' => '',
+				'内容模型管理' => site_url('model/view'),
+				$data['model']->description => site_url('model/fields/' . $data['model']->id),
+				'添加字段' => '',
+			));
 			$this->_template('fields_add', $data);
 		}
 		else
@@ -330,6 +356,12 @@ class Model extends Admin_Controller
 		}
 		else
 		{	
+			$data['bread'] = make_bread(Array(
+				'模型管理' => '',
+				'内容模型管理' => site_url('model/view'),
+				$data['model']->description => site_url('model/fields/' . $data['model']->id),
+				'编辑字段' => '',
+			));
 			$this->_template('fields_edit', $data);	
 		}
 	}

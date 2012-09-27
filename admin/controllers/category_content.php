@@ -77,6 +77,19 @@ class Category_content extends Admin_Controller
 		$this->load->library('form');
 		$this->load->library('field_behavior');
 		$data['provider'] = $this->_pagination($data['model']);
+		
+		$bread = Array(
+			'分类管理' => '',
+			$data['model']['description'] => site_url('category_content/view?model=' . $data['model']['name']), 
+		);
+		if($data['provider'])
+		{
+			foreach($data['provider']['path'] as $path)
+			{
+				$bread[ translate_number_to_tradition($path) ] = '';
+			}
+		}
+		$data['bread'] = make_bread($bread);
 		$this->_template('category_content_list', $data);	
 	}
 	
@@ -112,9 +125,9 @@ class Category_content extends Admin_Controller
 		
 		$config['total_rows'] = $this->db
 		                             ->where($condition)
-									 ->count_all_results('dili_u_c_' . $model['name']);
+									 ->count_all_results($this->db->dbprefix('u_c_') . $model['name']);
 
-		$this->db->from('dili_u_c_' . $model['name']);
+		$this->db->from($this->db->dbprefix('u_c_') . $model['name']);
 		$this->db->select('classid, parentid');
 		$this->db->where($condition);
 		foreach ($model['listable'] as $v)
@@ -131,7 +144,7 @@ class Category_content extends Admin_Controller
 		
 		if ($level != 0)
 		{
-			$data['parent'] = $this->db->where('classid', $level)->get('dili_u_c_' . $model['name'])->row();
+			$data['parent'] = $this->db->where('classid', $level)->get($this->db->dbprefix('u_c_') . $model['name'])->row();
 			$data['next_level'] = $data['parent']->level + 1;
 		}
 		else
@@ -199,25 +212,27 @@ class Category_content extends Admin_Controller
 		if ($id)
 		{
 			$this->_check_permit('edit');
-			$data['content'] = $this->db->where('classid', $id)->get('dili_u_c_' . $model)->row_array();
+			$data['content'] = $this->db->where('classid', $id)->get($this->db->dbprefix('u_c_') . $model)->row_array();
 			$data['attachment'] = $this->db->where('model', $data['model']['id'])
 										   ->where('content', $id)
 										   ->where('from', 1)
-										   ->get('dili_attachments')
+										   ->get($this->db->dbprefix('attachments'))
 										   ->result_array();
 			$data['parentid'] = $data['content']['parentid'];
+			$data['button_name'] = '编辑';
 		}
 		else
 		{
 			$this->_check_permit('add');
 			$data['parentid'] = $this->input->get('u_c_level') ? $this->input->get('u_c_level') : 0;
 			$data['content'] = array();
+			$data['button_name'] = '添加';
 		}
 		
 		if ($data['parentid'] > 0)
 		{
 			$current_level = $this->db->where('classid', $data['parentid'])
-									  ->get('dili_u_c_' . $model)
+									  ->get($this->db->dbprefix('u_c_') . $model)
 									  ->row()
 									  ->level + 1;	
 		}
@@ -243,6 +258,21 @@ class Category_content extends Admin_Controller
 		$this->load->library('field_behavior');
 		if ($this->form_validation->run() == FALSE)
 		{
+		
+			$bread = Array(
+				'分类管理' => '',
+				$data['model']['description'] => site_url('category_content/view?model=' . $data['model']['name']),
+			);
+			if($data['path'])
+			{
+				foreach($data['path'] as $path)
+				{
+					$bread[ translate_number_to_tradition($path) ] = '';
+				}
+			}
+			$bread[ $id ? '编辑' : '添加' ] = '';
+			$data['bread'] = make_bread($bread);
+			
 			$this->_template('category_content_form', $data);
 		}
 		else
@@ -263,7 +293,7 @@ class Category_content extends Admin_Controller
 				//如果不是顶级分类，就读其path数据
 				$data['path'] = '0';
 				$data['level'] = 1;
-				$parent_class = $this->db->where('classid', $data['parentid'])->get('dili_u_c_' . $model)->row();
+				$parent_class = $this->db->where('classid', $data['parentid'])->get($this->db->dbprefix('u_c_') . $model)->row();
 				if ($parent_class AND ! $parent_class->path)
 				{
 					$data['path'] .= ',' ;
@@ -277,7 +307,7 @@ class Category_content extends Admin_Controller
 			{
 				$this->plugin_manager->trigger_model_action('register_before_update', $data, $id);
 				$this->db->where('classid', $id);
-				$this->db->update('dili_u_c_' . $model,$data);
+				$this->db->update($this->db->dbprefix('u_c_') . $model,$data);
 				$this->plugin_manager->trigger_model_action('register_after_update', $data, $id);
 				if ($attachment != '0')
 				{
@@ -285,19 +315,19 @@ class Category_content extends Admin_Controller
 							 ->set('from', 1)
 							 ->set('content', $id)
 							 ->where('aid in (' . $attachment . ')')
-							 ->update('dili_attachments');	
+							 ->update($this->db->dbprefix('attachments'));	
 				}
 				$this->_message('修改成功!', 'category_content/form', TRUE, '?model=' . $modeldata['name'] . '&id=' . $id);	
 			}
 			else
 			{
 				$this->plugin_manager->trigger_model_action('register_before_insert', $data);
-				$this->db->insert('dili_u_c_' . $model,$data);
+				$this->db->insert($this->db->dbprefix('u_c_') . $model,$data);
 				$id = $this->db->insert_id();
 				$this->plugin_manager->trigger_model_action('register_after_insert', $data, $id);
 				if($attachment != '0')
 				{
-					$this->db->set('model',$modeldata['id'])->set('from',1)->set('content',$id)->where('aid in ('.$attachment.')')->update('dili_attachments');	
+					$this->db->set('model',$modeldata['id'])->set('from',1)->set('content',$id)->where('aid in ('.$attachment.')')->update($this->db->dbprefix('attachments'));	
 				}
 				$this->_message('添加成功!','category_content/view',true,'?model='.$modeldata['name'].'&u_c_level='.$data['parentid']);	
 			}
@@ -332,7 +362,7 @@ class Category_content extends Admin_Controller
 		$this->_check_permit();
 		$ids = $this->input->get_post('classid', TRUE);
 		$model = $this->input->get('model', TRUE);
-		$model_id = $this->db->select('id')->where('name', $model)->get('dili_cate_models')->row()->id;
+		$model_id = $this->db->select('id')->where('name', $model)->get($this->db->dbprefix('cate_models'))->row()->id;
 		if ($ids)
 		{
 			
@@ -341,7 +371,7 @@ class Category_content extends Admin_Controller
 				$ids = array($ids);
 			}
 			//搜索子分类
-			$this->db->select('classid')->from('dili_u_c_' . $model);
+			$this->db->select('classid')->from($this->db->dbprefix('u_c_') . $model);
 			$where_string = 'classid < 0 ';
 			foreach ($ids as $v)
 			{
@@ -358,7 +388,7 @@ class Category_content extends Admin_Controller
 									->where('model', $model_id)
 									->where_in('content', $ids)
 									->where('from', 1)
-									->get('dili_attachments')
+									->get($this->db->dbprefix('attachments'))
 									->result();
 			foreach ($attachments as $attachment)
 			{
@@ -370,8 +400,8 @@ class Category_content extends Admin_Controller
 			}
 			$this->db->where('model', $model_id)->where_in('content', $ids)
 					 ->where('from', 1)
-					 ->delete('dili_attachments');
-			$this->db->where_in('classid', $ids)->delete('dili_u_c_' . $model);
+					 ->delete($this->db->dbprefix('attachments'));
+			$this->db->where_in('classid', $ids)->delete($this->db->dbprefix('u_c_') . $model);
 			$this->plugin_manager->trigger_model_action('register_after_delete', $ids);
 		}
 		$this->_message('删除操作成功完成!', '', TRUE);
@@ -394,7 +424,7 @@ class Category_content extends Admin_Controller
 			$ids = $this->input->get('ids', TRUE);
 			$attachments = 	$this->db->select('aid, realname, name, image, folder, type')
 									 ->where("aid in ($ids)")
-									 ->get('dili_attachments')
+									 ->get($this->db->dbprefix('attachments'))
 									 ->result_array();
 			foreach ($attachments as $v)
 			{
@@ -406,7 +436,7 @@ class Category_content extends Admin_Controller
 		{
 			$attach = $this->db->select('aid, name, folder, type')
 							   ->where('aid', $this->input->get('id', TRUE))
-							   ->get('dili_attachments')
+							   ->get($this->db->dbprefix('attachments'))
 							   ->row(); 
 			if ($attach)
 			{
@@ -415,7 +445,7 @@ class Category_content extends Admin_Controller
 											 $attach->folder . '/' . 
 											 $attach->name . '.' . 
 											 $attach->type);		
-				$this->db->where('aid', $attach->aid)->delete('dili_attachments');
+				$this->db->where('aid', $attach->aid)->delete($this->db->dbprefix('attachments'));
 				echo 'ok';
 			}
 		}

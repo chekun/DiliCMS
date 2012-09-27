@@ -47,7 +47,7 @@ class Model_mdl extends CI_Model
      */
 	public function get_models()
 	{
-		return $this->db->get('dili_models')->result();	
+		return $this->db->get($this->db->dbprefix('models'))->result();	
 	}
 
 	// ------------------------------------------------------------------------
@@ -61,7 +61,7 @@ class Model_mdl extends CI_Model
      */
 	public function get_model_by_id($id)
 	{
-		return $this->db->where('id', $id)->get('dili_models')->row();	
+		return $this->db->where('id', $id)->get($this->db->dbprefix('models'))->row();	
 	}
 
 	// ------------------------------------------------------------------------
@@ -75,7 +75,7 @@ class Model_mdl extends CI_Model
      */
 	public function get_model_by_name($name)
 	{
-		return $this->db->where('name', $name)->get('dili_models')->row();
+		return $this->db->where('name', $name)->get($this->db->dbprefix('models'))->row();
 	}
 
 	// ------------------------------------------------------------------------
@@ -89,14 +89,15 @@ class Model_mdl extends CI_Model
      */
 	public function add_new_model($data)
 	{
-		if ($this->db->insert('dili_models', $data))
+		if ($this->db->insert($this->db->dbprefix('models'), $data))
 		{
 			$this->load->dbforge();
-			$this->dbforge->drop_table('dili_u_m_' . $data['name']);
+			$table = 'u_m_' . $data['name'];
+			$this->dbforge->drop_table($table);
 			$this->dbforge->add_field('id');
 			$this->dbforge->add_field(array('create_time' => array('type' => 'INT', 'constraint' => 10, 'unsigned' => TRUE)));
 			$this->dbforge->add_field(array('update_time' => array('type' => 'INT', 'constraint' => 10, 'unsigned' => TRUE)));
-			$this->dbforge->create_table('dili_u_m_' . $data['name']);
+			$this->dbforge->create_table($table);
 			return TRUE;
 		}
 		return FALSE;
@@ -114,13 +115,13 @@ class Model_mdl extends CI_Model
      */
 	public function edit_model($target_model, $data)
 	{
-		if ($this->db->where('id', $target_model->id)->update('dili_models', $data))
+		if ($this->db->where('id', $target_model->id)->update($this->db->dbprefix('models'), $data))
 		{
 			$this->load->dbforge();
 			$old_table_name = $target_model->name;
 			if ($old_table_name != $data['name'])
 			{
-				$this->dbforge->rename_table('dili_u_m_' . $old_table_name, 'dili_u_m_' . $data['name']);
+				$this->dbforge->rename_table('u_m_' . $old_table_name, 'u_m_' . $data['name']);
 				$this->platform->cache_delete(DILICMS_SHARE_PATH . 'settings/model/' . $old_table_name . '.php');
 			}
 			return TRUE;
@@ -141,22 +142,22 @@ class Model_mdl extends CI_Model
 	{
 		$this->load->dbforge();
 		//删除表
-		$this->dbforge->drop_table('dili_u_m_'.$model->name);
+		$this->dbforge->drop_table('u_m_' . $model->name);
 		//删除字段
-		$this->db->where('model',$model->id)->delete('dili_model_fields');
+		$this->db->where('model',$model->id)->delete($this->db->dbprefix('model_fields'));
 		//删除附件
 		$attachments = $this->db->select('name, folder, type')
 								->where('model', $model->id)
 								->where('from', 0)
-								->get('dili_attachments')
+								->get($this->db->dbprefix('attachments'))
 								->result();
 		foreach($attachments as $attachment)
 		{
 			$this->platform->file_delete(DILICMS_SHARE_PATH . '../' . setting('attachment_dir') . '/' . $attachment->folder . '/' . $attachment->name . '.' . $attachment->type);		
 		}
-		$this->db->where('model', $model->id)->where('from', 0)->delete('dili_attachments');
+		$this->db->where('model', $model->id)->where('from', 0)->delete($this->db->dbprefix('attachments'));
 		//删除记录
-		$this->db->where('id',$model->id)->delete('dili_models');
+		$this->db->where('id',$model->id)->delete($this->db->dbprefix('models'));
 		//清除缓存文件
 		$this->platform->cache_delete(DILICMS_SHARE_PATH . 'settings/model/' . $model->name . '.php');
 	}
@@ -172,7 +173,7 @@ class Model_mdl extends CI_Model
      */
 	public function get_model_fields($id)
 	{
-		return $this->db->where('model', $id)->order_by('order', 'ASC')->get('dili_model_fields')->result();
+		return $this->db->where('model', $id)->order_by('order', 'ASC')->get($this->db->dbprefix('model_fields'))->result();
 	}
 	
 	// ------------------------------------------------------------------------
@@ -190,9 +191,9 @@ class Model_mdl extends CI_Model
 		$this->load->dbforge();
 		$this->load->library('field_behavior');
 		$data['model'] = $model->id;
-		if ($this->db->insert('dili_model_fields', $data))
+		if ($this->db->insert($this->db->dbprefix('model_fields'), $data))
 		{
-			$this->dbforge->add_column('dili_u_m_' . $model->name, $this->field_behavior->on_info($data));
+			$this->dbforge->add_column('u_m_' . $model->name, $this->field_behavior->on_info($data));
 			return TRUE;
 		}
 		return FALSE;
@@ -209,7 +210,7 @@ class Model_mdl extends CI_Model
      */
 	public function get_field_by_id($id)
 	{
-		return $this->db->where('id', $id)->get('dili_model_fields')->row();	
+		return $this->db->where('id', $id)->get($this->db->dbprefix('model_fields'))->row();	
 	}
 
 	// ------------------------------------------------------------------------
@@ -223,7 +224,7 @@ class Model_mdl extends CI_Model
      */
 	public function get_field_by_name($name)
 	{
-		return $this->db->where('name', $name)->get('dili_model_fields')->row();	
+		return $this->db->where('name', $name)->get($this->db->dbprefix('model_fields'))->row();	
 	}
 
 	// ------------------------------------------------------------------------
@@ -238,7 +239,7 @@ class Model_mdl extends CI_Model
      */
 	public function check_field_unique($model, $name)
 	{
-		return $this->db->where('model', $model)->where('name', $name)->get('dili_model_fields')->row();	
+		return $this->db->where('model', $model)->where('name', $name)->get($this->db->dbprefix('model_fields'))->row();	
 	}
 
 	// ------------------------------------------------------------------------
@@ -258,9 +259,9 @@ class Model_mdl extends CI_Model
 		$this->load->dbforge();
 		$this->load->library('field_behavior');
 		$old_name = $field->name;
-		if ($this->db->where('id', $field->id)->update('dili_model_fields', $data))
+		if ($this->db->where('id', $field->id)->update($this->db->dbprefix('model_fields'), $data))
 		{
-			$this->dbforge->modify_column('dili_u_m_' . $model->name, $this->field_behavior->on_info($data, $old_name));
+			$this->dbforge->modify_column('u_m_' . $model->name, $this->field_behavior->on_info($data, $old_name));
 			return TRUE;
 		}
 		return FALSE;
@@ -280,8 +281,8 @@ class Model_mdl extends CI_Model
 	public function del_field($model, $field)
 	{
 		$this->load->dbforge();
-		$this->dbforge->drop_column('dili_u_m_' . $model->name, $field->name);
-		$this->db->where('id', $field->id)->delete('dili_model_fields');
+		$this->dbforge->drop_column('u_m_' . $model->name, $field->name);
+		$this->db->where('id', $field->id)->delete($this->db->dbprefix('model_fields'));
 	}
 
 	// ------------------------------------------------------------------------
