@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>MultiUpload Demo</title>
 <link href="multiupload.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="../../jquery/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="../../jquery/jquery-1.4.4.min.js"></script>
 <script type="text/javascript" src="swfupload/swfupload.js"></script>
 <script type="text/javascript" src="multiupload.js"></script>
 <script type="text/javascript">
@@ -94,7 +94,7 @@ JSON.stringify = JSON.stringify || function (obj) {
 var callback= callback || function(v){
 	v=JSON.stringify(v);
 	window.name=escape(v);
-	window.location='http://'+location.search.match(/[\?&]editorhost=(.*)(&|$)/i)[1]+'/xheditorproxy.html';//这个文件最好是一个0字节文件，如果无此文件也会正常工作
+	window.location='http://'+location.search.match(/[\?&]parenthost=(.*)(&|$)/i)[1]+'/xheditorproxy.html';//这个文件最好是一个0字节文件，如果无此文件也会正常工作
 }
 //----------------跨域支持代码结束----------------
 </script>

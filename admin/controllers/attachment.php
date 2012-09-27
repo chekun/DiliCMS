@@ -120,6 +120,94 @@ class Attachment extends CI_Controller
 					<data>' . $response . '</data>
 				</return>';
 	}
+
+	// ------------------------------------------------------------------------
+
+    /**
+     * 编辑器文件上传接口
+     *
+     * @access  public
+     * @return  void
+     * 
+     * $_GET['field'], 上传域名称,不指定则使用默认值(xheditor),filedata
+     * $_GET['tpl'],返回数据的模版,{{error}}代表错误信息,{{url}}代表附件的地址,{{aid}}代表上传返回的0，不传则使用默认值(xheditor),'{"err":"{{error}}","msg":"{{url}}","aid":{{aid}}}'
+     * {{name}}代表名称,{{type}}代表扩展名
+     */
+	public function _save_post()
+	{
+		if ( ! ($field = $this->input->post('field')))
+		{
+			$field = 'filedata';
+		}
+		if ( ! ($tpl = $this->input->post('tpl')))
+		{
+			$tpl = '{"err":"{{error}}","msg":"{{url}}", "aid":{{aid}}}';
+		}
+		$error = '啊哦，登陆超时了。';
+		$url = '';
+		$aid = 0;
+		$name = '';
+		$type = '';
+		$this->load->library('session');
+		$is_valid = FALSE;
+		if ($uid = $this->session->userdata('uid'))
+		{
+			if (! $_FILES[$field]['error'])
+			{
+				//判断文件MIME是否合法,文件的格式将使用数据源的位置填写，不填写则允许一切格式上传
+				//加载MIMES数据
+				include APPPATH.'config/mimes.php';
+				$error = '对不起，不支持上传此文件类型.';
+				foreach (explode(';', str_replace("*.", "", setting('attachment_type'))) as $_mime)
+				{
+					if (isset($mimes[$_mime]))
+					{
+						if (! is_array($mimes[$_mime]))
+						{
+							$mimes[$_mime] = array($mimes[$_mime]);
+						}
+						if (in_array($_FILES[$field]['type'], $mimes[$_mime]))
+						{
+							$is_valid = TRUE;
+							$error = '';
+						}
+					}
+				}
+				//判断文件大小
+				if ($is_valid AND $_FILES[$field]['size'] > setting('attachment_maxupload'))
+				{
+					$is_valid = FALSE;
+					$error = '文件过大.';
+				}
+				if ($is_valid)
+				{
+					$this->load->helper('date');
+					$_timestamp = now();
+					$upload['folder'] = date('Y/m', $_timestamp);
+					$target_path = DILICMS_SHARE_PATH.'../'.setting('attachment_dir').'/'.$upload['folder'];
+					$realname = explode('.', $_FILES[$field]['name']);
+					$type = $upload['type'] = strtolower(array_pop($realname));
+					$name = $upload['realname'] = implode('.', $realname);
+					$upload['name'] = $_timestamp.substr(md5($upload['realname']. rand()), 0, 16);
+					$upload['posttime'] = $_timestamp;
+					$upload['uid'] = $uid;
+					$target_file = $target_path.'/'.$upload['name'].'.'.$upload['type'];
+					if ($this->platform->file_upload($_FILES[$field]['tmp_name'], $target_file))
+					{
+						$upload['image'] = (in_array($upload['type'], array('jpg', 'gif', 'png', 'jpeg', 'bmp')) ? 1 : 0);
+						$this->db->insert('dili_attachments', $upload);
+						if ($aid = $this->db->insert_id())
+						{
+							//已上传成功并已插入数据库
+							$url = '/'.setting('attachment_dir').'/'.$upload['folder'].'/'.$upload['name'].'.'.$upload['type'];
+							$error = '';
+						}
+					}
+				}	
+			}
+		}
+		echo str_replace(array('{{error}}', '{{url}}', '{{aid}}', '{{name}}', '{{type}}'), array($error, $url, $aid, $name, $type), $tpl);
+	}
 	
 	// ------------------------------------------------------------------------
 
