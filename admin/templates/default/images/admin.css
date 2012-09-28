@@ -110,7 +110,9 @@ img.operator{width:12px;height:12px;margin:0 6px;cursor:pointer; vertical-align:
 /* admin_right style start */
 #admin_right{margin:4px 0 0 180px}
 .position{line-height:30px;text-align:left;color:#999;margin-left:15px}
-	.position a,.position span{color:#999;padding-left:5px;font-family:'宋体'}
+	.position span{color:#999;font-family:'宋体';padding:0 5px;}
+	.position a{color:#333;font-weight:bold;}
+	.position a:hover{text-decoration:underline;}
 /* operating style start */
 .operating{height:45px;margin-bottom:5px;border-top:1px solid #e1e1e1;border-bottom:1px solid #e1e1e1;padding-left:8px;background:url(admin_bg.gif) repeat-x 0 -110px;overflow:hidden;z-index:99}
 	.operating .search{margin:12px 10px 0 0;}

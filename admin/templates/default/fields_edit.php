@@ -1,7 +1,6 @@
 <?php if ( ! defined('IN_DILICMS')) exit('No direct script access allowed');?>
 <div class="headbar">
-	<div class="position"><span>模型</span><span>></span><span>模型管理</span><span>></span><span><?php echo $model->description; ?></span><span>></span><span>编辑字段</span></div>
-    
+	<div class="position"><?=$bread?></div>
 </div>
 <div class="content_box">
 	<div class="content form_content">
