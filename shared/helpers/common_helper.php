@@ -100,7 +100,7 @@ if ( ! function_exists('array_to_cache'))
  */
 if ( ! function_exists('backend_url'))
 {
-	function backend_url($uri, $qs = '')
+	function backend_url($uri = '', $qs = '')
 	{
 		return site_url(setting('backend_access_point') . '/' . $uri) . ($qs == '' ? '' : '?' . $qs);
 	}
