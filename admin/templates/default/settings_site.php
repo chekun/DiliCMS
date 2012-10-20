@@ -91,6 +91,10 @@
 				<col width="150px" />
 				<col />
 				<tr>
+					<th>访问路径：</th>
+					<td><input type='text' class='normal' name='attachment_url'  id="attachment_url" value="<?php echo $site->attachment_url; ?>" />附件访问前缀，末尾不包含/</td>
+				</tr>
+				<tr>
 					<th>上传路径：</th>
 					<td><input type='text' class='normal' name='attachment_dir'  id="attachment_dir" value="<?php echo $site->attachment_dir; ?>" /></td>
 				</tr>
