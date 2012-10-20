@@ -271,6 +271,7 @@ CREATE TABLE IF NOT EXISTS `dili_site_settings` (
   `site_keyword` varchar(200) DEFAULT NULL,
   `site_description` varchar(200) DEFAULT NULL,
   `site_theme` varchar(20) DEFAULT NULL,
+  `attachment_url` varchar(50) DEFAULT NULL,
   `attachment_dir` varchar(20) DEFAULT NULL,
   `attachment_type` varchar(50) DEFAULT NULL,
   `attachment_maxupload` varchar(20) DEFAULT NULL

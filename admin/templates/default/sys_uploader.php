@@ -31,7 +31,7 @@
                     </ul>
                     
                     <script language="javascript">
-                        var base_url = '<?php echo base_url(); ?>' ,backend_url = '<?php echo backend_url($this->uri->rsegment(1)).'/'; ?>',attach_url = base_url + 'attachments/',attachment_dir = '<?php echo $this->platform->file_url(); ?>';
+                        var base_url = '<?php echo base_url(); ?>' ,backend_url = '<?php echo backend_url(); ?>',attachment_url = '<?php echo $this->platform->file_url(); ?>';
                     </script>
                     <link rel="stylesheet" href="js/contextMenu/jquery.contextMenu.css" />
                     <script src="js/contextMenu/jquery.contextMenu.js"></script>

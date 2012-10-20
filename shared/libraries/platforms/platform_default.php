@@ -149,7 +149,8 @@ class platform_default
      */
 	public function file_url($path = '')
 	{
-		return '/' . setting('attachment_dir') . '/' . $path;
+        $CI = &get_instance();
+		return  $CI->settings->item('attachment_url'). '/' . $path;
 	}
     
     // ------------------------------------------------------------------------

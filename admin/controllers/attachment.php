@@ -132,6 +132,7 @@ class Attachment extends CI_Controller
      * $_GET['field'], 上传域名称,不指定则使用默认值(xheditor),filedata
      * $_GET['tpl'],返回数据的模版,{{error}}代表错误信息,{{url}}代表附件的地址,{{aid}}代表上传返回的0，不传则使用默认值(xheditor),'{"err":"{{error}}","msg":"{{url}}","aid":{{aid}}}'
      * {{name}}代表名称,{{type}}代表扩展名
+     * {{object}}代表文件的完整信息
      */
 	public function _save_post()
 	{
@@ -141,18 +142,19 @@ class Attachment extends CI_Controller
 		}
 		if ( ! ($tpl = $this->input->post('tpl')))
 		{
-			$tpl = '{"err":"{{error}}","msg":"{{url}}", "aid":{{aid}}}';
+			$tpl = '{"err":"{{error}}","msg":{"url":"{{url}}","localfile":"{{name}}","id":"{{aid}}","file":"{{object}}"}}';
 		}
 		$error = '啊哦，登陆超时了。';
 		$url = '';
 		$aid = 0;
 		$name = '';
 		$type = '';
+		$object = '';
 		$this->load->library('session');
 		$is_valid = FALSE;
 		if ($uid = $this->session->userdata('uid'))
 		{
-			if (! $_FILES[$field]['error'])
+			if (isset($_FILES[$field]) AND ! $_FILES[$field]['error'])
 			{
 				//判断文件MIME是否合法,文件的格式将使用数据源的位置填写，不填写则允许一切格式上传
 				//加载MIMES数据
@@ -201,12 +203,17 @@ class Attachment extends CI_Controller
 							//已上传成功并已插入数据库
 							$url = '/'.setting('attachment_dir').'/'.$upload['folder'].'/'.$upload['name'].'.'.$upload['type'];
 							$error = '';
+							$object = $aid . '|' . $upload['realname'] . '|' . $upload['name'] . '|' . $upload['image'].'|'.$upload['folder'].'|'.$upload['type'];
 						}
 					}
 				}	
 			}
+			else
+			{
+				$error = '上传的文件不存在';
+			}
 		}
-		echo str_replace(array('{{error}}', '{{url}}', '{{aid}}', '{{name}}', '{{type}}'), array($error, $url, $aid, $name, $type), $tpl);
+		echo str_replace(array('{{error}}', '{{url}}', '{{aid}}', '{{name}}', '{{type}}', '{{object}}'), array($error, $url, $aid, $name, $type, $object), $tpl);
 	}
 	
 	// ------------------------------------------------------------------------
