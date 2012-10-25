@@ -49,11 +49,11 @@ $active_group = 'default';
 $active_record = TRUE;
 
 $db['default']['hostname'] = 'localhost';
-$db['default']['username'] = 'root';
+$db['default']['username'] = '';
 $db['default']['password'] = '';
-$db['default']['database'] = 'dilicms2';
+$db['default']['database'] = '';
 $db['default']['dbdriver'] = 'mysql';
-$db['default']['dbprefix'] = 'dili2_';
+$db['default']['dbprefix'] = 'dili_';
 $db['default']['pconnect'] = FALSE;
 $db['default']['db_debug'] = TRUE;
 $db['default']['cache_on'] = FALSE;
