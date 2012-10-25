@@ -3,7 +3,8 @@ DROP TABLE IF EXISTS `dili_admins`;
 CREATE TABLE IF NOT EXISTS `dili_admins` (
   `uid` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `username` varchar(16) NOT NULL,
-  `password` varchar(32) NOT NULL,
+  `password` varchar(40) NOT NULL,
+  'salt' varchar(10) NOT NULL,
   `email` varchar(100) NOT NULL,
   `role` smallint(5) unsigned DEFAULT NULL,
   `status` tinyint(1) unsigned DEFAULT '1' COMMENT '1=正常，2=冻结',
@@ -15,7 +16,7 @@ CREATE TABLE IF NOT EXISTS `dili_admins` (
 
 DELETE FROM `dili_admins`;
 
-INSERT INTO `dili_admins` (`uid`, `username`, `password`, `email`, `role`, `status`) VALUES (1, 'admin', 'aebcf178d597d93ff848fd2d6331d5e7', 'dili@cms.com', 1, 1);
+INSERT INTO `dili_admins` (`uid`, `username`, `password`, 'salt', `email`, `role`, `status`) VALUES (1, 'admin', '1e95b0358f0465957bf236079d064a6c5be22a1c', '516f36ef1b','dili@cms.com', 1, 1);
 
 
 

@@ -92,7 +92,7 @@ class Login extends CI_Controller
 			$admin = $this->user_mdl->get_full_user_by_username($username);
 			if ($admin)
 			{
-				if ($admin->password == md5($password))
+				if ($admin->password == sha1($password.$admin->salt))
 				{
 					if ($admin->role == 1 AND ! setting('backend_root_access'))
 					{

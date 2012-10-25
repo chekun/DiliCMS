@@ -85,7 +85,7 @@ class System extends Admin_Controller
 		}
 		else
 		{
-			$old_pass = md5(trim($this->input->post('old_pass', TRUE)));
+			$old_pass = sha1(trim($this->input->post('old_pass', TRUE)).$this->_admin->salt);
 			$stored = $this->user_mdl->get_user_by_uid($this->session->userdata('uid'));
 			if ($stored AND $old_pass == $stored->password)
 			{
