@@ -40,6 +40,7 @@
 			<thead>
 				<tr>
                 	<th></th>
+                	<th>发布时间</th>
 					<?php foreach($model['listable'] as $v): ?>
         			<th><?php echo $model['fields'][$v]['description']; ?></th>
     				<?php endforeach; ?>
@@ -59,6 +60,7 @@
             <?php foreach($provider['list'] as $v) : ?>
             	<tr>
                 	<td><input type="checkbox" name="id[]" value="<?php echo $v->id; ?>" /></td>
+                	<?php echo date('Y-m-d', $v->create_time); ?>
 					<?php foreach($model['listable'] as $vt): ?>
                     <td>
                     <?php $this->field_behavior->on_list($model['fields'][$vt],$v); ?>
