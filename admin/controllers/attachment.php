@@ -197,7 +197,7 @@ class Attachment extends CI_Controller
 					if ($this->platform->file_upload($_FILES[$field]['tmp_name'], $target_file))
 					{
 						$upload['image'] = (in_array($upload['type'], array('jpg', 'gif', 'png', 'jpeg', 'bmp')) ? 1 : 0);
-						$this->db->insert('dili_attachments', $upload);
+						$this->db->insert($this->db->dbprefix('attachments'), $upload);
 						if ($aid = $this->db->insert_id())
 						{
 							//已上传成功并已插入数据库
