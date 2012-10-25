@@ -104,7 +104,9 @@ class User_mdl extends CI_Model
      */
 	public function update_user_password()
 	{
-		$data['password'] = md5($this->input->post('new_pass'));
+		$data['password'] = $this->input->post('new_pass', TRUE);
+		$data['salt'] = substr(sha1(time()), -10);
+		$data['password'] = sha1($data['password'].$data['salt']);
 		return $this->db->where('uid', $this->session->userdata('uid'))->update($this->db->dbprefix('admins'), $data);		
 	}
 
@@ -190,6 +192,8 @@ class User_mdl extends CI_Model
      */
 	public function add_user($data)
 	{
+		$data['salt'] = substr(sha1(time()), -10);
+		$data['password'] = sha1($data['password'].$data['salt']);
 		return $this->db->insert($this->db->dbprefix('admins'), $data);
 	}
 	
@@ -205,6 +209,11 @@ class User_mdl extends CI_Model
      */
 	public function edit_user($uid, $data)
 	{
+		if (isset($data['password']))
+		{
+			$data['salt'] = substr(sha1(time()), -10);
+			$data['password'] = sha1($data['password'].$data['salt']);
+		}
 		return $this->db->where('uid', $uid)->update($this->db->dbprefix('admins'), $data);	
 	}
 	
