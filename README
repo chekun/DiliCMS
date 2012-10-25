@@ -27,6 +27,7 @@
 	更新内容
 	1.用户密码换用sha1和salt加密
 	2.内容模型字段增加create_by和update_by，用来记录操作人员.
+	3.如果没有插件，则不显示顶部【工具】菜单.
 	旧版本更新须知：
 	数据库执行:ALTER TABLE `dili_admins`  CHANGE COLUMN `password` `password` VARCHAR(40) NOT NULL AFTER `username`,  ADD COLUMN `salt` VARCHAR(10) NOT NULL AFTER `password`;注意表名前缀改成你自己的,然后修改password为1e95b0358f0465957bf236079d064a6c5be22a1c,修改salt为516f36ef1b,然后就可以使用密码"dilicms"进行登录了，到后台自行修改密码.
 
