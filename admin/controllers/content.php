@@ -222,6 +222,7 @@ class Content extends Admin_Controller
 			{
 				$this->db->where('id', $id);
 				$data['update_time'] = $this->session->_get_time();
+				$data['update_user'] = $this->_admin->uid;
 				$this->plugin_manager->trigger_model_action('register_before_update', $data , $id);
 				$this->db->update($this->db->dbprefix('u_m_') . $model,$data);
 				$this->plugin_manager->trigger_model_action('register_after_update', $data , $id);
@@ -239,6 +240,7 @@ class Content extends Admin_Controller
 			{
 			    
 				$data['create_time'] = $data['update_time'] = $this->session->_get_time();
+				$data['create_user'] = $data['update_user'] = $this->_admin->uid;
 				$this->plugin_manager->trigger_model_action('register_before_insert', $data);
 				$this->db->insert($this->db->dbprefix('u_m_') . $model,$data);
 				$id = $this->db->insert_id();
