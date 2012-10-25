@@ -59,7 +59,7 @@ class User_mdl extends CI_Model
 		{
 			$this->db->where($table_admins . '.username', $username);
 		}
-		return $this->db->select("$table_admins.uid, $table_admins.username, $table_admins.password, $table_admins.role, $table_roles.name, $table_admins.status")
+		return $this->db->select("$table_admins.uid, $table_admins.username, $table_admins.password, $table_admin.salt, $table_admins.role, $table_roles.name, $table_admins.status")
 							  ->from($table_admins)
 							  ->join($table_roles, "$table_roles.id = $table_admins.role")
 							  ->get()
