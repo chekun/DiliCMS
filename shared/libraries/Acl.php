@@ -110,9 +110,19 @@ class Acl
      */
 	public function show_top_menus()
 	{
+		//检查是否显示顶部插件菜单.
+		$is_show_module_menu = FALSE;
+		if ($this->ci->plugin_manager->trigger_left_menu())
+		{
+			$is_show_module_menu = TRUE;
+		}
 		$last_menu_key = count($this->top_menus) - 1;
 		foreach ($this->top_menus as $key => $v)    
 		{
+			if ($key === 2 AND ! $is_show_module_menu)
+			{
+				continue;
+			}
 			echo '<li class="' . ($key == 0 ? 'first' : ($key == $last_menu_key ? 'last' : '')) . 
 			     ' ' .($key == $this->_current_menu ? 'selected' : '').'"><a href="' . 
 			     backend_url($v['class_name'] . '/' . $v['method_name']) . '">' . $v['menu_name'] .'</a>
