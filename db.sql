@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS `dili_admins` (
 
 DELETE FROM `dili_admins`;
 
-INSERT INTO `dili_admins` (`uid`, `username`, `password`, 'salt', `email`, `role`, `status`) VALUES (1, 'admin', '1e95b0358f0465957bf236079d064a6c5be22a1c', '516f36ef1b','dili@cms.com', 1, 1);
+INSERT INTO `dili_admins` (`uid`, `username`, `password`, `salt`, `email`, `role`, `status`) VALUES (1, 'admin', '1e95b0358f0465957bf236079d064a6c5be22a1c', '516f36ef1b','dili@cms.com', 1, 1);
 
 
 
