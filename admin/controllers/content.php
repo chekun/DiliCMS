@@ -114,7 +114,7 @@ class Content extends Admin_Controller
 		$config['total_rows'] = $this->db->where($condition)->count_all_results($this->db->dbprefix('u_m_') . $model['name']);
 		
 		$this->db->from($this->db->dbprefix('u_m_') . $model['name']);
-		$this->db->select('id');
+		$this->db->select('id, create_time');
 		$this->db->where($condition);
 		$this->field_behavior->set_extra_condition();
 		foreach ($model['listable'] as $v)
