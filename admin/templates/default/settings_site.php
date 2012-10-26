@@ -40,7 +40,7 @@
 					<td><textarea name='site_stats'  id="site_stats" class="noeditor"><?php echo $site->site_stats; ?></textarea></td>
 				</tr>
 				<tr>
-					<th>平台简介：</th>
+					<th>站点底部：</th>
 					<td><textarea name='site_footer'  id="site_footer" style="height:300px;width:100%" class="xheditor {skin:'nostyle'}"><?php echo $site->site_footer;?></textarea></td>
 				</tr>
 				<tr>
