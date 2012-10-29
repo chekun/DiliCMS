@@ -234,7 +234,7 @@ class User extends Admin_Controller
 		$data['username'] = $this->input->post('username', TRUE);
 		if ( ! ($edit AND ! $this->input->post('password', TRUE) AND ! $this->input->post('confirm_password', TRUE)))
 		{
-			//$data['password'] = md5($this->input->post('password', TRUE));	
+			$data['password'] = $this->input->post('password', TRUE);	
 		}
 		$data['email'] = $this->input->post('email', TRUE);
 		$data['role'] = $this->input->post('role', TRUE);
