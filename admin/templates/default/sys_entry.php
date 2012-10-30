@@ -23,7 +23,7 @@
 		<p>
         	<a href="<?php echo backend_url('login/quit'); ?>">退出管理</a>
             <a href="<?php echo backend_url('system/home'); ?>">后台首页</a>
-            <a href="<?php echo str_replace('/admin/', '', base_url()); ?>" target='_blank'>站点首页</a>
+            <a href="<?php echo base_url().'../'; ?>" target='_blank'>站点首页</a>
             <span>您好 <label class='bold'><?php echo $this->_admin->username; ?></label>，
             当前身份 <label class='bold'><?php echo $this->_admin->name; ?></label></span>
         </p>
