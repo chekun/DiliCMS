@@ -3,12 +3,12 @@
 安装方法
 	普通平台
 		1.新建数据库，并导入db.sql
-		2.配置application和admin文件夹下的/config/database.php
+		2.配置application和admin文件夹下的/config/database.php,配置表前缀为dili_
 		3.运行http://your-url/admin/index.php/initialize,初始化系统
 		4.欢迎来到DiliCMS的世界
 	SAE平台
 		1.使用SAE平台的phpmyadmin导入db.sql
-		2.配置application和admin文件夹下的/config/database.php
+		2.配置application和admin文件夹下的/config/database.php,,配置表前缀为dili_
 		3.配置shared/config/platform.php为
 			$running_platform = array(
 					'type'		=> 'sae',//修改default为sae.
