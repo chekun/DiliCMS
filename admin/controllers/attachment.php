@@ -201,7 +201,7 @@ class Attachment extends CI_Controller
 						if ($aid = $this->db->insert_id())
 						{
 							//已上传成功并已插入数据库
-							$url = setting('attachment_url').'/'.setting('attachment_dir').'/'.$upload['folder'].'/'.$upload['name'].'.'.$upload['type'];
+							$url = setting('attachment_url').'/'.$upload['folder'].'/'.$upload['name'].'.'.$upload['type'];
 							$error = '';
 							$object = $aid . '|' . $upload['realname'] . '|' . $upload['name'] . '|' . $upload['image'].'|'.$upload['folder'].'|'.$upload['type'];
 						}
