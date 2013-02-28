@@ -23,6 +23,10 @@
 
 版本号 2.0 Final
 
+发布时间：2013年2月28日
+	更新内容
+	1.修复错误Field 'path' doesn't have a default value
+
 发布时间: 2012年10月25日
 	更新内容
 	1.用户密码换用sha1和salt加密
