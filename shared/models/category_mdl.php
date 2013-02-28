@@ -218,7 +218,7 @@ class Category_mdl extends CI_Model
 			$this->dbforge->add_key('classid',TRUE);
 			$this->dbforge->add_field(array('parentid' => array('type' => 'INT', 'constraint' => 5, 'unsigned' => TRUE, 'default'=>0)));
 			$this->dbforge->add_field(array('level' => array('type' => 'INT', 'constraint' => 2, 'unsigned' => TRUE, 'default'=>1)));
-			$this->dbforge->add_field(array('path' => array('type' => 'VARCHAR', 'constraint' => 50)));
+			$this->dbforge->add_field(array('path' => array('type' => 'VARCHAR', 'constraint' => 50, 'default'=>"")));
 			$this->dbforge->create_table($table);
 			return TRUE;
 		}
