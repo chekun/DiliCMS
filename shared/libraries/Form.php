@@ -404,6 +404,64 @@ class Form
 	
 	// ------------------------------------------------------------------------
 
+	/**
+     * 生成内容模型调用的控件
+     *
+     * @access  private
+     * @param   array
+     * @param   string
+     * @return  string
+     */
+	private function _content($field, $default)
+	{
+		$html = '';
+		if ( ! $field['values'])
+		{
+			return '请设置数据源';
+		}
+		if (count($options = explode('|', $field['values'])) != 2)
+		{
+			return '数据源格式不正确';
+		}
+		$CI = & get_instance();
+		if ( ! $CI->platform->cache_exists(DILICMS_SHARE_PATH . 'settings/model/'.$options[0].'.php'))
+		{
+			return '内存模型不存在!';
+		}
+		$CI->settings->load('model/'.$options[0]);
+		$model_data =  & setting('models');
+		if ( ! isset($model_data[$options[0]]) OR ! $model_data[$options[0]])
+		{
+			return '内存模型不合法!';
+		}
+		$find_target_field = FALSE;
+		foreach ($model_data[$options[0]]['fields'] as $_field)
+		{
+			if ($_field['name'] == $options[1])
+			{
+				$find_target_field = TRUE;
+				break;
+			}
+		}
+		if ( ! $find_target_field)
+		{
+			return '不存在的字段名称!';
+		}
+		$html = '<input class="small" name="' . $field['name'] . '" id="' . $field['name'] . 
+			   '" type="text" autocomplete="off" value="' . $default . '" />';
+		// 如果有默认值，则需要走数据库读取默认值
+	    $default_label = '';
+		if ($default AND $row = $CI->db->where('id', $default)->get('u_m_'.$options[0])->row_array())
+		{
+			$default_label = $row[$options[1]];
+		}
+		//绑定js事件
+		$html .= '<script>autocomplete_wrapper("'.$field['name'].'","'.site_url('content/search/'.implode('/', $options)).'","'.$default_label.'");</script>';
+		return $html;
+	}
+	
+	// ------------------------------------------------------------------------
+
     /**
      * 生成LINKED_MENU类型控件HTML
      *
