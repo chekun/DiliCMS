@@ -77,28 +77,30 @@
 	/*dilicms autocomplete wrapper factory*/
 	function autocomplete_wrapper(target,server_script,label)
 	{
-	   $existed = 3000000 + $('input[id*="_wrapper_input"]').length * -1;
+	    $existed = 3000000 + $('input[id*="_wrapper_input"]').length * -1;
 	    $('#' + target).css('display','none')
 	                   .after('<div class="autocomplete_wrapper" style="z-index:'+ $existed +'"><input autocomplete="off" class="normal" id="'+ target +'_wrapper_input" type="input" value="' + (label ? label : '' ) + '" /><div></div></div>');
-	    $('#' + target + '_wrapper_input').bind('keyup',
+	    var _event = $.browser.msie ? 'propertychange' : 'input';
+	    $('#' + target + '_wrapper_input').bind(_event,
 	        function()
 	        {
 	            $this = $(this);
 			    $.post(server_script,{keyword:$this.val()}, function(result) {
 			      	$this.next().html('')
 			      	              .append(result)
-	                              .append('<p onclick="autocomplete_set_value(this,\'\');" class="close">关闭</p>')
+	                              .append('<p data-text="" onclick="autocomplete_set_value(this,\'\');" class="close">关闭</p>')
 	                              .show();
 			    });
 	        }
 	    );
+	    //
 	}
 	
 	function autocomplete_set_value(me,value)
 	{
 	    target = $(me).parent().prev();
 	    $('#'+target.attr('id').replace('_wrapper_input','')).val(value);
-        label = $(me).html();
+        label = $(me).attr('data-text');
         label = (label == '关闭' ? '' : label)	    
 	    target.val(label).next().hide();
 	}

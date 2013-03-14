@@ -171,6 +171,12 @@ class Field_behavior
 												'type' => 'TEXT'
 												) ;
 								break;
+				case 'content' : $field = array(
+												'type' => 'INT',
+												 'constraint' => $data['length'] ? $data['length'] : 10 ,
+												 'default' => 0
+												) ;
+								break;
 			}
 		}
 			if ($oldname != '')
@@ -280,8 +286,19 @@ class Field_behavior
 							}
 							echo implode(',', $temp_out);
 							break;
+				case 'content':
+							$options = explode('|', $field['values']);
+							if ($value->$field['name'] AND $row = $this->_ci->db->select('id, '.$options[1])->where('id', $value->$field['name'])->get('u_m_'.$options[0])->row_array())
+							{
+								echo $row[$options[1]];
+							}
+							else
+							{
+								echo '-';
+							}
+							break;
 				default :
-							echo $value->$field['name'];	
+							echo $value->$field['name'];
 			}
 		}
 	}
@@ -320,6 +337,7 @@ class Field_behavior
 				case 'datetime':
 				case 'int':
 				case 'float':
+				case 'content':
 						$field_min = $field_max = $field;
 						$field_min['name'] = $field_min['name'] . '_min';
 						$field_max['name'] = $field_max['name'] . '_max';
@@ -372,6 +390,7 @@ class Field_behavior
 				case 'datetime':
 				case 'int':
 				case 'float':
+				case 'content':
 						if ($keyword_min = $this->_ci->input->get_post($field['name'] . '_min', TRUE))
 						{
 							$condition[$field['name'] . ' >='] = $keyword_min;
