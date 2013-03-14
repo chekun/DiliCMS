@@ -28,7 +28,7 @@
 
 ## 更新日志
     
-    点击changelog.md查看
+    点击CHANGELOG.md查看
     
 ## LICENSE
 Copyright (c) 2013 [DiliCMS](http://www.dilicms.com).
