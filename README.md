@@ -11,6 +11,7 @@
 3.运行http://your-url/admin/index.php/initialize,初始化系统
 4.欢迎来到DiliCMS的世界
 ```
+
 - SAE平台
 ```
 1.使用SAE平台的phpmyadmin导入db.sql
@@ -22,6 +23,7 @@
 	);
 4.运行http://your-url/admin/index.php/initialize,初始化系统
 5.欢迎来到DiliCMS的世界
+
 ```
 
 > ### 默认帐号为：admin,密码为:dilicms
