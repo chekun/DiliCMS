@@ -1,4 +1,4 @@
-
+<?php if ( ! defined('IN_DILICMS')) exit('No direct script access allowed'); ?>
 <!DOCTYPE html>
 <html lang="zh-cn" class="fuelux">
   <head>
@@ -59,7 +59,7 @@
         </div>
         <footer>
           <p align="center">
-            DiliCMS <code><?php echo DILICMS_VERSION; ?></code> 安装程序 <br />
+            <a target="_blank" href="http://www.dilicms.com/">DiliCMS</a> <code><?php echo DILICMS_VERSION; ?></code> Installer <br />
             ©<?php echo date('Y'); ?> <a target="_blank" href="http://www.dilicms.com/">DiliCMS</a>
           </p>
         </footer>
