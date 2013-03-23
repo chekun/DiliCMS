@@ -1,0 +1,14 @@
+.fuelux .container, .fuelux .span12 {
+	width: 940px;
+}
+
+.fuelux .modal {
+	position: relative;
+	margin-top: 10px;
+	width: 900px;
+	margin-left: -450px;
+}
+
+.fuelux .modal-header {
+	padding: 9px 15px 18px;
+}
