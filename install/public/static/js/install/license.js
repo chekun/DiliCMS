@@ -9,18 +9,20 @@ define(["jquery", 'jquery-ui', "text!templates/license.html"], function($, ui, t
         License.prototype.init = function() {
             var $this = this;
             this.$container.html(tpl);
-            this.$container.find('.checkbox-custom').checkbox();
-            this.$container.find('.checkbox-custom').on('changed', function (e, data) {
+            this.$checkBox = this.$container.find('.checkbox-custom');
+            this.$nextBtn = this.$container.find('.modal-footer > button');
+            this.$checkBox.checkbox();
+            this.$checkBox.on('changed', function (e, data) {
                 if (data.isChecked)
                 {
-                    $this.$container.find('.modal-footer button').removeClass('disabled');
+                    $this.$nextBtn.removeClass('disabled');
                 }
                 else
                 {
-                    $this.$container.find('.modal-footer button').addClass('disabled');
+                    $this.$nextBtn.addClass('disabled');
                 }
             });
-            this.$container.find('.modal-footer button').click(function(){
+            this.$nextBtn.click(function(){
                 window.wizard.wizard('next');
             });
         }
@@ -52,7 +54,7 @@ define(["jquery", 'jquery-ui', "text!templates/license.html"], function($, ui, t
         }
         //on change, check 
         License.prototype.change = function(e) {
-            if ( ! this.$container.find('.checkbox-custom').checkbox('isChecked'))
+            if ( ! this.$checkBox.checkbox('isChecked'))
             {
                 this.$container.effect('shake');
                 e.preventDefault();
