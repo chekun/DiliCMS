@@ -72,7 +72,7 @@ if (defined('ENVIRONMENT'))
  * NO TRAILING SLASH!
  *
  */
-	$application_folder = '../install';
+	$application_folder = '../';
 
 /*
  * --------------------------------------------------------------------
@@ -191,7 +191,7 @@ if (defined('ENVIRONMENT'))
 		define('APPPATH', BASEPATH.$application_folder.'/');
 	}
 //加载DiliCMS常量
-require_once FCPATH . 'shared/config/constant.php';
+require_once BASEPATH . '../shared/config/constant.php';
 /*
  * --------------------------------------------------------------------
  * LOAD THE BOOTSTRAP FILE
