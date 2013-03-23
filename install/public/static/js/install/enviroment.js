@@ -1,7 +1,7 @@
-define(["jquery", 'jquery-ui', "text!templates/platform.html"], function($, ui, tpl) {
+define(["jquery", 'jquery-ui', "text!templates/enviroment.html"], function($, ui, tpl) {
         var Platform = function() {
             this.isShow = false;
-            this.$container = $('#step-platform');
+            this.$container = $('#step-enviroment');
             this.init();
         }
         //init html
@@ -24,7 +24,7 @@ define(["jquery", 'jquery-ui', "text!templates/platform.html"], function($, ui, 
             if ( ! this.isShow || refresh)
             {
                 $.ajax({
-                    url: "index.php/install/platform",
+                    url: "index.php/install/enviroment",
                     dataType: 'html',
                     cache: false,
                     beforeSend: function() {
