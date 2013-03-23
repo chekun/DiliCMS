@@ -31,9 +31,8 @@
 /**
  * 检测当前安装环境是否为SAE
  *
- * @access  public
- * @param   string  
- * @return  mixed
+ * @access  public 
+ * @return  bool
  */
 if ( ! function_exists('is_sae'))
 {
@@ -42,3 +41,65 @@ if ( ! function_exists('is_sae'))
         return defined('SAE_ACCESSKEY') && (substr(SAE_ACCESSKEY, 0, 4 ) != 'kapp');
     }
 }
+
+// ------------------------------------------------------------------------
+
+/**
+ * 检测SAE下memcache服务是否正常
+ *
+ * @access  public
+ * @return  bool
+ */
+if ( ! function_exists('is_memcache_ok'))
+{
+    function is_memcache_ok()
+    {
+        $mmc = memcache_init();
+        if ($mmc == FALSE)
+        {
+            return FALSE;
+        }
+        else
+        {
+            memcache_set($mmc, "dilicms_install_test", "dilicms");
+            return memcache_get($mmc, "dilicms_install_test") == 'dilicms';
+        }
+    }
+}
+
+// ------------------------------------------------------------------------
+
+/**
+ * 检测SAE下memcache服务是否正常
+ *
+ * @access  public
+ * @return  bool
+ */
+if ( ! function_exists('is_storage_ok'))
+{
+    function is_storage_ok()
+    {
+        $s = new SaeStorage();
+        $status = $s->write('public', '.dilicms_install_test', '');
+        $status AND $s->delete('public', '.dilicms_install_test');
+        return $status;
+    }
+}
+
+// ------------------------------------------------------------------------
+
+/**
+ * 检测SAE下mysql服务是否正常
+ *
+ * @access  public
+ * @return  bool
+ */
+if ( ! function_exists('is_mysql_ok'))
+{
+    function is_mysql_ok()
+    {
+        return mysql_connect(SAE_MYSQL_HOST_M.':'.SAE_MYSQL_PORT, SAE_MYSQL_USER, SAE_MYSQL_PASS);
+    }
+}
+
+// ------------------------------------------------------------------------
