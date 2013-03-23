@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS `{DB_PREFIX}attachments`;
+DROP TABLE IF EXISTS `{DB_PREFIX}attachments`{SEPERATOR}
 CREATE TABLE IF NOT EXISTS `{DB_PREFIX}attachments` (
   `aid` int(10) NOT NULL AUTO_INCREMENT,
   `uid` smallint(10) NOT NULL DEFAULT '0',
@@ -12,5 +12,5 @@ CREATE TABLE IF NOT EXISTS `{DB_PREFIX}attachments` (
   `image` tinyint(1) DEFAULT '0',
   `posttime` int(11) DEFAULT '0',
   PRIMARY KEY (`aid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-DELETE FROM `{DB_PREFIX}attachments`;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8{SEPERATOR}
+DELETE FROM `{DB_PREFIX}attachments`

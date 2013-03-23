@@ -124,6 +124,10 @@ if ( ! function_exists('check_environments'))
             'status' => TRUE,
         );
         $environments[] = array(
+            'name' => '有MySQL扩展',
+            'status' => function_exists('mysql_connect'),
+        );
+        $environments[] = array(
             'name' => 'SimpleXMLElement 支持',
             'status' => class_exists('SimpleXMLElement'),
         );

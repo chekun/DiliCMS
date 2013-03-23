@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS `{DB_PREFIX}model_fields`;
+DROP TABLE IF EXISTS `{DB_PREFIX}model_fields`{SEPERATOR}
 CREATE TABLE IF NOT EXISTS `{DB_PREFIX}model_fields` (
   `id` mediumint(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(20) NOT NULL,
@@ -18,5 +18,5 @@ CREATE TABLE IF NOT EXISTS `{DB_PREFIX}model_fields` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`,`model`),
   KEY `model` (`model`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-DELETE FROM `{DB_PREFIX}model_fields`;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8{SEPERATOR}
+DELETE FROM `{DB_PREFIX}model_fields`

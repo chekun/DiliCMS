@@ -34,6 +34,7 @@ class Initialize extends CI_Controller
      */
     public function index()
     {
+        $this->load->database();
         $this->load->model('cache_mdl');
         $this->cache_mdl->update_model_cache();
         $this->cache_mdl->update_category_cache();

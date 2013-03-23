@@ -45,9 +45,7 @@
                   </ul>
                 </div>
                 <div class="step-content">
-                  <div class="step-pane active" id="step-license">
-                    
-                  </div>
+                  <div class="step-pane active" id="step-license"></div>
                   <div class="step-pane" id="step-platform"></div>
                   <div class="step-pane" id="step-environment"></div>
                   <div class="step-pane" id="step-database"></div>

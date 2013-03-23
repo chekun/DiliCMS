@@ -41,6 +41,7 @@ define(["jquery", 'jquery-ui', "text!templates/environment.html"], function($, u
                                 你使用的是<strong>SAE</strong>平台, 可以直接进行下一步。\
                             </div> \
                         ');
+                        $this.$container.data('platform', 'sae');
                         $this.$nextBtn.removeClass('disabled');
                     }
                     else
@@ -50,6 +51,7 @@ define(["jquery", 'jquery-ui', "text!templates/environment.html"], function($, u
                         {
                             $this.$nextBtn.removeClass('disabled');
                             $this.$refreshBtn.hide();
+                            $this.$container.data('platform', 'default');
                         }
                         else
                         {
