@@ -64,6 +64,23 @@ $db['default']['swap_pre'] = '';
 $db['default']['autoinit'] = TRUE;
 $db['default']['stricton'] = FALSE;
 
+//SAE database config
+$db['sae']['hostname'] = SAE_MYSQL_HOST_M.':'.SAE_MYSQL_PORT;
+$db['sae']['username'] = SAE_MYSQL_USER;
+$db['sae']['password'] = SAE_MYSQL_PASS;
+$db['sae']['database'] = SAE_MYSQL_DB;
+$db['sae']['dbdriver'] = 'mysql';
+$db['sae']['dbprefix'] = 'dili_';
+$db['sae']['pconnect'] = FALSE;
+$db['sae']['db_debug'] = TRUE;
+$db['sae']['cache_on'] = FALSE;
+$db['sae']['cachedir'] = '';
+$db['sae']['char_set'] = 'utf8';
+$db['sae']['dbcollat'] = 'utf8_general_ci';
+$db['sae']['swap_pre'] = '';
+$db['sae']['autoinit'] = TRUE;
+$db['sae']['stricton'] = FALSE;
+
 
 /* End of file database.php */
 /* Location: ./application/config/database.php */
