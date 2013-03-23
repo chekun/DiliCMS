@@ -70,7 +70,7 @@ if ( ! function_exists('is_memcache_ok'))
 // ------------------------------------------------------------------------
 
 /**
- * 检测SAE下memcache服务是否正常
+ * 检测SAE下storage服务是否正常
  *
  * @access  public
  * @return  bool
@@ -98,7 +98,7 @@ if ( ! function_exists('is_mysql_ok'))
 {
     function is_mysql_ok()
     {
-        return mysql_connect(SAE_MYSQL_HOST_M.':'.SAE_MYSQL_PORT, SAE_MYSQL_USER, SAE_MYSQL_PASS);
+        return function_exists('mysql_connect') AND mysql_connect(SAE_MYSQL_HOST_M.':'.SAE_MYSQL_PORT, SAE_MYSQL_USER, SAE_MYSQL_PASS);
     }
 }
 
