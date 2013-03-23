@@ -7,16 +7,17 @@ define(["jquery", 'jquery-ui', "text!templates/license.html"], function($, ui, t
         }
         //init html
         License.prototype.init = function() {
+            var $this = this;
             this.$container.html(tpl);
             this.$container.find('.checkbox-custom').checkbox();
             this.$container.find('.checkbox-custom').on('changed', function (e, data) {
                 if (data.isChecked)
                 {
-                    this.$container.find('.modal-footer button').removeClass('disabled');
+                    $this.$container.find('.modal-footer button').removeClass('disabled');
                 }
                 else
                 {
-                    this.$container.find('.modal-footer button').addClass('disabled');
+                    $this.$container.find('.modal-footer button').addClass('disabled');
                 }
             });
             this.$container.find('.modal-footer button').click(function(){
