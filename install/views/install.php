@@ -57,6 +57,12 @@
               </div>
           </div>
         </div>
+        <footer>
+          <p align="center">
+            DiliCMS <code><?php echo DILICMS_VERSION; ?></code> 安装程序 <br />
+            ©<?php echo date('Y'); ?> <a target="_blank" href="http://www.dilicms.com/">DiliCMS</a>
+          </p>
+        </footer>
     </div>
     <script src="static/js/require.js"></script>
     <script>
