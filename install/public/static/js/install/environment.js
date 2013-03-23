@@ -1,11 +1,11 @@
-define(["jquery", 'jquery-ui', "text!templates/enviroment.html"], function($, ui, tpl) {
-        var Platform = function() {
+define(["jquery", 'jquery-ui', "text!templates/environment.html"], function($, ui, tpl) {
+        var Environment = function() {
             this.isShow = false;
-            this.$container = $('#step-enviroment');
+            this.$container = $('#step-environment');
             this.init();
         }
         //init html
-        Platform.prototype.init = function() {
+        Environment.prototype.init = function() {
             var $this = this;
             this.$container.html(tpl);
             this.$refreshBtn = $(this.$container).find('.modal-header > button');
@@ -18,13 +18,13 @@ define(["jquery", 'jquery-ui', "text!templates/enviroment.html"], function($, ui
             });
         }
         //when show
-        Platform.prototype.show = function(refresh) {
+        Environment.prototype.show = function(refresh) {
             refresh = refresh || false;
             var $this = this;
             if ( ! this.isShow || refresh)
             {
                 $.ajax({
-                    url: "index.php/install/enviroment",
+                    url: "index.php/install/environment",
                     dataType: 'html',
                     cache: false,
                     beforeSend: function() {
@@ -34,18 +34,30 @@ define(["jquery", 'jquery-ui', "text!templates/enviroment.html"], function($, ui
                         }
                     }
                 }).done(function (html) {
-                    $this.$container.find('.modal-body').html(html);
-                    $this.isShow = true;
-                    if ($this.isPassed())
+                    if (html == 'pass')
                     {
+                        $this.$container.find('.modal-body').html(' \
+                            <div class="alert"> \
+                                你使用的是<strong>SAE</strong>平台, 可以直接进行下一步。\
+                            </div> \
+                        ');
                         $this.$nextBtn.removeClass('disabled');
-                        $this.$refreshBtn.hide();
                     }
                     else
                     {
-                        $this.$nextBtn.addClass('disabled');
-                        $this.$refreshBtn.show();
+                        $this.$container.find('.modal-body').html(html);
+                        if ($this.isPassed())
+                        {
+                            $this.$nextBtn.removeClass('disabled');
+                            $this.$refreshBtn.hide();
+                        }
+                        else
+                        {
+                            $this.$nextBtn.addClass('disabled');
+                            $this.$refreshBtn.show();
+                        }
                     }
+                    $this.isShow = true;
                 }).always(function (){
                     if (refresh)
                     {
@@ -55,7 +67,7 @@ define(["jquery", 'jquery-ui', "text!templates/enviroment.html"], function($, ui
             }
         }
         //on change, check 
-        Platform.prototype.change = function(e) {
+        Environment.prototype.change = function(e) {
             if ( ! this.isPassed())
             {
                 this.$container.effect('shake');
@@ -63,16 +75,16 @@ define(["jquery", 'jquery-ui', "text!templates/enviroment.html"], function($, ui
             }
         }
         // changed
-        Platform.prototype.changed = function() {
+        Environment.prototype.changed = function() {
             //do nothing
             
         }
 
-        Platform.prototype.isPassed = function() {
+        Environment.prototype.isPassed = function() {
             return ! this.$container.find('.alert-error').length;
         }
 
-        var platform = new Platform();window.platform = platform;
-        return platform;
+        var environment = new Environment();
+        return environment;
     }
 );

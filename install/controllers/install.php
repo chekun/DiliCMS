@@ -36,4 +36,16 @@ class Install extends CI_Controller
         $this->load->view('platform', $data);
     }
 
+    public function environment()
+    {
+        if (is_sae())
+        {
+            echo 'pass';
+        }
+        else
+        {
+            echo 'pass';
+        }
+    }
+
 }

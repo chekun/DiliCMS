@@ -48,11 +48,11 @@
                   <div class="step-pane active" id="step-license">
                     
                   </div>
-                  <div class="step-pane" id="step-platform">This is step 2</div>
-                  <div class="step-pane" id="step-environment">This is step 3</div>
-                  <div class="step-pane" id="step-database">This is step 4</div>
-                  <div class="step-pane" id="step-admin">This is step 5</div>
-                  <div class="step-pane" id="step-complete">This is step 5</div>
+                  <div class="step-pane" id="step-platform"></div>
+                  <div class="step-pane" id="step-environment"></div>
+                  <div class="step-pane" id="step-database"></div>
+                  <div class="step-pane" id="step-admin"></div>
+                  <div class="step-pane" id="step-complete"></div>
                 </div>
               </div>
           </div>
@@ -71,7 +71,11 @@
                  'fuelux/all', 
                  'install/license', 
                  'install/platform',
-                 'install/environment'], function($, fuelux, license, platform) {
+                 'install/environment'], function($, 
+                                                  fuelux, 
+                                                  license, 
+                                                  platform, 
+                                                  environment) {
             $(function() {
                 window.wizard = wizard = $('#installWizard');
                 wizard.on('change', function(e, data) {
@@ -83,6 +87,9 @@
                       case 2: 
                               platform.change(e);
                               break;
+                      case 3: 
+                              environment.change(e);
+                              break;
                     }
                 });
                 wizard.on('changed', function(e, data) {
@@ -93,6 +100,9 @@
                               break;
                       case 2:
                               platform.show();
+                              break;
+                      case 3:
+                              environment.show();
                               break;
                     }
                 });

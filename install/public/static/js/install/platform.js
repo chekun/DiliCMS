@@ -72,7 +72,7 @@ define(["jquery", 'jquery-ui', "text!templates/platform.html"], function($, ui, 
             return ! this.$container.find('.alert-error').length;
         }
 
-        var platform = new Platform();window.platform = platform;
+        var platform = new Platform();
         return platform;
     }
 );
