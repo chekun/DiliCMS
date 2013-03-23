@@ -81,7 +81,7 @@ define(["jquery", 'jquery-ui', "text!templates/environment.html"], function($, u
         }
 
         Environment.prototype.isPassed = function() {
-            return ! this.$container.find('.alert-error').length;
+            return ! this.$container.find('.error').length;
         }
 
         var environment = new Environment();
