@@ -103,3 +103,49 @@ if ( ! function_exists('is_mysql_ok'))
 }
 
 // ------------------------------------------------------------------------
+
+/**
+ * 检测运行环境
+ *
+ * @access  public
+ * @return  mixed
+ */
+if ( ! function_exists('check_environments'))
+{
+    function check_environments()
+    {
+        //检查运行环境
+        $environments[] = array(
+            'name' => 'PHP版本 >= 5.1.6',
+            'status' => (PHP_VERSION >= '5.1.6')
+        );
+        $environments[] = array(
+            'name' => 'MySQL版本 > 4.1',
+            'status' => TRUE,
+        );
+        $environments[] = array(
+            'name' => 'SimpleXMLElement 支持',
+            'status' => class_exists('SimpleXMLElement'),
+        );
+        //检查目录是否可写
+        $environments[] = array(
+            'name' => './shared 文件夹可读写',
+            'status' => is_writeable(BASEPATH.'../shared')
+        );
+        $environments[] = array(
+            'name' => './admin/config 文件夹可读写',
+            'status' => is_writeable(BASEPATH.'../admin/config')
+        );
+        $environments[] = array(
+            'name' => './application/config 文件夹可读写',
+            'status' => is_writeable(BASEPATH.'../application/config')
+        );
+        $environments[] = array(
+            'name' => './attachments 文件夹可读写',
+            'status' => is_writeable(BASEPATH.'../attachments')
+        );
+        return $environments;
+    }
+}
+
+// ------------------------------------------------------------------------

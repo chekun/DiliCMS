@@ -44,7 +44,8 @@ class Install extends CI_Controller
         }
         else
         {
-            echo 'pass';
+            $data['environments'] = check_environments();
+            $this->load->view('environment', $data);
         }
     }
 
