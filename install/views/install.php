@@ -67,7 +67,7 @@
     <script src="static/js/require.js"></script>
     <script>
         requirejs.config({baseUrl: 'static/js'});
-        require(['jquery', 'fuelux/all', 'install/license'], function($, fuelux, license) {
+        require(['jquery', 'fuelux/all', 'install/license', 'install/platform'], function($, fuelux, license, platform) {
             $(function() {
                 window.wizard = wizard = $('#installWizard');
                 wizard.on('change', function(e, data) {
@@ -76,6 +76,9 @@
                       case 1:
                               license.change(e);
                               break;
+                      case 2: 
+                              platform.change(e);
+                              break;
                     }
                 });
                 wizard.on('changed', function(e, data) {
@@ -83,6 +86,9 @@
                     {
                       case 1:
                               license.show();
+                              break;
+                      case 2:
+                              platform.show();
                               break;
                     }
                 });
