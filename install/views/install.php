@@ -71,11 +71,15 @@
                  'fuelux/all', 
                  'install/license', 
                  'install/platform',
-                 'install/environment'], function($, 
-                                                  fuelux, 
-                                                  license, 
-                                                  platform, 
-                                                  environment) {
+                 'install/environment',
+                 'install/database'], function(
+                    $, 
+                    fuelux, 
+                    license, 
+                    platform, 
+                    environment,
+                    database
+          ) {
             $(function() {
                 window.wizard = wizard = $('#installWizard');
                 wizard.on('change', function(e, data) {
@@ -90,6 +94,9 @@
                       case 3: 
                               environment.change(e);
                               break;
+                      case 4: 
+                              database.change(e);
+                              break;
                     }
                 });
                 wizard.on('changed', function(e, data) {
@@ -103,6 +110,9 @@
                               break;
                       case 3:
                               environment.show();
+                              break;
+                      case 4:
+                              database.show();
                               break;
                     }
                 });

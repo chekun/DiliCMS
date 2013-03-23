@@ -49,4 +49,9 @@ class Install extends CI_Controller
         }
     }
 
+    public function database()
+    {
+        
+    }
+
 }
