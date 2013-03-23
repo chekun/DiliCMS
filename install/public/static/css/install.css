@@ -12,3 +12,15 @@
 .fuelux .modal-header {
 	padding: 9px 15px 18px;
 }
+
+.fuelux .well {
+    background: #fff;
+    padding-top: 100px;
+    padding-bottom: 40px;
+    margin-top: 50px;
+    background: url(../images/logo.png) 10px 10px no-repeat;
+}
+
+.btn {
+    cursor: pointer;
+}
