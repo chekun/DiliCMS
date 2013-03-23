@@ -45,7 +45,7 @@
 | the active record class
 */
 
-$active_group = 'default';
+$active_group = get_instance()->platform->get_type();
 $active_record = TRUE;
 
 $db['default']['hostname'] = 'localhost';
@@ -64,7 +64,7 @@ $db['default']['swap_pre'] = '';
 $db['default']['autoinit'] = TRUE;
 $db['default']['stricton'] = FALSE;
 
-//SAE database config
+//SAE数据库设置
 $db['sae']['hostname'] = SAE_MYSQL_HOST_M.':'.SAE_MYSQL_PORT;
 $db['sae']['username'] = SAE_MYSQL_USER;
 $db['sae']['password'] = SAE_MYSQL_PASS;
