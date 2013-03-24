@@ -52,10 +52,10 @@ class Platform
      * @access  public
      * @return  void
      */
-    public function __construct()
+    public function __construct($config = array())
     {
         date_default_timezone_set('PRC');//强制时区为PRC,以后可增加配置变量
-        $this->_init();
+        $this->_init($config);
     }
     
     // ------------------------------------------------------------------------
@@ -66,17 +66,21 @@ class Platform
      * @access  private
      * @return  void
      */
-    private function _init()
+    private function _init($running_platform)
     {
         $platform = '';
-        if (file_exists(DILICMS_SHARE_PATH . 'config/platform.php'))
+        if ( ! is_array($running_platform) || ! $running_platform)
         {
-           include DILICMS_SHARE_PATH . 'config/platform.php';
-           if (isset($running_platform['type']) AND $running_platform['type'])
-           {
-               $platform = $running_platform['type'];
-           }
+            if (file_exists(DILICMS_SHARE_PATH . 'config/platform.php'))
+            {
+               include DILICMS_SHARE_PATH . 'config/platform.php';
+            }
         }
+        if (isset($running_platform['type']) AND $running_platform['type'])
+        {
+            $platform = $running_platform['type'];
+        }
+        
         if ( ! in_array($platform, $this->_supported_platforms))
         {
             $platform = $this->_supported_platforms[0];

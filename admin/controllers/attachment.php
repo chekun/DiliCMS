@@ -37,6 +37,7 @@ class Attachment extends CI_Controller
 	public function __construct()
 	{
 		parent::__construct();
+		$this->load->database();
 	}
 	
 	// ------------------------------------------------------------------------
@@ -49,6 +50,7 @@ class Attachment extends CI_Controller
      */
 	public function _upload_post()
 	{
+		
 		//不能加载SESSION类库
 		$session_id = $this->input->post('hash', TRUE);
 		$session = $this->db->where('session_id', $session_id)->get($this->db->dbprefix('sessions'))->row();

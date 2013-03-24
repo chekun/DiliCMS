@@ -71,11 +71,8 @@
 
 	<div id="body">
 
-		<p>安装教程</p>
-		<code><a href="http://www.dilicms.com/#installation" target="_blank">http://www.dilicms.com/#installation</a></code>
-
-		<p>默认帐号和密码</p>
-		<code>帐号:admin/密码:dilicms</code>
+		<p>安装</p>
+		<code><a href="install/public/">点此进行安装</a></code>
 
 		<p>QQ讨论群</p>
 		<code>185074106</code>

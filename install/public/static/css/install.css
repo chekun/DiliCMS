@@ -1,0 +1,50 @@
+.fuelux .container, .fuelux .span12 {
+	width: 940px;
+}
+
+.fuelux .modal {
+	position: relative;
+	margin-top: 10px;
+	width: 900px;
+	margin-left: -450px;
+}
+
+.fuelux .modal-header {
+	padding: 9px 15px 18px;
+}
+
+.fuelux .modal-body {
+    overflow-x: hidden;
+}
+
+.fuelux .well {
+    background: #fff;
+    padding-top: 100px;
+    padding-bottom: 40px;
+    margin-top: 30px;
+    background: url(../images/logo.png) 10px 10px no-repeat;
+}
+
+.control-group.error .controls, .control-group.error .controls .help-inline {
+    background: red;
+    color: white;
+}
+
+#console {
+    display: block;
+    left: 420px;
+    height: 340px;
+    top: 5px;
+    max-width: 450px;
+    width: 450px;
+    max-height: 340px;
+}
+
+#console .popover-content {
+    overflow-x: hidden;
+    max-height: 280px;
+}
+
+.fuelux .thumbnails {
+    margin-left: 60px;
+}
