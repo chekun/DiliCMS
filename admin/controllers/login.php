@@ -35,6 +35,7 @@ class Login extends CI_Controller
 	public function __construct()
 	{
 		parent::__construct();
+        $this->load->database();
 		$this->load->library('session');
 		$this->settings->load('backend');
 		$this->load->switch_theme(setting('backend_theme'));
