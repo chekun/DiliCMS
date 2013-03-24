@@ -54,7 +54,7 @@ if ( ! function_exists('is_memcache_ok'))
 {
     function is_memcache_ok()
     {
-        $mmc = memcache_init();
+        $mmc = @memcache_init();
         if ($mmc == FALSE)
         {
             return FALSE;

@@ -51,4 +51,14 @@
         Storage <strong>已建立</strong>
     </div>
     <?php endif; ?>
+    <?php if ( ! $is_config_ok): ?>
+    <div class="alert alert-error">
+        shared/config/platform.php <strong>未正确配置</strong>，请先正确配置shared/config/platform.php。<br />
+        shared/config/platform.php必须可读且type的值必须为sae, storage的值必须为public.
+    </div>
+    <?php else: ?>
+    <div class="alert">
+        shared/config/platform.php <strong>配置正确</strong>
+    </div>
+    <?php endif; ?>
 <?php endif; ?>
