@@ -153,3 +153,27 @@ if ( ! function_exists('check_environments'))
 }
 
 // ------------------------------------------------------------------------
+
+/**
+ * 检测是否已经安装过
+ *
+ * @access  public
+ * @return  mixed
+ */
+if ( ! function_exists('is_installed'))
+{
+    function is_installed()
+    {
+        if (is_sae())
+        {
+            $s = new SaeStorage();
+            return $s->fileExists('public', 'install.lock');
+        }
+        else
+        {
+            return @file_exists(BASEPATH.'../shared/settings/install.lock');
+        }
+    }
+}
+
+// ------------------------------------------------------------------------

@@ -3,8 +3,20 @@
 class Install extends CI_Controller 
 {
 
+    public function __construct()
+    {
+        parent::__construct();
+        if (is_installed())
+        {
+            header("Content-type:text/html;charset=utf-8");
+            echo 'DiliCMS已经安装过,要重新安装请先删除install.lock';
+            exit($this->output->get_output());
+        }
+    }
+
 	public function index()
 	{
+        
         date_default_timezone_set('PRC');
 		$this->load->view('install');
 	}
@@ -91,6 +103,8 @@ class Install extends CI_Controller
                     $database_config = str_replace($search_array, $replace_array, @file_get_contents(BASEPATH.'../admin/config/database.php'));
                     @file_put_contents(BASEPATH.'../admin/config/database.php', $database_config);
                     @file_put_contents(BASEPATH.'../application/config/database.php', $database_config);
+                    $database_config = str_replace("get_instance()->platform->get_type()", "PLATFORM", $database_config);
+                    @file_put_contents(BASEPATH.'../install/config/database.php', $database_config);
                 }
                 
                 echo json_encode(array(
@@ -120,6 +134,55 @@ class Install extends CI_Controller
                     'status' => 1,
                     'messages' => array('表'.$config['dbprefix'].$step.'安装成功, 插入行数: '.$db->affected_rows())
             ));
+        }
+    }
+
+    public function account()
+    {
+        define('PLATFORM', is_sae() ? 'sae' : 'default');
+        $this->load->database();
+        $data['username'] = $this->input->post('username', TRUE);
+        $data['salt'] = substr(sha1(time()), -10);
+        $data['password'] = sha1($this->input->post('userpass', TRUE).$data['salt']);
+        $data['email'] = 'hello@dilicms.com';
+        $data['role'] = 1;
+        $data['status'] = 1;
+        if ($this->db->insert('admins', $data) AND $this->db->affected_rows() == 1)
+        {
+            echo json_encode(array('status' => 1));
+        }
+        else
+        {
+            echo json_encode(array('status' => 0));
+        }
+    }
+
+    public function complete()
+    {
+        //更新缓存
+        define('PLATFORM', is_sae() ? 'sae' : 'default');
+        define('DILICMS_SHARED_PATH', BASEPATH.'../shared/');
+        $this->load->add_package_path(DILICMS_SHARED_PATH);
+        $this->load->library('platform', array('type' => PLATFORM, 'storage' => 'public'));
+        $this->load->helper('common');
+        $this->load->database();
+        $this->load->model('cache_mdl');
+        $this->cache_mdl->update_model_cache();
+        $this->cache_mdl->update_category_cache();
+        $this->cache_mdl->update_menu_cache();
+        $this->cache_mdl->update_role_cache();
+        $this->cache_mdl->update_site_cache();
+        $this->cache_mdl->update_backend_cache();
+        $this->cache_mdl->update_plugin_cache();
+        $this->cache_mdl->update_fieldtypes_cache();
+        //创建安装锁定文件
+        if (is_sae())
+        {
+            $this->platform->file_write('install.lock', 'Welcome to DiliCMS!');
+        }
+        else
+        {
+            $this->platform->file_write(DILICMS_SHARED_PATH.'settings/install.lock', 'Welcome to DiliCMS!');
         }
     }
 

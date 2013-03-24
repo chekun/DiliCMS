@@ -1,0 +1,40 @@
+<div class="modal">
+  <div class="modal-header">
+    &nbsp;&nbsp;
+    <h3 class="pull-left">设置管理员帐号</h3>
+    <button type="button" class="btn btn-danger disabled pull-right hide">正在创建账号...</button>
+  </div>
+  <div class="modal-body">
+    <form class="form-horizontal">
+      <div class="control-group">
+        <label class="control-label" for="username">用户名</label>
+        <div class="controls">
+          <input type="text" id="username" name="username" placeholder="输入用户名" value="">
+          <span class="help-inline">3-16个字符, <span class="label label-important">必须填写</span></span>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="userpass">密码</label>
+        <div class="controls">
+          <input type="password" id="userpass" name="userpass" placeholder="输入密码">
+          <span class="help-inline">6-18位, <span class="label label-important">必须填写</span></span>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="password_confirm">确认密码</label>
+        <div class="controls">
+          <input type="password" id="password_confirm" name="password_confirm" placeholder="必须和密码一致">
+          <span class="help-inline">6-18位, <span class="label label-important">必须填写</span></span>
+        </div>
+      </div>
+      <div class="control-group">
+        <div class="controls">
+          <button type="submit" class="btn">创建管理员帐号</button>
+        </div>
+      </div>
+  </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary disabled">下一步</button>
+  </div>
+</div>

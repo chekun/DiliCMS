@@ -44,7 +44,7 @@ abstract class Admin_Controller extends CI_Controller
 	public function __construct()
 	{
 		parent::__construct();
-        $this->load->library('database');
+        $this->load->database();
 		$this->load->library('session');
 		$this->settings->load('backend');
 		$this->load->switch_theme(setting('backend_theme'));

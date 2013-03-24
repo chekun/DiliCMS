@@ -39,6 +39,7 @@ define(["jquery", 'jquery-ui', "text!templates/license.html"], function($, ui, t
                             <li>FLASH上传控件版权归Discuz!所有.</li> \
                             <li>后台UI版权归iwebshop所有.</li> \
                         </ol> \
+                        <span class="label label-warning">注: DiliCMS V3.0以后将采用开源上传组件和UI框架.</span> \
                     </p> \
                     <p> \
                         本安装程序使用以下开源框架实现: \

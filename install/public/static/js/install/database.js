@@ -2,7 +2,6 @@ define(["jquery", 'jquery-ui', "text!templates/database.html"], function($, ui, 
         var Database = function() {
             this.isShow = false;
             this.$container = $('#step-database');
-            this.$container.data('isPassed', false);
             this.platform = $('#step-environment').data('platform') || 'default';
             this.init();
         }

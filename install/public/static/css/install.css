@@ -44,3 +44,7 @@
     overflow-x: hidden;
     max-height: 280px;
 }
+
+.fuelux .thumbnails {
+    margin-left: 60px;
+}

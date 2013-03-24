@@ -36,8 +36,8 @@
                     <li data-target="#step-database" class="">
                       <span class="badge">4</span>数据库<span class="chevron"></span>
                     </li>
-                    <li data-target="#step-admin" class="">
-                      <span class="badge">5</span>初始账号<span class="chevron"></span>
+                    <li data-target="#step-account" class="">
+                      <span class="badge">5</span>初始帐号<span class="chevron"></span>
                     </li>
                     <li data-target="#step-complete" class="">
                       <span class="badge">6</span>完成<span class="chevron"></span>
@@ -49,7 +49,7 @@
                   <div class="step-pane" id="step-platform"></div>
                   <div class="step-pane" id="step-environment"></div>
                   <div class="step-pane" id="step-database"></div>
-                  <div class="step-pane" id="step-admin"></div>
+                  <div class="step-pane" id="step-account"></div>
                   <div class="step-pane" id="step-complete"></div>
                 </div>
               </div>
@@ -58,7 +58,7 @@
         <footer>
           <p align="center">
             <a target="_blank" href="http://www.dilicms.com/">DiliCMS</a> <code><?php echo DILICMS_VERSION; ?></code> Installer <br />
-            ©<?php echo date('Y'); ?> <a target="_blank" href="http://www.dilicms.com/">DiliCMS</a>
+            ©<?php echo date('Y'); ?> <a target="_blank" href="http://www.dilicms.com/">DiliCMS</a> & <a target="_blank" href="http://chekun.me">chekun</a>
           </p>
         </footer>
     </div>
@@ -70,13 +70,17 @@
                  'install/license', 
                  'install/platform',
                  'install/environment',
-                 'install/database'], function(
+                 'install/database',
+                 'install/account',
+                 'install/complete'], function(
                     $, 
                     fuelux, 
                     license, 
                     platform, 
                     environment,
-                    database
+                    database,
+                    account,
+                    complete
           ) {
             $(function() {
                 window.wizard = wizard = $('#installWizard');
@@ -95,6 +99,12 @@
                       case 4: 
                               database.change(e);
                               break;
+                      case 5: 
+                              account.change(e);
+                              break;
+                      case 6:
+                              complete.change(e);
+                              break;
                     }
                 });
                 wizard.on('changed', function(e, data) {
@@ -111,6 +121,12 @@
                               break;
                       case 4:
                               database.show();
+                              break;
+                      case 5: 
+                              account.show();
+                              break;
+                      case 6: 
+                              complete.show();
                               break;
                     }
                 });
