@@ -164,6 +164,7 @@ class Install extends CI_Controller
         define('DILICMS_SHARED_PATH', BASEPATH.'../shared/');
         $this->load->add_package_path(DILICMS_SHARED_PATH);
         $this->load->library('platform', array('type' => PLATFORM, 'storage' => 'public'));
+        $this->load->library('settings');
         $this->load->helper('common');
         $this->load->database();
         $this->load->model('cache_mdl');
