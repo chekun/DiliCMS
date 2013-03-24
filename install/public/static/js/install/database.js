@@ -2,7 +2,6 @@ define(["jquery", 'jquery-ui', "text!templates/database.html"], function($, ui, 
         var Database = function() {
             this.isShow = false;
             this.$container = $('#step-database');
-            this.platform = $('#step-environment').data('platform') || 'default';
             this.init();
         }
         //init html
@@ -48,6 +47,7 @@ define(["jquery", 'jquery-ui', "text!templates/database.html"], function($, ui, 
         Database.prototype.show = function() {
             this.$nextBtn.addClass('disabled');
             this.$console.hide();
+            this.platform = $('#step-environment').data('platform');
             if (this.platform == 'sae')
             {
                 this.$server.attr('readonly', true);
