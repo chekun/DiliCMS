@@ -2,7 +2,7 @@ define(["jquery", 'jquery-ui', "text!templates/complete.html"], function($, ui, 
         var Complete = function() {
             this.isShow = false;
             this.$container = $('#step-complete');
-            this.baseUrl = window.location.pathname.replace('/install/public/index.php', '').replace('/install/public', '');
+            this.baseUrl = window.location.href.replace(/(\/install\/public.*)/, '');
             this.init();
         }
         //init html
