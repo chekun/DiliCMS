@@ -94,7 +94,7 @@ class Model_mdl extends CI_Model
 			$this->load->dbforge();
 			$table = 'u_m_' . $data['name'];
 			$this->dbforge->drop_table($table);
-            $this->dbforge->add_field(array('id' => array('type' => 'INT', 'constraint' => 10, 'unsigned' => TRUE, 'default' => 0, 'auto_increment' => TRUE)));
+            $this->dbforge->add_field(array('id' => array('type' => 'INT', 'constraint' => 10, 'unsigned' => TRUE, 'auto_increment' => TRUE)));
 			$this->dbforge->add_key('id', TRUE);
 			$this->dbforge->add_field(array('create_time' => array('type' => 'INT', 'constraint' => 10, 'unsigned' => TRUE, 'default' => 0)));
 			$this->dbforge->add_field(array('update_time' => array('type' => 'INT', 'constraint' => 10, 'unsigned' => TRUE, 'default' => 0)));
