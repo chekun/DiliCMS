@@ -45,6 +45,11 @@
 | the active record class
 */
 
+if ( ! class_exists('Platform'))
+{
+    get_instance()->load->library('platform');
+}
+
 $active_group = get_instance()->platform->get_type();
 $active_record = TRUE;
 
