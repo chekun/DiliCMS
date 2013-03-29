@@ -45,7 +45,7 @@
 | the active record class
 */
 
-if ( ! class_exists('Platform'))
+if ( ! class_exists('Platform') AND function_exists('is_sae'))
 {
     get_instance()->load->library('platform');
 }
