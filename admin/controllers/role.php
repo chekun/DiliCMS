@@ -242,7 +242,7 @@ class Role extends Admin_Controller
 		$data['rights'] = $this->_array_to_string($this->input->post('right', TRUE));
 		$data['models'] = $this->_array_to_string($this->input->post('model', TRUE));
 		$data['category_models'] = $this->_array_to_string($this->input->post('category_model', TRUE));
-		$data['plugins'] = $this->_array_to_string($this->input->post('plugin'), TRUE);	
+		$data['plugins'] = $this->_array_to_string($this->input->post('plugin', TRUE));	
 		return $data;
 	}
 
