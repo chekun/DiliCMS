@@ -46,7 +46,7 @@ define(["jquery", 'jquery-ui', "text!templates/license.html"], function($, ui, t
                         <ul> \
                             <li><a target="_blank" href="http://jquery.com">jQuery</a>, <a target="_blank" href="http://jqueryui.com">jQueryUI</a></li> \
                             <li><a target="_blank" href="http://requirejs.org">RequireJS</a></li> \
-                            <li><a target="_blank" href="http://exacttarget.github.com/fuelux/">Bootstrap</a>, <a target="_blank" href="http://requirejs.org">Fuel UX</a></li> \
+                            <li><a target="_blank" href="http://twitter.github.io/bootstrap/">Bootstrap</a>, <a target="_blank" href="http://exacttarget.github.com/fuelux/">Fuel UX</a></li> \
                         </ul> \
                     </p> \
                 ');
