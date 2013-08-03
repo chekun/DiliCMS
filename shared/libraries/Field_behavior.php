@@ -201,7 +201,7 @@ class Field_behavior
      * @param   bool
      * @return  void
      */
-	public function on_form($field, $default = '', $has_tip = TRUE)
+	public function on_form($field, $default = '', $has_tip = TRUE, $allow_upload = FALSE)
 	{
 		
 		if ($this->_is_extra($field['type']))
@@ -217,7 +217,7 @@ class Field_behavior
 			{
 				$default = $field['values'];
 			}
-			$this->_ci->form->display($field, $default, $has_tip);
+			$this->_ci->form->display($field, $default, $has_tip, $allow_upload);
 		}
 	}
 	
