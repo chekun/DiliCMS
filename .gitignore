@@ -1,3 +1,4 @@
+.idea
 # ignore database config
 !admin/config/database.php
 !application/config/database.php
