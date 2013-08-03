@@ -59,11 +59,6 @@ jQuery(function(){
 		});
 		//kill the fucking focus
 		$('button').attr('hideFocus',true);
-		//恼人的IE6,7相对路径导致xheditorcss加载失败的问题
-		if(parseInt($.browser.version) < 8)
-		{
-			$('<link id="xheCSS_nostyle" rel="stylesheet" type="text/css" href="js/xheditor/xheditor_skin/nostyle/ui.css">').appendTo($('head'));
-		}
 	 }
 
     //kindeditor 初始化绑定
