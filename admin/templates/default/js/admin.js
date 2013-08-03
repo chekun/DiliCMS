@@ -65,9 +65,30 @@ jQuery(function(){
 			$('<link id="xheCSS_nostyle" rel="stylesheet" type="text/css" href="js/xheditor/xheditor_skin/nostyle/ui.css">').appendTo($('head'));
 		}
 	 }
-	 
-	 
-	
+
+    //kindeditor 初始化绑定
+    KindEditor.ready(function(K) {
+        $('textarea[data-editor="kindeditor"]').each(function(k, item) {
+            var $this = $(item);
+            var allowUpload = $this.data('upload');
+            if ($this.data('editor-mode') == 'simple') {
+                K.create(item, {
+                    resizeType : 1,
+                    allowPreviewEmoticons : false,
+                    allowImageUpload : allowUpload,
+                    items : [
+                        'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline',
+                        'removeformat', '|', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist',
+                        'insertunorderedlist', '|', 'emoticons', 'image', 'link']
+                });
+            } else {
+                K.create(item, {
+                    resizeType : 1,
+                    allowImageUpload : allowUpload
+                });
+            }
+        });
+    });
 });
 
 //全选全不选

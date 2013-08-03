@@ -1,5 +1,7 @@
 <?php if ( ! defined('IN_DILICMS')) exit('No direct script access allowed');?>
-<script src="js/xheditor/xheditor-zh-cn.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="js/kindeditor/themes/default/default.css" />
+<script charset="utf-8" src="js/kindeditor/kindeditor-all-min.js"></script>
+<script charset="utf-8" src="js/kindeditor/lang/zh_CN.js"></script>
 <?php $current_tab =  $this->input->get('tab') ? $this->input->get('tab') : 'site_basic' ; ?>
 <div class="headbar">
 	<div class="position"><span>系统</span><span>></span><span>系统设置</span><span>></span><span>站点设置</span></div>
@@ -41,7 +43,7 @@
 				</tr>
 				<tr>
 					<th>站点底部：</th>
-					<td><textarea name='site_footer'  id="site_footer" style="height:300px;width:100%" class="xheditor {skin:'nostyle'}"><?php echo $site->site_footer;?></textarea></td>
+					<td><textarea name='site_footer'  id="site_footer" style="height:300px;width:100%" data-editor="kindeditor" data-editor-mode="simple" data-upload="false"><?php echo $site->site_footer;?></textarea></td>
 				</tr>
 				<tr>
 					<th>站点关键字：</th>
@@ -74,7 +76,7 @@
 				</tr>
 				<tr>
 					<th>站点关闭原因：</th>
-					<td><textarea  name='site_close_reason' style="height:200px;width:100%" class="xheditor {skin:'nostyle'}" ><?php echo $site->site_close_reason; ?></textarea></td>
+					<td><textarea  name='site_close_reason' style="height:200px;width:100%" data-editor="kindeditor" data-editor-mode="simple" data-upload="false"><?php echo $site->site_close_reason; ?></textarea></td>
 				</tr>
 				<tr>
 					<th></th>
@@ -122,7 +124,7 @@
 				<col />
 				<tr>
 					<th>注册协议：</th>
-					<td><textarea name='site_terms'  id="site_terms" style="height:300px;width:100%" class="xheditor {skin:'nostyle'}"></textarea></td>
+					<td><textarea name='site_terms'  id="site_terms" style="height:300px;width:100%" data-editor="kindeditor" data-editor-mode="simple" data-upload="false"></textarea></td>
 				</tr>
 				<tr>
 					<th></th>
