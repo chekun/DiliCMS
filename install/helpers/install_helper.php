@@ -137,6 +137,10 @@ if ( ! function_exists('check_environments'))
             'status' => is_writeable(BASEPATH.'../shared')
         );
         $environments[] = array(
+            'name' => './install/config 文件夹可读写',
+            'status' => is_writeable(BASEPATH.'../install/config')
+        );
+        $environments[] = array(
             'name' => './admin/config 文件夹可读写',
             'status' => is_writeable(BASEPATH.'../admin/config')
         );
