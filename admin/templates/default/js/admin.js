@@ -62,28 +62,50 @@ jQuery(function(){
 	 }
 
     //kindeditor 初始化绑定
-    KindEditor.ready(function(K) {
-        $('textarea[data-editor="kindeditor"]').each(function(k, item) {
-            var $this = $(item);
-            var allowUpload = $this.data('upload');
-            if ($this.data('editor-mode') == 'simple') {
-                K.create(item, {
-                    resizeType : 1,
-                    allowPreviewEmoticons : false,
-                    allowImageUpload : allowUpload,
-                    items : [
-                        'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline',
-                        'removeformat', '|', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist',
-                        'insertunorderedlist', '|', 'emoticons', 'image', 'link']
-                });
-            } else {
-                K.create(item, {
-                    resizeType : 1,
-                    allowImageUpload : allowUpload
-                });
-            }
+    if (typeof KindEditor !== 'undefined') {
+        KindEditor.ready(function(K) {
+            $('textarea[data-editor="kindeditor"]').each(function(k, item) {
+                var $this = $(item);
+                var allowUpload = $this.data('upload');
+                var uploadUrl = $this.data('url');
+                if ($this.data('editor-mode') == 'simple') {
+                    K.create(item, {
+                        resizeType : 1,
+                        allowPreviewEmoticons : false,
+                        allowImageUpload : false,
+                        width: 800,
+                        items : [
+                            'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline',
+                            'removeformat', '|', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist',
+                            'insertunorderedlist', '|', 'emoticons', 'image', 'link', '|', 'about']
+                    });
+                } else {
+                    K.create(item, {
+                        resizeType : 1,
+                        allowImageUpload : allowUpload,
+                        allowFlashUpload: allowUpload,
+                        allowMediaUpload: allowUpload,
+                        allowFileUpload: allowUpload,
+                        uploadJson: uploadUrl,
+                        afterUpload : function(url, data) {
+                            after_editor_upload(data);
+                        },
+                        width: 800,
+                        items: [
+                            'source', '|', 'undo', 'redo', '|', 'preview', 'print', 'template', 'code', 'cut', 'copy', 'paste',
+                            'plainpaste', 'wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright',
+                            'justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript',
+                            'superscript', 'clearhtml', 'quickformat', 'selectall', '|', 'fullscreen', '/',
+                            'formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold',
+                            'italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', '|', 'image',
+                            'flash', 'media', 'insertfile', 'table', 'hr', 'emoticons', 'baidumap', 'pagebreak',
+                            'anchor', 'link', 'unlink', '|', 'about'
+                        ]
+                    });
+                }
+            });
         });
-    });
+    }
 });
 
 //全选全不选

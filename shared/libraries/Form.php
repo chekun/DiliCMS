@@ -48,17 +48,17 @@ class Form
      * @param   bool
      * @return  void
      */
-	public function display( & $field, $default = '', $has_tip = TRUE)
+	public function display( & $field, $default = '', $has_tip = TRUE, $allow_upload = FALSE)
 	{
 		$this->_find_real_value($field['name'], $default);
 		$type = '_'.$field['type']; 
 		if ($has_tip)
 		{
-			echo  $this->_add_tip($field['ruledescription'], $this->$type($field, $default));	
+			echo  $this->_add_tip($field['ruledescription'], $this->$type($field, $default, $allow_upload));
 		}
 		else
 		{
-			echo  $this->$type($field, $default);	
+			echo  $this->$type($field, $default, $allow_upload);
 		}
 	}
 	
@@ -339,16 +339,15 @@ class Form
      * @param   bool
      * @return  string
      */
-	private function _wysiwyg($field, $default, $basic = FALSE)
+	private function _wysiwyg($field, $default, $allow_upload = FALSE, $basic = FALSE)
 	{
 		$style = 'style="';
-		$style .= 'width:' . ($field['width'] ? $field['width'] : '400') . 'px;';
-		$style .= 'height:' . ($field['height'] ? $field['height'] : '200')  . 'px;';
+		$style .= 'width:' . ($field['width'] ? $field['width'].'px' : '100%');
+		$style .= 'height:' . ($field['height'] ? $field['height'].'px' : '100%');
 		$style .= '"';
 		$upload_url = backend_url('attachment/save');
-		$upload_config = ",html5Upload:false,upLinkUrl:'$upload_url',upImgUrl:'$upload_url',upFlashUrl:'$upload_url',upMediaUrl:'$upload_url',onUpload:after_editor_upload";
 		return '<textarea name="' . $field['name'] . '" id="' . $field['name'] . '" ' . $style . 
-		       '  class="xheditor {tools:\'' . ($basic ? 'mini' : 'mfull') . '\',skin:\'nostyle\''.$upload_config.'}">' . $default . '</textarea>';
+		       '  data-editor="kindeditor" data-editor-mode="'.($basic ? 'simple' : 'full').'" data-upload="'.($allow_upload ? 'true' : 'false').'" data-url="'.$upload_url.'">' . $default . '</textarea>';
 	}
 	
 	// ------------------------------------------------------------------------
@@ -361,9 +360,9 @@ class Form
      * @param   string
      * @return  string
      */
-	private function _wysiwyg_basic($field, $default)
+	private function _wysiwyg_basic($field, $default, $allow_upload = FALSE)
 	{
-		return $this->_wysiwyg($field, $default, TRUE);   
+		return $this->_wysiwyg($field, $default, $allow_upload, TRUE);
 	}
 	
 	// ------------------------------------------------------------------------

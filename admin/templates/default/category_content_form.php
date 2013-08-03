@@ -1,5 +1,7 @@
 <?php if ( ! defined('IN_DILICMS')) exit('No direct script access allowed');?>
-<script src="js/xheditor/xheditor-zh-cn.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="js/kindeditor/themes/default/default.css" />
+<script charset="utf-8" src="js/kindeditor/kindeditor-all-min.js"></script>
+<script charset="utf-8" src="js/kindeditor/lang/zh_CN.js"></script>
 <script src="js/DatePicker/WdatePicker.js" type="text/javascript"></script>
 <script src="js/colorPicker/colorpicker.js" type="text/javascript"></script>
 <script src="js/dili_utility/jquery.ld.js" type="text/javascript"></script>
@@ -27,7 +29,7 @@
                 <tr>
 					<th> <?php echo $v['description'];?>：</th>
 					<td>
-						<?php $this->field_behavior->on_form($v , isset($content[$v['name']]) ? $content[$v['name']] : ''); ?>
+						<?php $this->field_behavior->on_form($v , isset($content[$v['name']]) ? $content[$v['name']] : '', TRUE, $model['hasattach']); ?>
 						<?php echo form_error($v['name']); ?>
                     </td>
 				</tr>

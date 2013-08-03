@@ -140,11 +140,11 @@ class Attachment extends CI_Controller
 	{
 		if ( ! ($field = $this->input->post('field')))
 		{
-			$field = 'filedata';
+			$field = 'imgFile';
 		}
 		if ( ! ($tpl = $this->input->post('tpl')))
 		{
-			$tpl = '{"err":"{{error}}","msg":{"url":"{{url}}","localfile":"{{name}}","id":"{{aid}}","file":"{{object}}"}}';
+			$tpl = '{"error":{{status}},"url":"{{url}}","message":"{{error}}","msg":"{{object}}"}';
 		}
 		$error = '啊哦，登陆超时了。';
 		$url = '';
@@ -215,7 +215,8 @@ class Attachment extends CI_Controller
 				$error = '上传的文件不存在';
 			}
 		}
-		echo str_replace(array('{{error}}', '{{url}}', '{{aid}}', '{{name}}', '{{type}}', '{{object}}'), array($error, $url, $aid, $name, $type, $object), $tpl);
+        $status = ($error === '' ?  0 : 1);
+		echo str_replace(array('{{status}}', '{{error}}', '{{url}}', '{{aid}}', '{{name}}', '{{type}}', '{{object}}'), array($status, $error, $url, $aid, $name, $type, $object), $tpl);
 	}
 	
 	// ------------------------------------------------------------------------
