@@ -45,12 +45,17 @@
 | the active record class
 */
 
+if ( ! class_exists('Platform') AND ! function_exists('is_sae'))
+{
+    get_instance()->load->library('platform');
+}
+
 $active_group = PLATFORM;
 $active_record = TRUE;
 
 $db['default']['hostname'] = 'localhost';
 $db['default']['username'] = 'root';
-$db['default']['password'] = '';
+$db['default']['password'] = 'root';
 $db['default']['database'] = 'dilicms';
 $db['default']['dbdriver'] = 'mysql';
 $db['default']['dbprefix'] = 'dili_';
