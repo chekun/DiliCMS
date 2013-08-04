@@ -169,15 +169,12 @@ class Field_behavior
 				case 'wysiwyg_basic':
 								$field = array(
 												'type' => 'TEXT'
-<<<<<<< HEAD
-=======
 												) ;
 								break;
 				case 'content' : $field = array(
 												'type' => 'INT',
 												 'constraint' => $data['length'] ? $data['length'] : 10 ,
 												 'default' => 0
->>>>>>> develop
 												) ;
 								break;
 			}
@@ -511,8 +508,4 @@ class Field_behavior
 }
 
 /* End of file Field_behavior.php */
-<<<<<<< HEAD
 /* Location: ./shared/libraries/Field_behavior.php */
-=======
-/* Location: ./shared/libraries/Field_behavior.php */
->>>>>>> develop

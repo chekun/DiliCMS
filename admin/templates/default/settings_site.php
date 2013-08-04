@@ -42,7 +42,7 @@
 					<td><textarea name='site_stats'  id="site_stats" class="noeditor"><?php echo $site->site_stats; ?></textarea></td>
 				</tr>
 				<tr>
-					<th>站点底部：</th
+					<th>站点底部：</th>
 					<td><textarea name='site_footer'  id="site_footer" style="height:300px;width:100%" data-editor="kindeditor" data-editor-mode="simple" data-upload="false"><?php echo $site->site_footer;?></textarea></td>
 				</tr>
 				<tr>

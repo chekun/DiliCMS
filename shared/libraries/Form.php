@@ -346,14 +346,8 @@ class Form
 		$style .= 'height:' . ($field['height'] ? $field['height'].'px' : '100%');
 		$style .= '"';
 		$upload_url = backend_url('attachment/save');
-<<<<<<< HEAD
-		$upload_config = ",html5Upload:false,upLinkUrl:'$upload_url',upImgUrl:'$upload_url',upFlashUrl:'$upload_url',upMediaUrl:'$upload_url',onUpload:after_editor_upload";
-		return '<textarea name="' . $field['name'] . '" id="' . $field['name'] . '" ' . $style . 
-		       '  class="xheditor {tools:\'' . ($basic ? 'mini' : 'mfull') . '\',skin:\'nostyle\''.$upload_config.'}">' . $default . '</textarea>';
-=======
 		return '<textarea name="' . $field['name'] . '" id="' . $field['name'] . '" ' . $style . 
 		       '  data-editor="kindeditor" data-editor-mode="'.($basic ? 'simple' : 'full').'" data-upload="'.($allow_upload ? 'true' : 'false').'" data-url="'.$upload_url.'">' . $default . '</textarea>';
->>>>>>> develop
 	}
 	
 	// ------------------------------------------------------------------------
