@@ -1,4 +1,5 @@
 var uploaderSwitcher,uploadedfile,uploaded,uploaderContainer,attachContainer,loading,clipboardContainer,clipboard,clipboardStatus,need_context_menu;
+
 $(function()
 {
 	$.ajaxSetup({
@@ -169,3 +170,4 @@ function after_editor_upload(data)
     attachContainer.append(insert_new_attachment(file));
     uploadedfile.val(uploaded);
 }
+
