@@ -5,7 +5,7 @@
 </div>
 <div class="content_box">
 	<div class="content form_content">
-		<form action="<?php echo backend_url('setting/backend'); ?>"  method="post">
+        <?php echo form_open('setting/backend'); ?>
 			<!--基本设置!-->
 			<table class="form_table dili_tabs" id="site_basic" >
 				<col width="150px" />
@@ -44,7 +44,6 @@
 					</td>
 				</tr>
 			</table>
-		</form>
-        
+		<?php echo form_close(); ?>
 	</div>
 </div>

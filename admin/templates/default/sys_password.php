@@ -4,7 +4,7 @@
 </div>
 <div class="content_box">
 	<div class="content form_content">
-		<form action="<?php echo backend_url('system/password'); ?>"  method="post">
+        <?php echo form_open('system/password'); ?>
 			<input type='hidden' name='id' />
 			<table class="form_table">
 				<col width="150px" />
@@ -33,6 +33,6 @@
 				</tr>
 				<tr><td></td><td><button class="submit" type="submit"><span>保 存</span></button></td></tr>
 			</table>
-		</form>
+		<?php echo form_close(); ?>
 	</div>
 </div>

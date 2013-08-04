@@ -20,7 +20,7 @@
 </div>
 
 <div class="content">
-	<form name='cache_form' id="cache_form" method='post' action='<?php echo backend_url('system/cache'); ?>'>
+    <?php echo form_open('system/cache', array('id' => 'cache_form', 'name' => 'cache_form')); ?>
 		<table id="list_table" class="list_table">
 			<col width="40px" />
 			<col />
@@ -60,5 +60,5 @@
                 
 			</tbody>
 		</table>
-	</form>
+	<?php echo form_close(); ?>
 </div>
