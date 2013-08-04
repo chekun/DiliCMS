@@ -28,7 +28,7 @@
 </div>
 
 <div class="content">
-	<form id="category_content_list_form" method="post" action="<?php echo backend_url('category_content/del','model='.$model['name']); ?>">
+    <?php echo form_open('category_content/del?model='.$model['name'], array('id' => 'category_content_list_form')); ?>
 		<table id="list_table" class="list_table">
 			<col width="40px" />
 			<col />
@@ -54,7 +54,7 @@
             <?php endforeach; ?>
 			</tbody>
 		</table>
-        </form>
+    <?php echo form_close(); ?>
 </div>
 <div class="pages_bar pagination"><?php echo $provider['pagination']; ?></div>
 <script language="javascript">

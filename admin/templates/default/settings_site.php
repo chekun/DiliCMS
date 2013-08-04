@@ -15,7 +15,7 @@
 </div>
 <div class="content_box">
 	<div class="content form_content">
-		<form action="<?php echo backend_url('setting/site').'?tab=site_basic'; ?>"  method="post">
+        <?php echo form_open('setting/site?tab=site_basic'); ?>
 			<!--基本设置!-->
 			<table class="form_table dili_tabs" id="site_basic" style="<?php echo $current_tab == 'site_basic' ? '' : 'display:none'; ?>">
 				<col width="150px" />
@@ -60,9 +60,9 @@
 					</td>
 				</tr>
 			</table>
-		</form>
-        
-        <form action="<?php echo backend_url('setting/site').'?tab=site_status'; ?>"  method="post">
+		<?php echo form_close(); ?>
+
+        <?php echo form_open('setting/site?tab=site_status') ?>
 			<!--站点状态!-->
 			<table class="form_table dili_tabs" id="site_status" style="<?php echo $current_tab == 'site_status' ? '' : 'display:none'; ?>">
 				<col width="150px" />
@@ -85,9 +85,9 @@
 					</td>
 				</tr>
 			</table>
-		</form>
-        
-        <form action="<?php echo backend_url('setting/site').'?tab=site_attachment'; ?>"  method="post">
+        <?php echo form_close(); ?>
+
+        <?php echo form_open('setting/site?tab=site_attachment'); ?>
 			<!--附件设置!-->
 			<table class="form_table dili_tabs" id="site_attachment" style="<?php echo $current_tab == 'site_attachment' ? '' : 'display:none'; ?>">
 				<col width="150px" />
@@ -115,9 +115,9 @@
 					</td>
 				</tr>
 			</table>
-		</form>
-        
-        <form action="<?php echo backend_url('setting/site').'?tab=site_terms'; ?>"  method="post">
+        <?php echo form_close(); ?>
+
+        <?php echo form_open('setting/site?tab=site_terms'); ?>
 			<!--注册协议!-->
 			<table class="form_table dili_tabs" id="site_terms" style="<?php echo $current_tab == 'site_terms' ? '' : 'display:none'; ?>">
 				<col width="150px" />
@@ -133,9 +133,9 @@
 					</td>
 				</tr>
 			</table>
-		</form>
-        
-        <form action="<?php echo backend_url('setting/site').'?tab=site_theme'; ?>"  method="post">
+        <?php echo form_close(); ?>
+
+        <?php echo form_open('setting/site?tab=site_theme'); ?>
 			<!--主题设置!-->
 			<table class="form_table dili_tabs" id="site_theme" style="<?php echo $current_tab == 'site_theme' ? '' : 'display:none'; ?>">
 				<col width="150px" />
@@ -151,7 +151,7 @@
 					</td>
 				</tr>
 			</table>
-		</form>
+        <?php echo form_close(); ?>
         
 	</div>
 </div>
