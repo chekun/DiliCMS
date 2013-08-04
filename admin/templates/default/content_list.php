@@ -2,7 +2,7 @@
 <script src="js/DatePicker/WdatePicker.js" type="text/javascript"></script>
 <script src="js/colorPicker/colorpicker.js" type="text/javascript"></script>
 <script src="js/dili_utility/jquery.ld.js" type="text/javascript"></script>
-<link rel="stylesheet" media="screen" type="text/css" href="js/colorpicker/css/colorpicker.css" />
+<link rel="stylesheet" media="screen" type="text/css" href="js/colorPicker/css/colorpicker.css" />
 <div class="headbar">
 	<div class="position"><?=$bread?></div>
 	<div class="operating" style="position:relative; overflow:visible ">
