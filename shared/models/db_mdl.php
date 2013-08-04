@@ -121,8 +121,12 @@ class Db_mdl extends CI_Model
     {
         $this->load->helper('file');
         $files = get_dir_file_info($this->_backup_path, TRUE);
-        foreach ($files as &$file)
+        foreach ($files as $k => &$file)
         {
+            if ($file['name'] === 'index.html') {
+                unset($files[$k]);
+                continue;
+            }
             $file['volume'] = preg_replace("/(.*)\-(\d{1})(.*)/", "$2", $file['name']);
             if ($file['volume'] == $file['name'])
             {
@@ -131,6 +135,7 @@ class Db_mdl extends CI_Model
             $file['size'] = round($file['size'] / 1024, 2);
             $file['date'] = date('Y-m-d H:i', $file['date']);
             $file['extension'] = pathinfo($file["server_path"], PATHINFO_EXTENSION);
+
         }
         return $files;
     }
@@ -274,7 +279,7 @@ class Db_mdl extends CI_Model
 
             if ($num_rows > 0)
             {
-                $is_extend_insert AND $sql .= 'INSERT INTO `$table` VALUES ';
+                $is_extend_insert AND $sql .= "INSERT INTO `$table` VALUES ";
                 foreach ($query->result_array() as $row)
                 {
                     $_data = array();

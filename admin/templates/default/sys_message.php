@@ -19,7 +19,7 @@
                             {
                                 location = $url;
                             }
-                            setTimeout("redirect('<?php echo $goto; ?>');", 3000);
+                            setTimeout("redirect('<?php echo $goto; ?>');", <?php echo $pause; ?>);
                         </script>
                         <a href="<?php echo $goto; ?>" style="text-decoration:underline"><?php echo "页面正在自动转向，你也可以点此直接跳转！"; ?></a>
                         <br />
