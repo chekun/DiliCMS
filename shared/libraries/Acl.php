@@ -188,6 +188,7 @@ class Acl
 			case 'plugin' :
 			case 'role'   :
 			case 'user'   :
+            case 'database' :
 						$this->_filter_normal_menus($class_name, $method_name);
 						break;
 			default : 
