@@ -4,7 +4,7 @@
 </div>
 <div class="content_box">
 	<div class="content form_content">
-		<form action="<?php echo backend_url('model/add'); ?>"  method="post">
+        <?php echo form_open('model/add'); ?>
 			<table class="form_table"  >
 				<col width="150px" />
 				<col />
@@ -34,7 +34,6 @@
 					</td>
 				</tr>
 			</table>
-		</form>
-        
+		<?php echo form_close(); ?>
 	</div>
 </div>

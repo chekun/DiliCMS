@@ -20,8 +20,8 @@
 </div>
 <div class="content_box">
 	<div class="content form_content">
-		<form enctype="multipart/form-data" action="<?php echo backend_url('category_content/save','model='.$model['name'].'&id='.(isset($content['classid']) ? $content['classid'] : '')); ?>"  method="post">
-			<table class="form_table" >
+		<?php echo form_open_multipart('category_content/save?model='.$model['name'].'&id='.(isset($content['classid']) ? $content['classid'] : '')); ?>
+				<table class="form_table" >
 				<col width="150px" />
 				<col />
 				<?php foreach( $model['fields'] as $v) :  ?>
@@ -47,7 +47,7 @@
 					</td>
 				</tr>
 			</table>
-		</form>
+		<?php echo form_close(); ?>
 	</div>
 </div>
 

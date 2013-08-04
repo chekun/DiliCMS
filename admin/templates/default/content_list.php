@@ -12,7 +12,7 @@
         <?php if($model['searchable']) : ?>
             <a href="javascript:void(0)" onclick="$('#content_search_form').slideToggle('slow');" ><button class="operating_btn" type="button"><span class="remove">筛选</span></button></a>
             <div id="content_search_form">
-                <form method="post" action="<?php echo backend_url('content/view','model='.$model['name']); ?>">
+                <?php echo form_open('content/view?model='.$model['name']); ?>
                     <table class="form_table">
                         <colgroup><col width="150px"><col></colgroup><tbody>
                         <?php foreach($model['searchable'] as $v): ?>
@@ -28,7 +28,7 @@
                             <td><button class="submit" type="submit"><span>搜索</span></button></td>
                         </tr>
                     </tbody></table>
-                </form>
+                <?php echo form_close(); ?>
             </div>
         <?php endif; ?>
 		<?php $this->plugin_manager->trigger_model_action('register_operation'); ?>
@@ -52,7 +52,7 @@
 </div>
 
 <div class="content">
-	<form id="content_list_form" method="post" action="<?php echo backend_url('content/del','model='.$model['name']); ?>">
+    <?php echo form_open('content/del?model='.$model['name'], array('id' => 'content_list_form')); ?>
 		<table id="list_table" class="list_table">
 			<col width="40px" />
 			<col />
@@ -75,7 +75,7 @@
             <?php endforeach; ?>
 			</tbody>
 		</table>
-        </form>
+    <?php echo form_close(); ?>
 </div>
 <div class="pages_bar pagination"><?php echo $provider['pagination']; ?></div>
 <script language="javascript">

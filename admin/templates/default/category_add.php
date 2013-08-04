@@ -4,7 +4,7 @@
 </div>
 <div class="content_box">
 	<div class="content form_content">
-		<form action="<?php echo backend_url('category/add'); ?>"  method="post">
+        <?php echo form_open('category/add'); ?>
 			<table class="form_table dili_tabs" id="site_basic" >
 				<col width="150px" />
 				<col />
@@ -38,7 +38,6 @@
 					</td>
 				</tr>
 			</table>
-		</form>
-        
+		<?php echo form_close(); ?>
 	</div>
 </div>

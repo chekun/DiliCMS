@@ -28,7 +28,7 @@
 </div>
 
 <div class="content">
-		<form method="post" action="" id="plugin_list_form">
+        <?php echo form_open('', array('id' => 'plugin_list_form')); ?>
 		<table id="list_table" class="list_table">
 			<col width="40px" />
 			<col />
@@ -51,7 +51,7 @@
             <?php endforeach; ?>
 			</tbody>
 		</table>
-        </form>
+        <?php echo form_close(); ?>
 </div>
 <script language="javascript">
 	$('a.confirm_delete').click(function(){
@@ -76,5 +76,4 @@
 		}
 		return false;
 	}
-	
 </script>

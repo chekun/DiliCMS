@@ -25,7 +25,7 @@
 </div>
 <div class="content_box">
 	<div class="content form_content">
-		<form enctype="multipart/form-data" action="<?php echo backend_url('content/save','model='.$model['name'].'&id='.(isset($content['id']) ? $content['id'] : '')); ?>"  method="post">
+		<?php echo form_open_multipart('content/save?model='.$model['name'].'&id='.(isset($content['id']) ? $content['id'] : '')); ?>
 			<table class="form_table" >
 				<col width="150px" />
 				<col />
@@ -51,7 +51,7 @@
 					</td>
 				</tr>
 			</table>
-		</form>
+		<?php echo form_close(); ?>
 	</div>
 </div>
 
