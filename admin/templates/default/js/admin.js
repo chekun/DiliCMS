@@ -59,15 +59,53 @@ jQuery(function(){
 		});
 		//kill the fucking focus
 		$('button').attr('hideFocus',true);
-		//恼人的IE6,7相对路径导致xheditorcss加载失败的问题
-		if(parseInt($.browser.version) < 8)
-		{
-			$('<link id="xheCSS_nostyle" rel="stylesheet" type="text/css" href="js/xheditor/xheditor_skin/nostyle/ui.css">').appendTo($('head'));
-		}
 	 }
-	 
-	 
-	
+
+    //kindeditor 初始化绑定
+    if (typeof KindEditor !== 'undefined') {
+        KindEditor.ready(function(K) {
+            $('textarea[data-editor="kindeditor"]').each(function(k, item) {
+                var $this = $(item);
+                var allowUpload = $this.data('upload');
+                var uploadUrl = $this.data('url');
+                if ($this.data('editor-mode') == 'simple') {
+                    K.create(item, {
+                        resizeType : 1,
+                        allowPreviewEmoticons : false,
+                        allowImageUpload : false,
+                        width: 800,
+                        items : [
+                            'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline',
+                            'removeformat', '|', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist',
+                            'insertunorderedlist', '|', 'emoticons', 'image', 'link', '|', 'about']
+                    });
+                } else {
+                    K.create(item, {
+                        resizeType : 1,
+                        allowImageUpload : allowUpload,
+                        allowFlashUpload: allowUpload,
+                        allowMediaUpload: allowUpload,
+                        allowFileUpload: allowUpload,
+                        uploadJson: uploadUrl,
+                        afterUpload : function(url, data) {
+                            after_editor_upload(data);
+                        },
+                        width: 800,
+                        items: [
+                            'source', '|', 'undo', 'redo', '|', 'preview', 'print', 'template', 'code', 'cut', 'copy', 'paste',
+                            'plainpaste', 'wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright',
+                            'justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript',
+                            'superscript', 'clearhtml', 'quickformat', 'selectall', '|', 'fullscreen', '/',
+                            'formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold',
+                            'italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', '|', 'image',
+                            'flash', 'media', 'insertfile', 'table', 'hr', 'emoticons', 'baidumap', 'pagebreak',
+                            'anchor', 'link', 'unlink', '|', 'about'
+                        ]
+                    });
+                }
+            });
+        });
+    }
 });
 
 //全选全不选

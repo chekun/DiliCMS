@@ -1,0 +1,69 @@
+<div class="modal">
+  <div class="modal-header">
+    &nbsp;&nbsp;
+    <h3 class="pull-left">数据库</h3>
+  </div>
+  <div class="modal-body">
+    <form class="form-horizontal">
+      <div class="control-group">
+        <label class="control-label" for="server">数据库地址</label>
+        <div class="controls">
+          <input type="text" id="server" name="server" placeholder="输入数据库地址" value="localhost">
+          <span class="help-inline">如localhost,localhost:3306, <span class="label label-important">必须填写</span></span>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="db">数据库名称</label>
+        <div class="controls">
+          <input type="text" id="db" name="db" placeholder="输入数据库名称" value="dilicms">
+          <span class="help-inline">如 dilicms, <span class="label label-important">必须填写</span></span>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="prefix">数据库表前缀</label>
+        <div class="controls">
+          <input type="text" id="prefix" name="prefix" placeholder="输入数据库名称" value="dili_">
+          <span class="help-inline">如 dili_, <span class="label label-info">可以为空</span></span>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="charset">数据库编码</label>
+        <div class="controls">
+          <input type="text" id="charset" name="charset" value="utf8" disabled="disabled">
+          <span class="help-inline">暂仅支持utf8</span>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="user">数据库连接用户</label>
+        <div class="controls">
+          <input type="text" id="user" name="user" placeholder="数据库用户名称" value="root">
+          <span class="help-inline">如 root, <span class="label label-important">必须填写</span></span>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="password">数据库连接密码</label>
+        <div class="controls">
+          <input type="password" id="password" name="password" placeholder="数据库用户连接密码">
+          <span class="help-inline"><span class="label label-info">可以为空, 但不推荐</span></span>
+        </div>
+      </div>
+      <div class="control-group">
+        <div class="controls">
+          <button type="submit" class="btn">导入数据库</button>
+        </div>
+      </div>
+  </form>
+  <div class="popover right" id="console">
+      <div class="arrow"></div>
+      <h3 class="popover-title">数据库导入控制台</h3>
+      <div class="popover-content">
+        <ol>
+
+        </ol>
+      </div>
+  </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary disabled">下一步</button>
+  </div>
+</div>

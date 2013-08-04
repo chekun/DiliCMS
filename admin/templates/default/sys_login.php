@@ -19,7 +19,7 @@
 				<div class="login_title">管理登录</div>
 				<div class="login_cont">
 					<b style="color:red"><?php echo $this->session->flashdata('error'); ?></b>
-                    <form action='<?php echo backend_url('login/do'); ?>' method='post'>
+                    <?php echo form_open('login/do'); ?>
 						<table class="form_table">
 							<col width="90px" />
 							<col />
@@ -33,8 +33,7 @@
 								<th></th><td><input class="submit" type="submit" value="登录" /><input class="submit" type="reset" value="取消" /></td>
 							</tr>
 						</table>
-					</form>
-                    
+					<?php echo form_close(); ?>
 				</div>
 			</div>
 		</div>

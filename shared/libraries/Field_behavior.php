@@ -169,6 +169,15 @@ class Field_behavior
 				case 'wysiwyg_basic':
 								$field = array(
 												'type' => 'TEXT'
+<<<<<<< HEAD
+=======
+												) ;
+								break;
+				case 'content' : $field = array(
+												'type' => 'INT',
+												 'constraint' => $data['length'] ? $data['length'] : 10 ,
+												 'default' => 0
+>>>>>>> develop
 												) ;
 								break;
 			}
@@ -195,7 +204,7 @@ class Field_behavior
      * @param   bool
      * @return  void
      */
-	public function on_form($field, $default = '', $has_tip = TRUE)
+	public function on_form($field, $default = '', $has_tip = TRUE, $allow_upload = FALSE)
 	{
 		
 		if ($this->_is_extra($field['type']))
@@ -211,7 +220,7 @@ class Field_behavior
 			{
 				$default = $field['values'];
 			}
-			$this->_ci->form->display($field, $default, $has_tip);
+			$this->_ci->form->display($field, $default, $has_tip, $allow_upload);
 		}
 	}
 	
@@ -280,8 +289,19 @@ class Field_behavior
 							}
 							echo implode(',', $temp_out);
 							break;
+				case 'content':
+							$options = explode('|', $field['values']);
+							if ($value->$field['name'] AND $row = $this->_ci->db->select('id, '.$options[1])->where('id', $value->$field['name'])->get('u_m_'.$options[0])->row_array())
+							{
+								echo $row[$options[1]];
+							}
+							else
+							{
+								echo '-';
+							}
+							break;
 				default :
-							echo $value->$field['name'];	
+							echo $value->$field['name'];
 			}
 		}
 	}
@@ -320,6 +340,7 @@ class Field_behavior
 				case 'datetime':
 				case 'int':
 				case 'float':
+				case 'content':
 						$field_min = $field_max = $field;
 						$field_min['name'] = $field_min['name'] . '_min';
 						$field_max['name'] = $field_max['name'] . '_max';
@@ -372,6 +393,7 @@ class Field_behavior
 				case 'datetime':
 				case 'int':
 				case 'float':
+				case 'content':
 						if ($keyword_min = $this->_ci->input->get_post($field['name'] . '_min', TRUE))
 						{
 							$condition[$field['name'] . ' >='] = $keyword_min;
@@ -489,4 +511,8 @@ class Field_behavior
 }
 
 /* End of file Field_behavior.php */
+<<<<<<< HEAD
 /* Location: ./shared/libraries/Field_behavior.php */
+=======
+/* Location: ./shared/libraries/Field_behavior.php */
+>>>>>>> develop

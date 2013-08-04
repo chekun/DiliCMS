@@ -1,0 +1,7 @@
+.idea
+# ignore database config
+!admin/config/database.php
+!application/config/database.php
+
+# ignore all settings
+shared/settings/*

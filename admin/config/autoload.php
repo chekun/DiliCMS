@@ -52,7 +52,7 @@ $autoload['packages'] = array(DILICMS_SHARE_PATH);
 |	$autoload['libraries'] = array('database', 'session', 'xmlrpc');
 */
 
-$autoload['libraries'] = array('database', 'platform', 'settings');
+$autoload['libraries'] = array('platform', 'settings');
 
 
 /*
@@ -64,7 +64,7 @@ $autoload['libraries'] = array('database', 'platform', 'settings');
 |	$autoload['helper'] = array('url', 'file');
 */
 
-$autoload['helper'] = array('url', 'common', 'utils');
+$autoload['helper'] = array('form', 'url', 'common', 'utils');
 
 
 /*

@@ -45,16 +45,21 @@
 | the active record class
 */
 
-$active_group = 'default';
+if ( ! class_exists('Platform') AND ! function_exists('is_sae'))
+{
+    get_instance()->load->library('platform');
+}
+
+$active_group = get_instance()->platform->get_type();
 $active_record = TRUE;
 
 $db['default']['hostname'] = 'localhost';
-$db['default']['username'] = '';
-$db['default']['password'] = '';
-$db['default']['database'] = '';
+$db['default']['username'] = 'root';
+$db['default']['password'] = 'root';
+$db['default']['database'] = 'dilicms';
 $db['default']['dbdriver'] = 'mysql';
-$db['default']['dbprefix'] = '';
-$db['default']['pconnect'] = TRUE;
+$db['default']['dbprefix'] = 'dili_';
+$db['default']['pconnect'] = FALSE;
 $db['default']['db_debug'] = TRUE;
 $db['default']['cache_on'] = FALSE;
 $db['default']['cachedir'] = '';
@@ -63,6 +68,27 @@ $db['default']['dbcollat'] = 'utf8_general_ci';
 $db['default']['swap_pre'] = '';
 $db['default']['autoinit'] = TRUE;
 $db['default']['stricton'] = FALSE;
+
+if ($active_group == 'sae')
+{
+    //SAE数据库设置
+    $db['sae']['hostname'] = SAE_MYSQL_HOST_M.':'.SAE_MYSQL_PORT;
+    $db['sae']['username'] = SAE_MYSQL_USER;
+    $db['sae']['password'] = SAE_MYSQL_PASS;
+    $db['sae']['database'] = SAE_MYSQL_DB;
+    $db['sae']['dbdriver'] = 'mysql';
+    $db['sae']['dbprefix'] = 'dili_';
+    $db['sae']['pconnect'] = FALSE;
+    $db['sae']['db_debug'] = TRUE;
+    $db['sae']['cache_on'] = FALSE;
+    $db['sae']['cachedir'] = '';
+    $db['sae']['char_set'] = 'utf8';
+    $db['sae']['dbcollat'] = 'utf8_general_ci';
+    $db['sae']['swap_pre'] = '';
+    $db['sae']['autoinit'] = TRUE;
+    $db['sae']['stricton'] = FALSE;
+}
+
 
 
 /* End of file database.php */

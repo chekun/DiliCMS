@@ -48,17 +48,17 @@ class Form
      * @param   bool
      * @return  void
      */
-	public function display( & $field, $default = '', $has_tip = TRUE)
+	public function display( & $field, $default = '', $has_tip = TRUE, $allow_upload = FALSE)
 	{
 		$this->_find_real_value($field['name'], $default);
 		$type = '_'.$field['type']; 
 		if ($has_tip)
 		{
-			echo  $this->_add_tip($field['ruledescription'], $this->$type($field, $default));	
+			echo  $this->_add_tip($field['ruledescription'], $this->$type($field, $default, $allow_upload));
 		}
 		else
 		{
-			echo  $this->$type($field, $default);	
+			echo  $this->$type($field, $default, $allow_upload);
 		}
 	}
 	
@@ -339,16 +339,21 @@ class Form
      * @param   bool
      * @return  string
      */
-	private function _wysiwyg($field, $default, $basic = FALSE)
+	private function _wysiwyg($field, $default, $allow_upload = FALSE, $basic = FALSE)
 	{
 		$style = 'style="';
-		$style .= 'width:' . ($field['width'] ? $field['width'] : '400') . 'px;';
-		$style .= 'height:' . ($field['height'] ? $field['height'] : '200')  . 'px;';
+		$style .= 'width:' . ($field['width'] ? $field['width'].'px' : '100%');
+		$style .= 'height:' . ($field['height'] ? $field['height'].'px' : '100%');
 		$style .= '"';
 		$upload_url = backend_url('attachment/save');
+<<<<<<< HEAD
 		$upload_config = ",html5Upload:false,upLinkUrl:'$upload_url',upImgUrl:'$upload_url',upFlashUrl:'$upload_url',upMediaUrl:'$upload_url',onUpload:after_editor_upload";
 		return '<textarea name="' . $field['name'] . '" id="' . $field['name'] . '" ' . $style . 
 		       '  class="xheditor {tools:\'' . ($basic ? 'mini' : 'mfull') . '\',skin:\'nostyle\''.$upload_config.'}">' . $default . '</textarea>';
+=======
+		return '<textarea name="' . $field['name'] . '" id="' . $field['name'] . '" ' . $style . 
+		       '  data-editor="kindeditor" data-editor-mode="'.($basic ? 'simple' : 'full').'" data-upload="'.($allow_upload ? 'true' : 'false').'" data-url="'.$upload_url.'">' . $default . '</textarea>';
+>>>>>>> develop
 	}
 	
 	// ------------------------------------------------------------------------
@@ -361,9 +366,9 @@ class Form
      * @param   string
      * @return  string
      */
-	private function _wysiwyg_basic($field, $default)
+	private function _wysiwyg_basic($field, $default, $allow_upload = FALSE)
 	{
-		return $this->_wysiwyg($field, $default, TRUE);   
+		return $this->_wysiwyg($field, $default, $allow_upload, TRUE);
 	}
 	
 	// ------------------------------------------------------------------------
@@ -400,6 +405,64 @@ class Form
 		}
 		return '<input class="field_colorpicker normal" name="' . $field['name'] . '" id="' . $field['name'] . 
 			   '" type="text" style="width:' . $field['width'] . 'px" autocomplete="off" value="' . $default . '" />';
+	}
+	
+	// ------------------------------------------------------------------------
+
+	/**
+     * 生成内容模型调用的控件
+     *
+     * @access  private
+     * @param   array
+     * @param   string
+     * @return  string
+     */
+	private function _content($field, $default)
+	{
+		$html = '';
+		if ( ! $field['values'])
+		{
+			return '请设置数据源';
+		}
+		if (count($options = explode('|', $field['values'])) != 2)
+		{
+			return '数据源格式不正确';
+		}
+		$CI = & get_instance();
+		if ( ! $CI->platform->cache_exists(DILICMS_SHARE_PATH . 'settings/model/'.$options[0].'.php'))
+		{
+			return '内存模型不存在!';
+		}
+		$CI->settings->load('model/'.$options[0]);
+		$model_data =  & setting('models');
+		if ( ! isset($model_data[$options[0]]) OR ! $model_data[$options[0]])
+		{
+			return '内存模型不合法!';
+		}
+		$find_target_field = FALSE;
+		foreach ($model_data[$options[0]]['fields'] as $_field)
+		{
+			if ($_field['name'] == $options[1])
+			{
+				$find_target_field = TRUE;
+				break;
+			}
+		}
+		if ( ! $find_target_field)
+		{
+			return '不存在的字段名称!';
+		}
+		$html = '<input class="small" name="' . $field['name'] . '" id="' . $field['name'] . 
+			   '" type="text" autocomplete="off" value="' . $default . '" />';
+		// 如果有默认值，则需要走数据库读取默认值
+	    $default_label = '';
+		if ($default AND $row = $CI->db->where('id', $default)->get('u_m_'.$options[0])->row_array())
+		{
+			$default_label = $row[$options[1]];
+		}
+		//绑定js事件
+		$html .= '<script>autocomplete_wrapper("'.$field['name'].'","'.site_url('content/search/'.implode('/', $options)).'","'.$default_label.'");</script>';
+		return $html;
 	}
 	
 	// ------------------------------------------------------------------------

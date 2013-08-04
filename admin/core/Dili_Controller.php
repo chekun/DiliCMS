@@ -44,6 +44,7 @@ abstract class Admin_Controller extends CI_Controller
 	public function __construct()
 	{
 		parent::__construct();
+        $this->load->database();
 		$this->load->library('session');
 		$this->settings->load('backend');
 		$this->load->switch_theme(setting('backend_theme'));
@@ -122,7 +123,7 @@ abstract class Admin_Controller extends CI_Controller
      * @param   string
      * @return  void
      */
-	public function _message($msg, $goto = '', $auto = TRUE, $fix = '')
+	public function _message($msg, $goto = '', $auto = TRUE, $fix = '', $pause = 3000)
 	{
 		if($goto == '')
 		{
@@ -133,7 +134,7 @@ abstract class Admin_Controller extends CI_Controller
 			$goto = strpos($goto, 'http') !== false ? $goto : backend_url($goto);	
 		}
 		$goto .= $fix;
-		$this->_template('sys_message', array('msg' => $msg, 'goto' => $goto, 'auto' => $auto));
+		$this->_template('sys_message', array('msg' => $msg, 'goto' => $goto, 'auto' => $auto, 'pause' => $pause));
 		echo $this->output->get_output();
 		exit();
 	}

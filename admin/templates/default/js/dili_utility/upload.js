@@ -1,5 +1,4 @@
 var uploaderSwitcher,uploadedfile,uploaded,uploaderContainer,attachContainer,loading,clipboardContainer,clipboard,clipboardStatus,need_context_menu;
-
 $(function()
 {
 	$.ajaxSetup({
@@ -39,7 +38,7 @@ $(function()
 
 function init_contextmenu()
 {
-	var editors = $('textarea.xheditor');
+	var editors = $('textarea[data-editor="kindeditor"]');
 	if (editors.length === 0)
 	{
 		need_context_menu = false;
@@ -50,7 +49,7 @@ function init_contextmenu()
 		need_context_menu = true;
 		var items = {};
 		editors.each(function(index, editor){
-			items[editor.id] = {name: $.trim($(editor).parent().parent().children('th').text().replace('：', '')), icon: "paste"}
+			items[index] = {name: $.trim($(editor).parent().parent().children('th').text().replace('：', '')), icon: "paste"}
 		});
 		$.contextMenu({
 	        selector: 'a.contextMenu', 
@@ -81,7 +80,7 @@ function init_contextmenu()
 	            		//附件方式插入
 	            		html = '<a href="'+trigger.attr('data-url')+'">'+trigger.attr('data-name')+'</a>';
 	            }
-	            $('#'+key)[0].xheditor.pasteHTML(html);
+	            KindEditor.instances[key].insertHtml(html);
 	        },
 	        items: items
 	    });
@@ -162,17 +161,11 @@ function toggleUploader(force)
 	}
 }
 
-function after_editor_upload(results)
+function after_editor_upload(data)
 {
-	length = results.length;
-	if(length > 0)
-	{
-		for(var i = 0; i < length; i++)
-		{
-			file = results[i].msg.file.split('|');
-			uploaded += ',' + file[0] ;
-			attachContainer.append(insert_new_attachment(file));
-			uploadedfile.val(uploaded);
-		}
-	}
+    console.log(data);
+    file = data.msg.split('|');
+    uploaded += ',' + file[0] ;
+    attachContainer.append(insert_new_attachment(file));
+    uploadedfile.val(uploaded);
 }

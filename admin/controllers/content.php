@@ -361,6 +361,29 @@ class Content extends Admin_Controller
 	}
 	
 	// ------------------------------------------------------------------------
+
+	/**
+     * 模糊搜索记录,用于调用内容字段
+     *
+     * @access  public
+     * @param   string
+     * @return  void
+     */
+	public function _search_post($model, $field)
+	{
+		$html = '';
+		$q = $this->input->post('keyword', TRUE);
+		if ($q AND $results = $this->db->select("id, $field")->like($field, $q)->limit(10)->get('u_m_'.$model)->result())
+		{
+			foreach ($results as $result)
+			{
+				$html .= '<p data-text="'.$result->$field.'" onclick="autocomplete_set_value(this,\''.$result->id.'\');">'.str_replace($q, "<span style=\"background:yellow\">$q</span>", $result->$field).'</p>';
+			}
+		}
+		echo $html;
+	}
+	
+	// ------------------------------------------------------------------------
 	
 }
 
