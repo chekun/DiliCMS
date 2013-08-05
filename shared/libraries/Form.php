@@ -341,12 +341,10 @@ class Form
      */
 	private function _wysiwyg($field, $default, $allow_upload = FALSE, $basic = FALSE)
 	{
-		$style = 'style="';
-		$style .= 'width:' . ($field['width'] ? $field['width'].'px' : '100%');
-		$style .= 'height:' . ($field['height'] ? $field['height'].'px' : '100%');
-		$style .= '"';
+        $default_width = ($field['width'] ? $field['width'] : '800');
+        $default_height = ($field['height'] ? $field['height'] : '300');
 		$upload_url = backend_url('attachment/save');
-		return '<textarea name="' . $field['name'] . '" id="' . $field['name'] . '" ' . $style . 
+		return '<textarea name="' . $field['name'] . '" id="' . $field['name'] . '" data-editor-width="'. $default_width .'" data-editor-height="'. $default_height .'"' .
 		       '  data-editor="kindeditor" data-editor-mode="'.($basic ? 'simple' : 'full').'" data-upload="'.($allow_upload ? 'true' : 'false').'" data-url="'.$upload_url.'">' . $default . '</textarea>';
 	}
 	

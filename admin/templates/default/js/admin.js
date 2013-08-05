@@ -68,12 +68,15 @@ jQuery(function(){
                 var $this = $(item);
                 var allowUpload = $this.data('upload');
                 var uploadUrl = $this.data('url');
+                var width = $this.data('editor-width');
+                var height = $this.data('editor-height');
                 if ($this.data('editor-mode') == 'simple') {
                     K.create(item, {
                         resizeType : 1,
                         allowPreviewEmoticons : false,
                         allowImageUpload : false,
-                        width: 800,
+                        width: width,
+                        height: height,
                         items : [
                             'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline',
                             'removeformat', '|', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist',
@@ -90,7 +93,8 @@ jQuery(function(){
                         afterUpload : function(url, data) {
                             after_editor_upload(data);
                         },
-                        width: 800,
+                        width: width,
+                        height: height,
                         items: [
                             'source', '|', 'undo', 'redo', '|', 'preview', 'print', 'template', 'code', 'cut', 'copy', 'paste',
                             'plainpaste', 'wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright',
