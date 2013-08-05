@@ -30,7 +30,6 @@ class Database extends Admin_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->_check_permit();
         $this->load->model('db_mdl');
     }
 
@@ -42,6 +41,7 @@ class Database extends Admin_Controller
      */
     public function index()
     {
+        $this->_check_permit();
         $status = $this->db_mdl->get_folder_status();
         if ($status !== TRUE)
         {
@@ -61,6 +61,7 @@ class Database extends Admin_Controller
      */
     public function export()
     {
+        $this->_check_permit();
         foreach (array(
                      'export_type',
                      'tables',
@@ -131,6 +132,7 @@ class Database extends Admin_Controller
      */
     public function recover()
     {
+        $this->_check_permit();
         $data['files'] = $this->db_mdl->get_backup_files();
         $this->_template('database_recover', $data);
         return;
@@ -144,6 +146,7 @@ class Database extends Admin_Controller
      */
     public function optimize()
     {
+        $this->_check_permit();
         $optimize_data = $this->db_mdl->get_unoptimized_tables();
         $this->_template('database_optimize', $optimize_data);
         return;
@@ -157,7 +160,7 @@ class Database extends Admin_Controller
      */
     public function _optimize_post()
     {
-
+        $this->_check_permit();
         if($this->db_mdl->optimize() !== FALSE)
         {
             $this->_message('数据库优化成功', "database/optimize");
