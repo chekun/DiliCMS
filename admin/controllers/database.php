@@ -30,6 +30,9 @@ class Database extends Admin_Controller
     public function __construct()
     {
         parent::__construct();
+        if ($this->platform->get_type() !== 'default') {
+            $this->_message('对不起，数据库管理功能无法在该环境下运行.', '', FALSE);
+        }
         $this->load->model('db_mdl');
     }
 
