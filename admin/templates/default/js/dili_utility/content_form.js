@@ -85,7 +85,7 @@
 	        function()
 	        {
 	            $this = $(this);
-			    $.post(server_script,{keyword:$this.val()}, function(result) {
+			    $.get(server_script,{keyword:$this.val()}, function(result) {
 			      	$this.next().html('')
 			      	              .append(result)
 	                              .append('<p data-text="" onclick="autocomplete_set_value(this,\'\');" class="close">关闭</p>')

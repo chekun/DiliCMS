@@ -134,23 +134,23 @@ if ( ! function_exists('check_environments'))
         //检查目录是否可写
         $environments[] = array(
             'name' => './shared 文件夹可读写',
-            'status' => is_writeable(BASEPATH.'../shared')
+            'status' => is_really_writable(BASEPATH.'../shared')
         );
         $environments[] = array(
             'name' => './install/config 文件夹可读写',
-            'status' => is_writeable(BASEPATH.'../install/config')
+            'status' => is_really_writable(BASEPATH.'../install/config')
         );
         $environments[] = array(
             'name' => './admin/config 文件夹可读写',
-            'status' => is_writeable(BASEPATH.'../admin/config')
+            'status' => is_really_writable(BASEPATH.'../admin/config')
         );
         $environments[] = array(
             'name' => './application/config 文件夹可读写',
-            'status' => is_writeable(BASEPATH.'../application/config')
+            'status' => is_really_writable(BASEPATH.'../application/config')
         );
         $environments[] = array(
             'name' => './attachments 文件夹可读写',
-            'status' => is_writeable(BASEPATH.'../attachments')
+            'status' => is_really_writable(BASEPATH.'../attachments')
         );
         return $environments;
     }

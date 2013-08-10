@@ -369,10 +369,10 @@ class Content extends Admin_Controller
      * @param   string
      * @return  void
      */
-	public function _search_post($model, $field)
+	public function search($model, $field)
 	{
 		$html = '';
-		$q = $this->input->post('keyword', TRUE);
+		$q = $this->input->get('keyword', TRUE);
 		if ($q AND $results = $this->db->select("id, $field")->like($field, $q)->limit(10)->get('u_m_'.$model)->result())
 		{
 			foreach ($results as $result)
