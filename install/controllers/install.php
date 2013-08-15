@@ -100,7 +100,7 @@ class Install extends CI_Controller
                 {
                     $search_array = array('{HOSTNAME}', '{USERNAME}', '{PASSWORD}', '{DATABASE}', '{PREFIX}');
                     $replace_array = array($config['hostname'], $config['username'], $config['password'], $config['database'], $config['dbprefix']);
-                    $database_config = str_replace($search_array, $replace_array, @file_get_contents(BASEPATH.'../admin/config/database.php'));
+                    $database_config = str_replace($search_array, $replace_array, @file_get_contents(BASEPATH.'../admin/config/database_template.php'));
                     @file_put_contents(BASEPATH.'../admin/config/database.php', $database_config);
                     @file_put_contents(BASEPATH.'../application/config/database.php', $database_config);
                     $database_config = str_replace("get_instance()->platform->get_type()", "PLATFORM", $database_config);

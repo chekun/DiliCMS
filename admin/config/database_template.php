@@ -53,12 +53,12 @@ if ( ! class_exists('Platform') AND ! function_exists('is_sae'))
 $active_group = get_instance()->platform->get_type();
 $active_record = TRUE;
 
-$db['default']['hostname'] = 'localhost';
-$db['default']['username'] = 'root';
-$db['default']['password'] = 'root';
-$db['default']['database'] = 'dilicms';
+$db['default']['hostname'] = '{HOSTNAME}';
+$db['default']['username'] = '{USERNAME}';
+$db['default']['password'] = '{PASSWORD}';
+$db['default']['database'] = '{DATABASE}';
 $db['default']['dbdriver'] = 'mysql';
-$db['default']['dbprefix'] = 'cd_';
+$db['default']['dbprefix'] = '{PREFIX}';
 $db['default']['pconnect'] = FALSE;
 $db['default']['db_debug'] = TRUE;
 $db['default']['cache_on'] = FALSE;
