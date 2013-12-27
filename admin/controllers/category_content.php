@@ -294,7 +294,7 @@ class Category_content extends Admin_Controller
 				$data['path'] = '0';
 				$data['level'] = 1;
 				$parent_class = $this->db->where('classid', $data['parentid'])->get($this->db->dbprefix('u_c_') . $model)->row();
-				if ($parent_class AND ! $parent_class->path)
+				if ($parent_class AND  $parent_class->path)
 				{
 					$data['path'] .= ',' ;
 					$data['level'] = $parent_class->level + 1; 
