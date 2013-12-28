@@ -101,7 +101,6 @@ class Attachment extends CI_Controller
 							$data['image'] = (in_array($data['type'], array('jpg', 'gif', 'png', 'jpeg', 'bmp'))) ? 1 : 0;
 							$this->db->insert($this->db->dbprefix('attachments'), $data);
 							$response = $this->db->insert_id() . '|' . $data['realname'] . '|' . $data['name'] . '|' . $data['image'].'|'.$data['folder'].'|'.$data['type'];
-							$this->plugin_manager->trigger_attachment($target_file);
 						}
 					}
 				}

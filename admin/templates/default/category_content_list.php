@@ -8,7 +8,7 @@
         <?php if($provider['next_level'] > 1): ?>
         <a class="hack_ie" href="<?php echo backend_url('category_content/view','model='.$model['name'].'&u_c_level='.($provider['parent'] ? $provider['parent']->parentid  : '0')); ?>"><button class="operating_btn" type="button"><span class="grade">返回上一级</span></button></a>
         <?php endif; ?>
-        <?php $this->plugin_manager->trigger_model_action('register_operation'); ?>
+        <?php $this->plugin_manager->trigger('buttons'); ?>
 	</div>
 	<div class="field">
 		<table class="list_table">
@@ -48,7 +48,7 @@
                         <?php endif; ?>
                     	<a href="<?php echo backend_url('category_content/form/','model='.$model['name'].'&id='.$v->classid); ?>"><img class="operator" src="images/icon_edit.gif" alt="修改" title="修改"></a>
                         <a class="confirm_delete" href="<?php echo backend_url('category_content/del','model='.$model['name'].'&classid='.$v->classid); ?>"><img class="operator" src="images/icon_del.gif" alt="删除" title="删除"></a>
-                        <?php $this->plugin_manager->trigger_model_action('register_list_view', $v); ?>
+                        <?php $this->plugin_manager->trigger('row_buttons', $v); ?>
                     </td>
                 </tr>
             <?php endforeach; ?>
@@ -82,4 +82,4 @@
 		}
 	}
 </script>
-<?php $this->plugin_manager->trigger_model_action('register_list_view', $provider['list']); ?>
+<?php $this->plugin_manager->trigger('listed', $provider['list']); ?>

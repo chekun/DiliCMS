@@ -106,6 +106,30 @@ if ( ! function_exists('backend_url'))
 	}
 }
 
+/**
+ * 插件URI生成函数
+ *
+ * @access	public
+ * @param	string
+ * @param	string
+ * @return	string
+ */
+if ( ! function_exists('plugin_url'))
+{
+	function plugin_url($plugin, $controller, $method = 'index', $qs = array())
+	{
+	    $ci = &get_instance();
+		if (false and $ci->config->item('index_page') === '') 
+	    {
+	        return backend_url("plugin/$name/$controller/$method", http_build_query($qs));
+	    }
+	    $qs['plugin'] = $plugin;
+	    $qs['c'] = $controller;
+	    $qs['m'] = $method;
+		return backend_url('module/run', http_build_query($qs));
+	}
+}
+
 // ------------------------------------------------------------------------
 
 /* End of file common_helper.php */

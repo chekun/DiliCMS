@@ -344,29 +344,48 @@ class Cache_mdl extends CI_Model
      */
 	public function update_plugin_cache()
 	{
-		$cached_plugins = $model_plugins = $result_plugins = array();
+		$cached_plugins = array();
 		$plugins = $this->db->select('name, access')
 							->where('active', '1')
 							->get($this->db->dbprefix('plugins'))
 							->result_array();
 		if ($plugins)
-		{
+	    {
 			foreach ($plugins as $key => $plugin)
 			{
-				if (file_exists(DILICMS_EXTENSION_PATH . 'plugins/' . $plugin['name'] . '/' . 'plugin_' . $plugin['name'] . '.php'))
-				{
-					$result_plugins[$plugin['name']] = $plugin;
-				}
-				if (file_exists(DILICMS_EXTENSION_PATH . 'plugins/' . $plugin['name'] . '/' . 'plugin_model_' . $plugin['name'] . '.php'))
-				{
-					$model_plugins[$plugin['name']] = $plugin;
-				}
+		        if (! isset($cached_plugins[$plugin['name']])) {
+		            $cached_plugins[$plugin['name']] = array(
+		                'classmap' => array(),
+		                'menus' => array(),
+		                'access' => $plugin['access']
+		            );
+		        }	    
+			    
+			    $this_plugin_path = DILICMS_EXTENSION_PATH.'plugins/'.$plugin['name'].'/';
+			    
+			    $this_hook_path = 'plugins/'.$plugin['name'].'/hooks/';
+			    
+			    if (file_exists($this_plugin_path.'hooks')) {
+                    foreach (glob($this_plugin_path.'hooks/'.$plugin['name']."_hook_*.php") as $filename) {
+                        $filename = basename($filename);
+                        $model = str_replace(array('.php', $plugin['name']."_hook_"), array('', ''), $filename);
+                        $cached_plugins[$plugin['name']]['classmap'][$model] =  $this_hook_path.$filename;
+                    }
+			    }
+			    
+			    if (file_exists($this_plugin_path.'menus.php')) {
+			        $this_plugin_menus = include ($this_plugin_path.'menus.php');
+			        $cached_plugins[$plugin['name']]['menus'] = $this_plugin_menus;
+			    }
+			    
+			    
 			}
 		}
-		$cached_plugins['plugins'] = $result_plugins;
-		$cached_plugins['model_plugins'] = $model_plugins;
+
 		$this->platform->cache_write(DILICMS_SHARE_PATH . 'settings/plugins.php', 
-									 array_to_cache("setting['active_plugins']", $cached_plugins));
+									 array_to_cache("setting['plugins']", $cached_plugins));
+									 
+		
 	}
 	
 	// ------------------------------------------------------------------------

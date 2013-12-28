@@ -31,7 +31,7 @@
                 <?php echo form_close(); ?>
             </div>
         <?php endif; ?>
-		<?php $this->plugin_manager->trigger_model_action('register_operation'); ?>
+		<?php $this->plugin_manager->trigger('buttons'); ?>
 	</div>
 	<div class="field">
 		<table class="list_table">
@@ -69,7 +69,7 @@
                     <td>
                     	<a href="<?php echo backend_url('content/form/','model='.$model['name'].'&id='.$v->id); ?>"><img class="operator" src="images/icon_edit.gif" alt="修改" title="修改"></a>
                         <a class="confirm_delete" href="<?php echo backend_url('content/del','model='.$model['name'].'&id='.$v->id); ?>"><img class="operator" src="images/icon_del.gif" alt="删除" title="删除"></a>
-                        <?php $this->plugin_manager->trigger_model_action('register_list_operation_view', $v); ?>
+                        <?php $this->plugin_manager->trigger('row_buttons', $v); ?>
                     </td>
                 </tr>
             <?php endforeach; ?>
@@ -104,4 +104,4 @@
 	}
 </script>
 <script src="js/dili_utility/content_form.js" type="text/javascript"></script>
-<?php $this->plugin_manager->trigger_model_action('register_list_view', $provider['list']); ?>
+<?php $this->plugin_manager->trigger('listed', $provider['list']); ?>

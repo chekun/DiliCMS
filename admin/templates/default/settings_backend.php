@@ -30,6 +30,14 @@
 					<th> 后台LOGO：</th>
 					<td><input type='text' class='normal' name="backend_logo" value="<?php echo $backend->backend_logo; ?>" autocomplete="off" /><label>左上角LOGO自定义路径</label></td>
 				</tr>
+				<tr>
+					<th>  插件开发模式：</th>
+					<td>
+					    <input type="radio" name="plugin_dev_mode" <?php echo $backend->plugin_dev_mode ? 'checked="checked"' :''; ?> value="1" >开启
+                        <input type="radio" name="plugin_dev_mode" value="0" <?php echo !$backend->plugin_dev_mode ? 'checked="checked"' :''; ?> >关闭
+					    <label> 开启该选项后每次请求都会自动刷新插件缓存，非插件开发时候请勿开启</label>
+					</td>
+				</tr>
                 <tr>
 					<th> 是否允许root用户登录：</th>
 					<td>
