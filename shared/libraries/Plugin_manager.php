@@ -99,12 +99,12 @@ class Plugin_manager {
 			}
 			if ($this->app->_admin->role != 1 and ! in_array('module@run', $this->app->acl->rights['rights']) )
 			{
-				unset($plugins[$key]);
+				unset($this->plugins[$key]);
 				continue;
 			}
 			if ($this->app->_admin->role != 1 && ! in_array($plugin['name'], $this->app->acl->rights['plugins']))
 			{
-				unset($plugins[$key]);
+				unset($this->plugins[$key]);
 				continue;		
 			}   
         }
@@ -122,7 +122,7 @@ class Plugin_manager {
             include $path;    
         }
         if (! class_exists(ucfirst($class_name))) {
-            throw new RuntimeException("Can\'t Find Class $class_name.");
+            throw new RuntimeException("Can't Find Class $class_name.");
         }
         
     }
