@@ -54,8 +54,8 @@ $active_group = get_instance()->platform->get_type();
 $active_record = TRUE;
 
 $db['default']['hostname'] = 'localhost';
-$db['default']['username'] = 'demo';
-$db['default']['password'] = 'y952fu2Cs2XTATsA';
+$db['default']['username'] = 'root';
+$db['default']['password'] = 'root';
 $db['default']['database'] = 'dilicms';
 $db['default']['dbdriver'] = 'mysql';
 $db['default']['dbprefix'] = 'dili_';
