@@ -34,7 +34,7 @@
                     </td>
 				</tr>
                 <?php endif; ?>
-                <?php $this->plugin_manager->trigger_model_action('register_view', $content); ?>
+                <?php $this->plugin_manager->trigger('rendered', $content); ?>
                 <?php endforeach; ?>
 				<tr>
 					<th></th>

@@ -70,7 +70,7 @@ class Category_content extends Admin_Controller
 		{
 			$this->_message('不存在的分类模型！', '', FALSE);
 		}
-		$this->plugin_manager->trigger_model_action('register_on_reach_model_list');
+		$this->plugin_manager->trigger('reached');
 		$this->settings->load('category/cate_' . $model);
 		$data['model'] = $this->settings->item('cate_models');
 		$data['model'] = $data['model'][$model];
@@ -121,7 +121,7 @@ class Category_content extends Admin_Controller
 		$data['where']['u_c_level'] = $level;
 		$condition['parentid ='] = $level;
 		
-		$this->plugin_manager->trigger_model_action('register_before_query', $condition);
+		$this->plugin_manager->trigger('querying', $condition);
 		
 		$config['total_rows'] = $this->db
 		                             ->where($condition)
@@ -140,7 +140,7 @@ class Category_content extends Admin_Controller
 		
 		$data['list'] = $this->db->get()->result();
 
-		$this->plugin_manager->trigger_model_action('register_before_list', $data['list']);
+		$this->plugin_manager->trigger('listing', $data['list']);
 		
 		if ($level != 0)
 		{
@@ -305,10 +305,10 @@ class Category_content extends Admin_Controller
 			
 			if ($id)
 			{
-				$this->plugin_manager->trigger_model_action('register_before_update', $data, $id);
+				$this->plugin_manager->trigger('updating', $data, $id);
 				$this->db->where('classid', $id);
 				$this->db->update($this->db->dbprefix('u_c_') . $model,$data);
-				$this->plugin_manager->trigger_model_action('register_after_update', $data, $id);
+				$this->plugin_manager->trigger('updated', $data, $id);
 				if ($attachment != '0')
 				{
 					$this->db->set('model', $modeldata['id'])
@@ -321,10 +321,10 @@ class Category_content extends Admin_Controller
 			}
 			else
 			{
-				$this->plugin_manager->trigger_model_action('register_before_insert', $data);
+				$this->plugin_manager->trigger('inserting', $data);
 				$this->db->insert($this->db->dbprefix('u_c_') . $model,$data);
 				$id = $this->db->insert_id();
-				$this->plugin_manager->trigger_model_action('register_after_insert', $data, $id);
+				$this->plugin_manager->trigger('inserted', $data, $id);
 				if($attachment != '0')
 				{
 					$this->db->set('model',$modeldata['id'])->set('from',1)->set('content',$id)->where('aid in ('.$attachment.')')->update($this->db->dbprefix('attachments'));	
@@ -383,7 +383,7 @@ class Category_content extends Admin_Controller
 			{
 				array_push($ids, $v->classid);	
 			}
-			$this->plugin_manager->trigger_model_action('register_before_delete', $ids);
+			$this->plugin_manager->trigger('deleting', $ids);
 			$attachments = $this->db->select('name, folder, type')
 									->where('model', $model_id)
 									->where_in('content', $ids)
@@ -402,7 +402,7 @@ class Category_content extends Admin_Controller
 					 ->where('from', 1)
 					 ->delete($this->db->dbprefix('attachments'));
 			$this->db->where_in('classid', $ids)->delete($this->db->dbprefix('u_c_') . $model);
-			$this->plugin_manager->trigger_model_action('register_after_delete', $ids);
+			$this->plugin_manager->trigger('deleted', $ids);
 		}
 		$this->_message('删除操作成功完成!', '', TRUE);
 	}

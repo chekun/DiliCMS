@@ -70,7 +70,7 @@ class Content extends Admin_Controller
 		{
 			$this->_message('不存在的模型！', '', FALSE);
 		}
-		$this->plugin_manager->trigger_model_action('register_on_reach_model_list');
+		$this->plugin_manager->trigger('reached');
 		$this->settings->load('model/' . $model);
 		$data['model'] = $this->settings->item('models');
 		$data['model'] = $data['model'][$model];
@@ -109,7 +109,7 @@ class Content extends Admin_Controller
 			$this->field_behavior->on_do_search($model['fields'][$v], $condition, $data['where'], $config['suffix']);
 		}
 		
-		$this->plugin_manager->trigger_model_action('register_before_query', $condition);
+		$this->plugin_manager->trigger('querying', $condition);
 		
 		$config['total_rows'] = $this->db->where($condition)->count_all_results($this->db->dbprefix('u_m_') . $model['name']);
 		
@@ -128,11 +128,14 @@ class Content extends Admin_Controller
 		
 		$data['list'] = $this->db->get()->result();
 		
-		$this->plugin_manager->trigger_model_action('register_before_list', $data['list']);
+		$this->plugin_manager->trigger('listing', $data['list']);
 		
 		$config['first_url'] = $config['base_url'] . $config['suffix'];
+		
 		$this->pagination->initialize($config);
+		
 		$data['pagination'] = $this->pagination->create_links();
+		
 		return $data;
 	}
 	
@@ -223,9 +226,9 @@ class Content extends Admin_Controller
 				$this->db->where('id', $id);
 				$data['update_time'] = $this->session->_get_time();
 				$data['update_user'] = $this->_admin->uid;
-				$this->plugin_manager->trigger_model_action('register_before_update', $data , $id);
-				$this->db->update($this->db->dbprefix('u_m_') . $model,$data);
-				$this->plugin_manager->trigger_model_action('register_after_update', $data , $id);
+				$this->plugin_manager->trigger('updating', $data , $id);
+				$this->db->update($this->db->dbprefix('u_m_') . $model, $data);
+				$this->plugin_manager->trigger('updated', $data , $id);
 				if ($attachment != '0')
 				{
 					$this->db->set('model', $modeldata['id'])
@@ -241,10 +244,10 @@ class Content extends Admin_Controller
 			    
 				$data['create_time'] = $data['update_time'] = $this->session->_get_time();
 				$data['create_user'] = $data['update_user'] = $this->_admin->uid;
-				$this->plugin_manager->trigger_model_action('register_before_insert', $data);
-				$this->db->insert($this->db->dbprefix('u_m_') . $model,$data);
+			    $this->plugin_manager->trigger('inserting', $data);
+				$this->db->insert($this->db->dbprefix('u_m_') . $model, $data);
 				$id = $this->db->insert_id();
-				$this->plugin_manager->trigger_model_action('register_after_insert', $data,$id);
+				$this->plugin_manager->trigger('inserted', $data, $id);
 				if ($attachment != '0')
 				{
 					$this->db->set('model', $modeldata['id'])
@@ -294,7 +297,7 @@ class Content extends Admin_Controller
 			{
 				$ids = array($ids);
 			}
-			$this->plugin_manager->trigger_model_action('register_before_delete', $ids);
+			$this->plugin_manager->trigger('deleting', $ids);
 			$attachments = $this->db->select('name, folder, type')
 									->where('model', $model_id)
 									->where('from', 0)
@@ -311,7 +314,7 @@ class Content extends Admin_Controller
 			}
 			$this->db->where('model', $model_id)->where_in('content', $ids)->where('from', 0)->delete($this->db->dbprefix('attachments'));
 			$this->db->where_in('id', $ids)->delete($this->db->dbprefix('u_m_') . $model);
-			$this->plugin_manager->trigger_model_action('register_after_delete', $ids);
+			$this->plugin_manager->trigger('deleted', $ids);
 		}
 		$this->_message('删除成功！', '', TRUE);	
 	}
