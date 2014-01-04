@@ -112,7 +112,7 @@ class Acl
 	{
 		//检查是否显示顶部插件菜单.
 		$is_show_module_menu = FALSE;
-		if ($this->ci->plugin_manager->trigger_left_menu())
+		if ($this->ci->plugin_manager->get_menus())
 		{
 			$is_show_module_menu = TRUE;
 		}
@@ -140,7 +140,7 @@ class Acl
      */
 	public function show_left_menus()
 	{
-		foreach ($this->left_menus as $v)
+		foreach ($this->left_menus as $key => $v)
 		{
 			if ($v['sub_menus'])
 			{
@@ -150,9 +150,13 @@ class Acl
 						 {
 						   $extra = '';
 						   $this->_current_menu ==  1 AND $extra =  'model=' . $j['extra'] ;
-						   $this->_current_menu ==  2 AND $extra = $j['extra'];
+						   if ($this->_current_menu ==  2) {
+						        echo '<li class="' . (isset($j['current']) ? 'selected' : '') .'"><a href="' . 
+						   	        plugin_url($key, $j['class_name'], $j['method_name']) . '">' . $j['menu_name'] . '</a></li>';
+						   	    continue;
+						   } 
 						   echo '<li class="' . (isset($j['current']) ? 'selected' : '') .'"><a href="' . 
-						   		backend_url($j['class_name'] . '/' . $j['method_name'], $extra) . '">' . $j['menu_name'] . '</a></li>';
+						   	 backend_url($j['class_name'] . '/' . $j['method_name'], $extra) . '">' . $j['menu_name'] . '</a></li>';
 						 }
 				echo	 '</ul>
 				      </li>';	
@@ -315,7 +319,7 @@ class Acl
      */
 	public function detect_plugin_menus()
 	{
-		$this->top_menus[$this->_current_menu]['sub_menus'] = $this->ci->plugin_manager->trigger_left_menu();
+		$this->top_menus[$this->_current_menu]['sub_menus'] = $this->ci->plugin_manager->get_menus();
 		$this->left_menus = & $this->top_menus[$this->_current_menu]['sub_menus'];
 		foreach ($this->left_menus as $key => & $v)
 		{
@@ -323,16 +327,18 @@ class Acl
 			{
 				foreach ($v['sub_menus'] as & $j)
 				{
-					$j['extra'] = 'plugin=' . $j['class_name'] . '&action=' . $j['method_name'];
-					if ($j['class_name'] == $this->ci->input->get('plugin') AND $j['method_name'] == $this->ci->input->get('action'))
+					$j['extra'] = 'plugin=' . $key . '&action=' . $j['method_name'];
+					if ($key == $this->ci->input->get('plugin') 
+					    AND 
+					    $j['class_name'] == $this->ci->input->get('c')
+					    AND 
+					    $j['method_name'] == $this->ci->input->get('m'))
 					{
 						$j['current'] = TRUE;
 					}
-					$j['class_name'] = 'module';
-					$j['method_name'] = 'run';
 					if ( ! $this->_default_link)
 					{
-						$this->_default_link = backend_url('module/run', $j['extra']);
+						$this->_default_link = plugin_url($key, $j['class_name'], $j['method_name']);
 					}
 				}
 			}

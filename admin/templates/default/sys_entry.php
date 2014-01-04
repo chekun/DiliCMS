@@ -29,9 +29,15 @@
         </p>
 	</div>
 	<div id="info_bar">
-    <span class="nav_sec">    	
-        <?php $this->plugin_manager->trigger_navigation(); ?>
-	</span></div>
+	    <?php if (setting('plugin_dev_mode')): ?>
+	    <label class="navindex" >
+    	    <a href="#" target="_blank">插件模式已开启</a>
+        </label>
+        <?php endif; ?>
+        <span class="nav_sec">    	
+            <?php //$this->plugin_manager->trigger_navigation(); ?>
+	    </span>
+	</div>
 	<div id="admin_left">
 		<ul class="submenu">
             <?php $this->acl->show_left_menus(); ?>

@@ -71,8 +71,18 @@
 
 	<div id="body">
 
+        <code style="color: red">
+            <a href="http://www.dilicms.com/">DiliCMS</a>只有后台的基础部分，没有前台程序，请确认满足您的需求再进行安装使用。
+        </code>
+
 		<p>安装</p>
-		<code><a href="install/public/">点此进行安装</a></code>
+		<code>
+            <a href="install/public/">点此进行安装</a>
+            <ul>
+                <li>请确环境检测中提到的文件夹有写入权限(windows也有权限问题)</li>
+                <li>安装程序采用HTML5,CSS3制作，请使用高端大气上档次的浏览器执行，^_^</li>
+            </ul>
+        </code>
 
 		<p>QQ讨论群</p>
 		<code>185074106</code>

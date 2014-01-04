@@ -25,202 +25,199 @@
  * @author      Jeongee
  * @link        http://www.dilicms.com
  */	
-class Plugin_manager
-{
-	/**
-     * active_plugins
-     * 已经激活模块插件的集合
-     *
-     * @var array
-     * @access  public
-     **/
-	public $active_plugins = array();
-
-	/**
-     * 
-     * 已经激活模型插件的集合
-     *
-     * @var array
-     * @access  public
-     **/
-	public $active_model_plugins = array();
-	
-	/**
-     * ci
-     * CI超级类的句柄
-     *
-     * @var object
-     * @access  private
-     **/
-	private $ci = NULL;
-	
-	/**
-     * 构造函数
-     *
-     * @access  public
-     * @return  void
-     */
-	public function __construct()
-	{
-		$this->ci = & get_instance();
-		$this->_init();
-	}
-
-	// ------------------------------------------------------------------------
-
-    /**
-     * 初始化
-     *
-     * @access  private
-     * @return  void
-     */
-	private function _init()
-	{
-		if ($this->ci->platform->cache_exists(DILICMS_SHARE_PATH . 'settings/plugins.php'))
+class Plugin_manager {
+    
+    protected $app = null;
+    
+    protected $classmap = array();
+    
+    protected $plugins = array();
+    
+    protected $menus = array();
+    
+    private $instances = array();
+    
+    public function __construct() 
+    {
+        $this->app = get_instance();
+        
+        //如果插件开发模式开启了，将会每次自动更新插件缓存
+        if ($this->app->settings->item('plugin_dev_mode')) {
+            
+            $this->app->load->model('cache_mdl');
+            
+            $this->app->cache_mdl->update_plugin_cache();
+            
+        }
+        
+        $this->initialize();
+    }
+    
+    private function initialize()
+    {
+        //加载插件
+        if ($this->app->platform->cache_exists(DILICMS_SHARE_PATH . 'settings/plugins.php'))
 		{
-			eval('?>' . $this->ci->platform->cache_read(DILICMS_SHARE_PATH . 'settings/plugins.php'));
-			if (isset($setting['active_plugins']))
+			eval('?>' . $this->app->platform->cache_read(DILICMS_SHARE_PATH . 'settings/plugins.php'));
+			if (isset($setting['plugins']) and is_array($setting['plugins']))
 			{
-				$this->active_plugins = $setting['active_plugins']['plugins'];
-				$this->active_model_plugins = $setting['active_plugins']['model_plugins'];
-				$this->_load_plugins($this->active_plugins);
-				unset($setting['active_plugins']);
+				$this->plugins = $setting['plugins'];
+				$this->watch();
+				unset($setting['plugins']);
 			}
 		}
-		if ($this->ci->uri->rsegment(1) == 'category_content' || $this->ci->uri->rsegment(1) == 'content')
+		if ($this->app->uri->rsegment(1) == 'category_content' || $this->app->uri->rsegment(1) == 'content')
 		{
-			$this->_load_plugins($this->active_model_plugins, 'model_');
-		}
-	}
-	
-	// ------------------------------------------------------------------------
+		    $model = $this->app->input->get('model', true);
+		    //重新分析classmap，加入autoloader
+		    foreach ($this->plugins as $name => $plugin) {
+		        foreach ($plugin['classmap'] as $filename => $hook) {
+		            if ($model == $filename) {
+		                $filename = ($name.'_hook_'.$model);
+		                $this->classmap[$filename] = $hook;
+		            }
+		        }
+		    }
+		    
+		} 
 
-    /**
-     * 加载插件
-     *
-     * @access  private
-     * @param   array
-     * @param   string
-     * @return  void
-     */
-	private function _load_plugins( & $plugins, $name_fix = '')
-	{
-		foreach ($plugins as $key => & $plugin)
-		{
-			if ($plugin['access'] == 1 && $this->ci->_admin->role != 1)
+		//加载菜单
+	    foreach ($this->plugins as $name => $plugin) {
+	        $this->menus[$name] = $plugin['menus'];
+	    }
+		
+    }
+    
+    private function watch()
+    {
+        foreach ($this->plugins as $key => $plugin) 
+        {
+            if ($plugin['access'] == 1 and $this->app->_admin->role != 1)
 			{
-				unset($plugins[$key]);
+				unset($this->plugins[$key]);
 				continue;	
 			}
-			if ($this->ci->_admin->role != 1 && ! in_array('module@run', $this->ci->acl->rights['rights']) )
+			if ($this->app->_admin->role != 1 and ! in_array('module@run', $this->app->acl->rights['rights']) )
 			{
-				unset($plugins[$key]);
-				continue;	
+				unset($this->plugins[$key]);
+				continue;
 			}
-			if ($this->ci->_admin->role != 1 && ! in_array($plugin['name'], $this->ci->acl->rights['plugins']))
+			if ($this->app->_admin->role != 1 && ! in_array($plugin['name'], $this->app->acl->rights['plugins']))
 			{
-				unset($plugins[$key]);
+				unset($this->plugins[$key]);
 				continue;		
-			}
-			if ( ! file_exists(DILICMS_EXTENSION_PATH . 'plugins/' . $plugin['name'] . '/' . 'plugin_' . $name_fix . $plugin['name'] . '.php'))
-			{
-				unset($plugins[$key]);
-			}
-			else
-			{
-				$plugin_class = 'plugin_' . $name_fix . $plugin['name'];
-				include DILICMS_EXTENSION_PATH . 'plugins/' . $plugin['name'] . '/' . 'plugin_' . $name_fix . $plugin['name'] . '.php';
-				if (class_exists($plugin_class))
-				{
-					$plugin['instance'] = new $plugin_class($plugin['name']);
-				}
-				else
-				{
-					unset($plugins[$key]);
-				}
-			}
-		}
-	}
-	
-	// ------------------------------------------------------------------------
-
-    /**
-     * 导航触发钩子
-     *
-     * @access  public
-     * @return  void
-     */
-	public function trigger_navigation()
-	{
-		foreach ($this->active_plugins as $plugin)
-		{
-			$plugin['instance']->register_navigation();
-		}
-	}
-	
-	// ------------------------------------------------------------------------
-
-    /**
-     * 菜单触发钩子
-     *
-     * @access  public
-     * @return  void
-     */
-	public function trigger_left_menu()
-	{
-		$left_menus = array();
-		foreach ($this->active_plugins as $plugin)
-		{
-			$left_menu = $plugin['instance']->register_left_menu();
-			if( $left_menu )
-			{
-				$left_menus[] = $left_menu;
-			}	
-		}
-		return $left_menus;	
-	}
-	
-	// ------------------------------------------------------------------------
-
-    /**
-     * 附件处理钩子触发
-     *
-     * @access  public
-     * @param   string
-     * @return  void
-     */
-	public function trigger_attachment($file)
-	{
-		foreach ($this->active_plugins as $plugin)
-		{
-			$plugin['instance']->register_attachment($file);
-		}	
-	}
-	
-	// ------------------------------------------------------------------------
-
-    /**
-     * 模型插件系列钩子触发
-     *
-     * @access  public
-     * @param   string
-     * @return  void/false
-     */
-	public function trigger_model_action($name = '' , & $arg1 = '' , & $arg2 = '')
-	{
-		if ( ! $name)
-		{
-			return FALSE;
-		}
-		foreach ($this->active_model_plugins as $plugin)
-		{
-			call_user_func_array(array(& $plugin['instance'], $name), array(& $arg1, & $arg2));
-		}
-	}
-			
+			}   
+        }
+    }
+    
+    private function autoloader($class_name) 
+    {
+        if (class_exists(ucfirst($class_name))) {
+            return true;
+        }
+        $path = DILICMS_EXTENSION_PATH . $this->classmap[$class_name];
+        
+        if (isset($this->classmap[$class_name]) and file_exists($path)) 
+        {
+            include $path;    
+        }
+        if (! class_exists(ucfirst($class_name))) {
+            throw new RuntimeException("Can't Find Class $class_name.");
+        }
+        
+    }
+    
+    public function trigger($method, & $data = null, $other = null)
+    {
+        $args = array(&$data, $other);
+        foreach ($this->classmap as $class => $path) {
+            if (! isset($this->instances[$class])) {
+                $this->autoloader($class);
+                $this->instances[$class] = new $class;
+            }
+            
+            return call_user_func_array(array($this->instances[$class], $method), $args);
+        }
+    }
+    
+    public function get_menus()
+    {
+        return $this->menus;
+    }
+    
 }
 
-// ------------------------------------------------------------------------
+interface DiliCMS_Model_Hook_Interface 
+{
+    
+    /**
+     * 为操作工具栏新增按钮 
+     */
+	public function buttons();
+	
+	/**
+     * 模型数据新增入库前
+     */
+	public function inserting(&$data);
+	
+	/**
+     * 模型数据新增入库后
+     */
+	public function inserted($data, $id);
+	
+	/**
+     * 模型数据修改入库前
+     */
+	public function updating(&$data, $id);		
+	
+	/**
+     * 模型数据修改入库后
+     */
+	public function updated($data, $id);
+	
+	/**
+     * 模型数据删除操作前
+     */
+	public function deleting(&$ids);
+	
+	/**
+     * 模型数据删除操作后
+     */
+	public function deleted($ids);
+	
+	/**
+     * 模型数据表单展示后
+     */
+	public function rendered($content);
+	
+	/**
+     * 模型数据列表执行查询前
+     */
+	public function querying(&$where);
+	
+	/**
+     * 模型数据列表展示前
+     */
+	public function listing(&$results);
+	
+	/**
+     * 模型数据列表展示后
+     */
+	public function listed($results);
+	
+	/**
+     * 模型数据列表各记录操作位置
+     */
+	public function row_buttons($data);
+	
+	/**
+     * 模型数据进入列表页面开始处理前
+     * 
+     * 可用于更细化的权限判断
+     */
+	//注册模型信息进入列表信息动作
+	public function reaching();
+}
 
 /**
  * DiliCMS 插件基类
@@ -231,121 +228,48 @@ class Plugin_manager
  * @author      Jeongee
  * @link        http://www.dilicms.com
  */	
-abstract class Dili_basic_plugin
+abstract class DiliCMS_Plugin_Controller
 {
-	protected $_name = '';
-	protected $_ci = NULL;
-	protected $_path = '';
+	protected $name = '';
+	
+	protected $app = null;
+	
+	protected $path = '';
 	
 	public function __construct($name)
 	{
-		$this->_name = $name;
-		$this->_ci = & get_instance();
-		$this->_path = DILICMS_EXTENSION_PATH . 'plugins/' . $this->_name . '/';
-	}
-	
-	protected function _url($action, $qs = '')
-	{
-		return backend_url('module/run','plugin='.$this->_name.'&action='.$action).$qs;	
-	}
-	
-	protected function _check($type = '' , $model = '')
-    {
-        return $this->_ci->uri->rsegment(1) == $type && $model == $this->_ci->input->get('model');
-    } 
-	
-	protected function _template($view , $data = array() , $output = true)
-	{
-		extract($data);
-		ob_start();
-		eval('?>' . file_get_contents($this->_path . $view . '.php'));
-		$content = ob_get_contents();
-		ob_end_clean();
-		if ($output == TRUE)
-		{
-			echo $content;
-		}	
-		else
-		{
-			return $content;
-		}
-	}
+		$this->name = $name;
+
+        $this->app = & get_instance();
 		
-}
+		$this->path = DILICMS_EXTENSION_PATH . 'plugins/' . $this->name . '/';
+		
+		$this->add_packages();
+	}
+
+    private function add_packages()
+    {
+        $this->load->add_package_path($this->path);
+    }
 	
-// ------------------------------------------------------------------------
-
-/**
- * DiliCMS 模型插件基类
- *
- * @package     DiliCMS
- * @subpackage  Libraries
- * @category    Libraries
- * @author      Jeongee
- * @link        http://www.dilicms.com
- */	
-abstract class Dili_model_plugin extends Dili_basic_plugin
-{	
-	public function __construct($name)
+	protected function plugin_url($controller, $method, $qs = array())
 	{
-		parent::__construct($name);
+	    return plugin_url($this->name, $controller, $method, $qs);
 	}
-	//注册操作栏
-	public function register_operation(){}
-	//注册模型信息插入前操作
-	public function register_before_insert(){}//& $data
-	//注册模型信息插入后操作
-	public function register_after_insert(){}//& $data ,$id
-	//注册模型信息修改前操作
-	public function register_before_update(){}//& $data ,$id		
-	//注册模型信息修改后操作
-	public function register_after_update(){}//& $data ,$id
-	//注册模型信息删除前操作
-	public function register_before_delete(){}//$ids
-	//注册模型信息删除后操作
-	public function register_after_delete(){}//$ids
-	//注册模型信息添加修改页面视图
-	public function register_view(){}//& $content
-	//注册模型信息列表QUERY之前
-	public function register_before_query(){}//&$where
-	//注册模型信息列表数据二次处理
-	public function register_before_list(){}//& $list
-	//注册模型信息列表显示页面
-	public function register_list_view(){}//& $list
-	//注册模型信息列表操作栏
-	public function register_list_operation_view(){}// &$data
-	//注册模型信息进入列表信息动作
-	public function register_on_reach_model_list(){}//
-}
-
-// ------------------------------------------------------------------------
-
-/**
- * DiliCMS 模块插件基类
- *
- * @package     DiliCMS
- * @subpackage  Libraries
- * @category    Libraries
- * @author      Jeongee
- * @link        http://www.dilicms.com
- */	
-abstract class Dili_plugin extends Dili_basic_plugin
-{
-	public function __construct($name)
+	
+	public function get_path()
 	{
-		parent::__construct($name);
+	    return $this->path;
 	}
-	//注册快速导航栏按钮
-	public function register_navigation(){}
-	//注册左边栏菜单
-	public function register_left_menu(){}
-	/*return   array( 'menu_name' => 'Hello World 插件',
-						'sub_menus' => array(
-											  0=>array('class_name'=>$this->_name,'method_name'=>'welcome','menu_name'=>'测试左菜单')
-											)
-					  );*/
-	//注册快速导航栏按钮
-	public function register_attachment(){}//参数为路径
+	
+	public function __get($name) 
+    {
+        if (property_exists($this->app, $name))
+        {
+            return $this->app->$name;
+        }
+    }
+		
 }
 	
 /* End of file Plugin_manager.php */

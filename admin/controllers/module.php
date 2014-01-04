@@ -26,6 +26,9 @@
  */
 class Module extends Admin_Controller
 {
+    
+    protected $plugin = null;
+    
 	/**
      * 构造函数
      *
@@ -35,56 +38,41 @@ class Module extends Admin_Controller
 	public function __construct()
 	{
 		parent::__construct();
+		
 		$this->acl->detect_plugin_menus();
+		
+		$this->initialize();
+		
 	}
 	
-	// ------------------------------------------------------------------------
-
-    /**
-     * GET方式入口
-     *
-     * @access  public
-     * @return  void
-     */
-	public function run()
+	private function initialize()
 	{
-		$this->_run_post();
-	}
-	
-	// ------------------------------------------------------------------------
-
-    /**
-     * POST方式入口
-     *
-     * @access  public
-     * @return  void
-     */
-	public function _run_post()
-	{
-		$plugin = $this->input->get('plugin', TRUE);
+	    $plugin = $this->input->get('plugin', TRUE);
 		if ( ! $plugin AND $this->acl->_default_link)
 		{
 			redirect($this->acl->_default_link);
 		}
 		$this->_check_permit();
-		$action = $this->input->get('action', TRUE);
-		if ( $action
-			AND
-			isset($this->plugin_manager->active_plugins[$plugin]['instance']) 
-			AND 
-		    in_array(strtolower($action), array_map('strtolower', get_class_methods('plugin_' . $plugin)))
+		$controller = $this->input->get('c', true);
+		$method = $this->input->get('m', TRUE);
+		$path = DILICMS_EXTENSION_PATH.'plugins/'.$plugin.'/controllers/'.$plugin.'_'.$controller.'.php';
+		if ( $controller
+			and
+			file_exists($path)
 		)
 		{
-				$data['content'] = $this->plugin_manager->active_plugins[$plugin]['instance']->$action();
-				$this->_template('', $data);
+		    include $path;
+		    $controller = ucfirst($plugin . '_' . $controller);
+		    $this->plugin = new $controller($plugin);
+		    $data['content'] = $this->plugin->$method();
+            $this->_template('', $data);
+            exit($this->output->get_output());
 		}
 		else
 		{
-			$this->_message('未定义的操作!', '', FALSE);	
+			$this->_message('未找到处理程序!', '', FALSE);	
 		}
 	}
-
-	// ------------------------------------------------------------------------
 	
 }
 
