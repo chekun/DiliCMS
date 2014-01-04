@@ -291,16 +291,24 @@ class Category_content extends Admin_Controller
 			if ($data['parentid'] > 0)
 			{
 				//如果不是顶级分类，就读其path数据
-				$data['path'] = '0';
+				$data['path'] = '{0}';
 				$data['level'] = 1;
 				$parent_class = $this->db->where('classid', $data['parentid'])->get($this->db->dbprefix('u_c_') . $model)->row();
-				if ($parent_class AND  $parent_class->path)
+
+				if ($parent_class)
 				{
-					$data['path'] .= ',' ;
+                    $data['path'] = $parent_class->path;
 					$data['level'] = $parent_class->level + 1; 
 				}
-				$data['path'] .= $data['parentid'] . ',0';
-			}
+                else
+                {
+                    $this->_message('不存在的顶级分类!', '', FALSE);
+                }
+				$data['path'] .= ',{'.$data['parentid'].'}';
+			} else {
+                $data['path'] = '{0}';
+                $data['level'] = 1;
+            }
 			$attachment = $this->input->post('uploadedfile', TRUE);
 			
 			if ($id)
@@ -371,14 +379,16 @@ class Category_content extends Admin_Controller
 				$ids = array($ids);
 			}
 			//搜索子分类
-			$this->db->select('classid')->from($this->db->dbprefix('u_c_') . $model);
 			$where_string = 'classid < 0 ';
 			foreach ($ids as $v)
 			{
-				$where_string .= " OR path Like '%," . $v . ",%'";
+                $_category = $this->db->select('path')->where('classid', $v)->get($this->db->dbprefix('u_c_') . $model)->row();
+				$where_string .= " OR path Like '" . $_category->path . ',{' . $v . "}%'";
 			}
+            $this->db->select('classid')->from($this->db->dbprefix('u_c_') . $model);
 			$this->db->where($where_string);
 			$result = $this->db->get()->result();
+
 			foreach ($result as $v)
 			{
 				array_push($ids, $v->classid);	
