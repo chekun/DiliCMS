@@ -167,7 +167,7 @@ class Plugin_mdl extends CI_Model
 							</plugin>
 						</root>';
 			//当前仅支持在普通环境下导出插件安装XML文件
-			if ($this->platform->get_type() == 'default')
+			if ($this->platform->get_type() == 'default' && file_exists(DILICMS_EXTENSION_PATH . 'plugins/' . $plugin->name))
 			{
 				file_put_contents(DILICMS_EXTENSION_PATH . 'plugins/' . $plugin->name .'/plugin_' . $plugin->name . '_install.xml', $xml);
 			}
