@@ -31,6 +31,13 @@
                         <label>是否使用上传控件，根据实际需求选择。</label>
                     </td>
 				</tr>
+                <tr>
+                    <th> 是否自动更新缓存：</th>
+                    <td>
+                        <?php $this->form->show('auto_update', 'radio', array('1'=>'是','0'=>'否'),'0'); ?>
+                        <label>操作不频繁的分类模型建议开启此选项.</label>
+                    </td>
+                </tr>
 				<tr>
 					<th></th>
 					<td>

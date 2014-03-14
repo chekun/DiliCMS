@@ -1,5 +1,17 @@
 # DiliCMS更新日志
 
+## 版本号 2.3.0
+
+> TBD Time 更新内容
+
+- 分类模型新增【自动更新缓存选项】
+  ALTER TABLE `dili_cate_models` ADD `auto_update` TINYINT(1)  UNSIGNED  NULL  DEFAULT '0'  AFTER `built_in`;
+
+
+## 版本号 2.2.0
+
+> 见v2.2.0-rc.1和v2.2.0-rc.2
+
 ## 版本号 2.2.0-rc.2
 
 > 2013年1月4日  更新内容

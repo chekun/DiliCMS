@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS `{DB_PREFIX}cate_models` (
   `level` tinyint(2) unsigned NOT NULL DEFAULT '1',
   `hasattach` tinyint(1) NOT NULL DEFAULT '0',
   `built_in` tinyint(1) DEFAULT '0',
+  `auto_update` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8{SEPERATOR}

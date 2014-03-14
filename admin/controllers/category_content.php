@@ -325,6 +325,9 @@ class Category_content extends Admin_Controller
 							 ->where('aid in (' . $attachment . ')')
 							 ->update($this->db->dbprefix('attachments'));	
 				}
+                if ($modeldata['auto_update']) {
+                    update_cache('category', $model);
+                }
 				$this->_message('修改成功!', 'category_content/form', TRUE, '?model=' . $modeldata['name'] . '&id=' . $id);	
 			}
 			else
@@ -337,6 +340,9 @@ class Category_content extends Admin_Controller
 				{
 					$this->db->set('model',$modeldata['id'])->set('from',1)->set('content',$id)->where('aid in ('.$attachment.')')->update($this->db->dbprefix('attachments'));	
 				}
+                if ($modeldata['auto_update']) {
+                    update_cache('category', $model);
+                }
 				$this->_message('添加成功!','category_content/view',true,'?model='.$modeldata['name'].'&u_c_level='.$data['parentid']);	
 			}
 		}
@@ -370,7 +376,8 @@ class Category_content extends Admin_Controller
 		$this->_check_permit();
 		$ids = $this->input->get_post('classid', TRUE);
 		$model = $this->input->get('model', TRUE);
-		$model_id = $this->db->select('id')->where('name', $model)->get($this->db->dbprefix('cate_models'))->row()->id;
+        $model_data = $this->db->select('id')->where('name', $model)->get($this->db->dbprefix('cate_models'))->row();
+		$model_id = $model_data->id;
 		if ($ids)
 		{
 			
@@ -413,6 +420,9 @@ class Category_content extends Admin_Controller
 					 ->delete($this->db->dbprefix('attachments'));
 			$this->db->where_in('classid', $ids)->delete($this->db->dbprefix('u_c_') . $model);
 			$this->plugin_manager->trigger('deleted', $ids);
+            if ($model_data->auto_update) {
+                update_cache('category', $model);
+            }
 		}
 		$this->_message('删除操作成功完成!', '', TRUE);
 	}

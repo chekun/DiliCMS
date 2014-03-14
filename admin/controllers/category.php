@@ -97,6 +97,7 @@ class Category extends Admin_Controller
 			$data['perpage'] = $this->input->post('perpage', TRUE);
 			$data['level'] = $this->input->post('level', TRUE);
 			$data['hasattach'] = $this->input->post('hasattach', TRUE);
+            $data['auto_update'] = $this->input->post('auto_update', TRUE);
 			//新增分类模型
 			$this->category_mdl->add_new_category($data);
 			//更新缓存
@@ -178,6 +179,7 @@ class Category extends Admin_Controller
 			$data['perpage'] = $this->input->post('perpage', TRUE);
 			$data['level'] = $this->input->post('level', TRUE);
 			$data['hasattach'] = $this->input->post('hasattach', TRUE);
+            $data['auto_update'] = $this->input->post('auto_update', TRUE);
 			$this->category_mdl->edit_category_model($target_model, $data);
 			update_cache('category', $data['name']);
 			update_cache('menu');
