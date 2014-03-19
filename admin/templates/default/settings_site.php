@@ -108,6 +108,24 @@
 					<th>上传大小限制：</th>
 					<td><input type='text' class='small' name='attachment_maxupload'  id="attachment_maxupload" value="<?php echo $site->attachment_maxupload; ?>" />单位：字节</td>
 				</tr>
+                <tr>
+                    <th>缩略图尺寸预设：</th>
+                    <td>
+                        <ul id="thumbs-preferences" data-url="<?php echo site_url('setting/thumbs'); ?>"></ul>
+                        <ul id="thumbs-preferences-form">
+                            <li style="padding:4px 0;">
+                                <input type="text" class="small" value="" id="new-size">
+                                <select id="new-rule">
+                                    <option value="crop">Crop策略</option>
+                                    <option value="fit">Fit策略</option>
+                                    <option value="fill">Fill策略</option>
+                                    <option value="fitWidth">FitWidth策略</option>
+                                </select>
+                                <button class="submit" id="add-new-preference" type='button'><span>添加</span></button>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
 				<tr>
 					<th></th>
 					<td>
@@ -155,3 +173,132 @@
         
 	</div>
 </div>
+<script type="text/template" id="thumb-template">
+    <%= size%> - <%= window.thumbRules[rule] %>
+    <a class="submit" style="padding:2px 4px" type='button'><span>x</span></a>
+</script>
+<script src="js/underscore-min.js"></script>
+<script src="js/backbone-min.js"></script>
+<script>
+    (function() {
+
+        "use strict"
+
+        var thumbApp = {};
+
+        window.thumbRules = thumbApp.rules = {
+            fill: 'fill策略',
+            fit: 'fit策略',
+            fitWidth: 'fitWidth策略',
+            crop: 'Crop策略'
+        };
+
+        thumbApp.url = $('#thumbs-preferences').data('url');
+
+        thumbApp.Model = Backbone.Model.extend({
+            defaults: {
+                size: '',
+                rule: ''
+            },
+            urlRoot: thumbApp.url+'/',
+            validate: function(attrs) {
+                if (! /^[1-9]\d*(x[1-9]\d*)?$/.test(attrs.size)) {
+                    return '不合法的尺寸设置\n尺寸需要设置为形如100x100或者100的值.';
+                }
+                if (typeof thumbApp.rules[attrs.rule] == 'undefined') {
+                    return '不合法的缩略策略参数';
+                }
+                if (/^\d+$/.test(attrs.size) && attrs.rule != 'fitWidth') {
+                    return '该尺寸只能设置为FitWidth策略';
+                }
+                var isExisted = false;
+                _.each(thumbApp.view.$el.children('li'), function(li) {
+                    var $li = $(li);
+                    if (attrs.size == $li.data('size')) {
+                        isExisted = true;
+                        return false;
+                    }
+                });
+                if (isExisted) {
+                    return '该尺寸的预设已经存在了';
+                }
+            }
+        });
+
+        thumbApp.Collection = Backbone.Collection.extend({
+            model: thumbApp.Model,
+            url : thumbApp.url,
+            urlRoot : thumbApp.url
+        });
+
+        thumbApp.preferences = new thumbApp.Collection();
+
+        thumbApp.thumbView = Backbone.View.extend({
+            tagName: 'li',
+            template: _.template($('#thumb-template').html()),
+            events: {
+                "click a.submit": "destroy"
+            },
+            initialize: function() {
+                this.listenTo(this.model, 'destroy', this.remove);
+            },
+            render: function() {
+                this.$el.css('padding', '4px 0')
+                    .data('size', this.model.get('size'))
+                    .data('rule', this.model.get('rule'));
+                this.$el.html(this.template(this.model.toJSON()));
+                return this;
+            },
+            destroy: function() {
+                this.model.destroy();
+            }
+        });
+
+        thumbApp.FormView = Backbone.View.extend({
+            el: '#thumbs-preferences-form',
+            events: {
+                "click #add-new-preference": "addNew"
+            },
+            initialize: function() {
+                this.$newSize = $('#new-size');
+            },
+            addNew: function() {
+                var newSize = this.$('#new-size').val();
+                var newRule = this.$('#new-rule').val();
+
+                var model = new thumbApp.Model({
+                    size: newSize,
+                    rule: newRule
+                });
+                if (! model.isValid()) {
+                    alert(model.validationError);
+                } else {
+                    model.save({id: newSize});
+                    thumbApp.view.addOne(model);
+                }
+            }
+        });
+
+        thumbApp.formView = new thumbApp.FormView();
+
+        thumbApp.View = Backbone.View.extend({
+            el: '#thumbs-preferences',
+            initialize: function() {
+                this.listenTo(thumbApp.preferences, 'sync', this.render);
+                thumbApp.preferences.fetch({reset: true});
+            },
+            render: function() {
+                this.$el.html('');
+                if (thumbApp.preferences.length > 0) {
+                    thumbApp.preferences.each(this.addOne, this);
+                }
+            },
+            addOne: function(thumb) {
+                var view = new thumbApp.thumbView({model: thumb});
+                this.$el.append(view.render().el);
+            }
+        });
+
+        thumbApp.view = new thumbApp.View();
+    })();
+</script>

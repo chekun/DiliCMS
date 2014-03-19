@@ -49,9 +49,9 @@ class MethodHook
 	public function redirect()
 	{
 		global $method;
-		if ($_SERVER['REQUEST_METHOD'] == 'POST' )
+		if (isset($_SERVER['REQUEST_METHOD']) and $_SERVER['REQUEST_METHOD'] !== 'GET')
 		{
-			$method = '_' . $method . '_post';
+			$method = '_' . $method . '_'. strtolower($_SERVER['REQUEST_METHOD']);
 		}
 	}
 		

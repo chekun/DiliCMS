@@ -6,6 +6,12 @@
 
 - 分类模型新增【自动更新缓存选项】
   ALTER TABLE `dili_cate_models` ADD `auto_update` TINYINT(1)  UNSIGNED  NULL  DEFAULT '0'  AFTER `built_in`;
+- 站点设置增加预设缩略图配置
+  ALTER TABLE `dili_site_settings` ADD `thumbs_preferences` VARCHAR(500)  NULL  DEFAULT '[]'  AFTER `attachment_maxupload`;
+- 内容模型和分类模型增加缩略图配置
+  ALTER TABLE `dili_models` ADD `thumb_preferences` TEXT  NULL  AFTER `built_in`;
+  ALTER TABLE `dili_cate_models` ADD `thumb_preferences` TEXT  NULL  AFTER `auto_update`;
+
 
 
 ## 版本号 2.2.0

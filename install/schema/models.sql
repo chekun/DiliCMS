@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS `{DB_PREFIX}models` (
   `perpage` varchar(2) NOT NULL DEFAULT '10',
   `hasattach` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `built_in` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `thumb_preferences` TEXT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8{SEPERATOR}
