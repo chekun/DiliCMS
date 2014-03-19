@@ -132,7 +132,8 @@ class Install extends CI_Controller
             }
             echo json_encode(array(
                     'status' => 1,
-                    'messages' => array('表'.$config['dbprefix'].$step.'安装成功, 插入行数: '.$db->affected_rows())
+                    'messages' => array('表'.$config['dbprefix'].$step.'安装成功, 插入行数: '.$db->affected_rows()),
+                    'debug' => $sql
             ));
         }
     }
