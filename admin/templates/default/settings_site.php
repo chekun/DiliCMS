@@ -187,9 +187,9 @@
         var thumbApp = {};
 
         window.thumbRules = thumbApp.rules = {
-            fill: 'fill策略',
-            fit: 'fit策略',
-            fitWidth: 'fitWidth策略',
+            fill: 'Fill策略',
+            fit: 'Fit策略',
+            fitWidth: 'FitWidth策略',
             crop: 'Crop策略'
         };
 

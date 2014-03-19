@@ -52,8 +52,9 @@ class Attachment extends CI_Controller
 	{
 		
 		//不能加载SESSION类库
-		$session_id = $this->input->post('hash', TRUE);
-		$session = $this->db->where('session_id', $session_id)->get($this->db->dbprefix('sessions'))->row();
+		$hash = $this->input->post('hash', TRUE);
+		list($session_id, $model_type, $model) = explode('^', $hash);
+        $session = $this->db->where('session_id', $session_id)->get($this->db->dbprefix('sessions'))->row();
 		$status = "ok";
 		$response = "";
 		if ($session)
@@ -73,12 +74,6 @@ class Attachment extends CI_Controller
 			}
 			else
 			{
-				//获取用户信息，让插件管理类正确执行(暂时的解决方案)
-				$this->_admin = $this->user_mdl->get_full_user_by_username($userdata['uid'], 'uid');
-				//加载ACL
-				$this->load->library('acl');
-				//加载插件经理
-				$this->load->library('plugin_manager');
 				if ( ! $_FILES['Filedata']['error'])
 				{
 					$data['folder'] = date('Y/m', $now);
@@ -99,6 +94,10 @@ class Attachment extends CI_Controller
 						else
 						{
 							$data['image'] = (in_array($data['type'], array('jpg', 'gif', 'png', 'jpeg', 'bmp'))) ? 1 : 0;
+                            //currently we only support Imagick to resize images
+                            if ($data['image'] and extension_loaded('imagick')) {
+                                $this->thumbnail($model_type, $model, $target_file, $data['type']);
+                            }
 							$this->db->insert($this->db->dbprefix('attachments'), $data);
 							$response = $this->db->insert_id() . '|' . $data['realname'] . '|' . $data['name'] . '|' . $data['image'].'|'.$data['folder'].'|'.$data['type'];
 						}
@@ -123,6 +122,50 @@ class Attachment extends CI_Controller
 	}
 
 	// ------------------------------------------------------------------------
+
+    /**
+     * 缩略图片
+     *
+     * @access  private
+     * @param $model_type
+     * @param $model
+     * @param $target
+     * @param $ext
+     * @return  void
+     */
+    private function thumbnail($model_type, $model, $target, $ext)
+    {
+        //do we have thumbnail settings for target model?
+        if ($model_type and $model and in_array($model_type, array('model', 'category'))) {
+            if ($model_type == 'model') {
+                $this->settings->load('model/' . $model);
+                $target_model = $this->settings->item('models');
+                $target_model = $target_model[$model];
+            } elseif ($model_type == 'category') {
+                $this->settings->load('category/cate_' . $model);
+                $target_model = $this->settings->item('cate_models');
+                $target_model = $target_model[$model];
+            }
+            $thumb_preferences = json_decode($target_model['thumb_preferences']);
+            if ($thumb_preferences and count($thumb_preferences->enabled) > 0) {
+                $thumbs_preferences = json_decode(setting('thumbs_preferences'));
+                if ($thumbs_preferences) {
+                    $this->load->library('tailor');
+                    foreach ($thumbs_preferences as $pref) {
+                        if (in_array($pref->size, $thumb_preferences->enabled)) {
+                            $this->tailor->initialize($target, $ext);
+                            $this->tailor->measure($pref->size, $pref->rule);
+                            $this->tailor->save($target.'.'.$pref->size);
+                        }
+                    }
+                    return $thumb_preferences->default == 'original' ? '' : $thumb_preferences->default;
+                }
+            }
+            return '';
+        }
+    }
+
+    // ------------------------------------------------------------------------
 
     /**
      * 编辑器文件上传接口
@@ -201,8 +244,17 @@ class Attachment extends CI_Controller
 						$this->db->insert($this->db->dbprefix('attachments'), $upload);
 						if ($aid = $this->db->insert_id())
 						{
+                            $thumbnailDefaultSize = '';
+                            //currently we only support Imagick to resize images
+                            if ($upload['image'] and extension_loaded('imagick')) {
+                                $thumbnailDefaultSize = $this->thumbnail($this->session->userdata('model_type'), $this->session->userdata('model'), $target_file, $upload['type']);
+                            }
+
 							//已上传成功并已插入数据库
 							$url = setting('attachment_url').'/'.$upload['folder'].'/'.$upload['name'].'.'.$upload['type'];
+                            if ($thumbnailDefaultSize) {
+                                $url .= '.'.$thumbnailDefaultSize.'.'.($upload['type'] == 'gif' ? 'gif' : 'jpg');
+                            }
 							$error = '';
 							$object = $aid . '|' . $upload['realname'] . '|' . $upload['name'] . '|' . $upload['image'].'|'.$upload['folder'].'|'.$upload['type'];
 						}
@@ -229,6 +281,8 @@ class Attachment extends CI_Controller
 	public function config()
 	{
 		$this->load->library('session');
+        $model_type = $this->session->userdata('model_type') ?: '';
+        $model = $this->session->userdata('model') ?: '';
 		echo '<?xml version="1.0" encoding="UTF-8"?>
 				<parameter>
 					<allowsExtend>
@@ -255,7 +309,7 @@ class Attachment extends CI_Controller
 					</language>
 					<config>
 						<userid>'.$this->session->userdata('uid').'</userid>
-						<hash>'.$this->session->userdata('session_id').'</hash>
+						<hash>'.$this->session->userdata('session_id').'^'.$model_type.'^'.$model.'</hash>
 						<maxupload>'.$this->settings->item('attachment_maxupload').'</maxupload>
 					</config>
 				</parameter>';

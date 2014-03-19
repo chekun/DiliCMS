@@ -163,6 +163,9 @@ class Content extends Admin_Controller
 	public function _save_post()
 	{
 		$model = $this->input->get('model', TRUE);
+        $this->session->set_userdata('model_type', 'model');
+        $this->session->set_userdata('model', $model);
+
 		$this->settings->load('model/' . $model);
 		$data['model'] = $this->settings->item('models');
 		$data['model'] = $data['model'][$model];
@@ -206,7 +209,12 @@ class Content extends Admin_Controller
 		$this->load->library('field_behavior');
 		if ($this->form_validation->run() == FALSE)
 		{
-			$this->_template('content_form', $data);
+            $thumb_preferences = json_decode($data['model']['thumb_preferences']);
+            $data['thumb_default_size'] = '';
+            if ($thumb_preferences and $thumb_preferences->default != 'original') {
+                $data['thumb_default_size'] = $thumb_preferences->default;
+            }
+ 			$this->_template('content_form', $data);
 		}
 		else
 		{
@@ -344,7 +352,7 @@ class Content extends Admin_Controller
 			}
 			echo implode(',', $response);
 		}
-		else if($action == 'del')
+		elseif ($action == 'del')
 		{
 			$attach = $this->db->select('aid, name, folder, type')
 							   ->where('aid', $this->input->get('id', TRUE))
@@ -358,8 +366,11 @@ class Content extends Admin_Controller
 											 $attach->name . '.' . 
 											 $attach->type);		
 				$this->db->where('aid', $attach->aid)->delete($this->db->dbprefix('attachments'));
-				echo 'ok';
-			}
+                echo 'ok';
+
+            } else {
+                echo 'ok';
+            }
 		}
 	}
 	

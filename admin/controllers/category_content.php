@@ -203,8 +203,12 @@ class Category_content extends Admin_Controller
      */
 	public function _save_post()
 	{
-		
+
 		$model = $this->input->get('model', TRUE);
+
+        $this->session->set_userdata('model_type', 'category');
+        $this->session->set_userdata('model', $model);
+
 		$this->settings->load('category/cate_' . $model);
 		$data['model'] = $this->settings->item('cate_models');
 		$data['model'] = $data['model'][$model];
@@ -228,37 +232,37 @@ class Category_content extends Admin_Controller
 			$data['content'] = array();
 			$data['button_name'] = '添加';
 		}
-		
+
 		if ($data['parentid'] > 0)
 		{
 			$current_level = $this->db->where('classid', $data['parentid'])
 									  ->get($this->db->dbprefix('u_c_') . $model)
 									  ->row()
-									  ->level + 1;	
+									  ->level + 1;
 		}
 		else
 		{
-			$current_level = 1;	
+			$current_level = 1;
 		}
-		
-		
+
+
 		$data['path'] = $this->_find_path($current_level);
-		
+
 		$this->load->library('form_validation');
-		
+
 		foreach ($data['model']['fields'] as $v)
 		{
 			if ($v['rules'] != '')
 			{
-				$this->form_validation->set_rules($v['name'], $v['description'], str_replace(",", "|", $v['rules']));	
+				$this->form_validation->set_rules($v['name'], $v['description'], str_replace(",", "|", $v['rules']));
 			}
 		}
-		
+
 		$this->load->library('form');
 		$this->load->library('field_behavior');
 		if ($this->form_validation->run() == FALSE)
 		{
-		
+
 			$bread = Array(
 				'分类管理' => '',
 				$data['model']['description'] => site_url('category_content/view?model=' . $data['model']['name']),
@@ -272,7 +276,13 @@ class Category_content extends Admin_Controller
 			}
 			$bread[ $id ? '编辑' : '添加' ] = '';
 			$data['bread'] = make_bread($bread);
-			
+
+            $thumb_preferences = json_decode($data['model']['thumb_preferences']);
+            $data['thumb_default_size'] = '';
+            if ($thumb_preferences and $thumb_preferences->default != 'original') {
+                $data['thumb_default_size'] = $thumb_preferences->default;
+            }
+
 			$this->_template('category_content_form', $data);
 		}
 		else
@@ -298,7 +308,7 @@ class Category_content extends Admin_Controller
 				if ($parent_class)
 				{
                     $data['path'] = $parent_class->path;
-					$data['level'] = $parent_class->level + 1; 
+					$data['level'] = $parent_class->level + 1;
 				}
                 else
                 {
@@ -310,7 +320,7 @@ class Category_content extends Admin_Controller
                 $data['level'] = 1;
             }
 			$attachment = $this->input->post('uploadedfile', TRUE);
-			
+
 			if ($id)
 			{
 				$this->plugin_manager->trigger('updating', $data, $id);
@@ -323,12 +333,12 @@ class Category_content extends Admin_Controller
 							 ->set('from', 1)
 							 ->set('content', $id)
 							 ->where('aid in (' . $attachment . ')')
-							 ->update($this->db->dbprefix('attachments'));	
+							 ->update($this->db->dbprefix('attachments'));
 				}
                 if ($modeldata['auto_update']) {
                     update_cache('category', $model);
                 }
-				$this->_message('修改成功!', 'category_content/form', TRUE, '?model=' . $modeldata['name'] . '&id=' . $id);	
+				$this->_message('修改成功!', 'category_content/form', TRUE, '?model=' . $modeldata['name'] . '&id=' . $id);
 			}
 			else
 			{
@@ -338,17 +348,17 @@ class Category_content extends Admin_Controller
 				$this->plugin_manager->trigger('inserted', $data, $id);
 				if($attachment != '0')
 				{
-					$this->db->set('model',$modeldata['id'])->set('from',1)->set('content',$id)->where('aid in ('.$attachment.')')->update($this->db->dbprefix('attachments'));	
+					$this->db->set('model',$modeldata['id'])->set('from',1)->set('content',$id)->where('aid in ('.$attachment.')')->update($this->db->dbprefix('attachments'));
 				}
                 if ($modeldata['auto_update']) {
                     update_cache('category', $model);
                 }
-				$this->_message('添加成功!','category_content/view',true,'?model='.$modeldata['name'].'&u_c_level='.$data['parentid']);	
+				$this->_message('添加成功!','category_content/view',true,'?model='.$modeldata['name'].'&u_c_level='.$data['parentid']);
 			}
 		}
-		
+
 	}
-	
+
 	// ------------------------------------------------------------------------
 	
 	/**
@@ -452,7 +462,7 @@ class Category_content extends Admin_Controller
 			}
 			echo implode(',', $response);
 		}
-		else if($action == 'del')
+		elseif ($action == 'del')
 		{
 			$attach = $this->db->select('aid, name, folder, type')
 							   ->where('aid', $this->input->get('id', TRUE))
@@ -467,7 +477,10 @@ class Category_content extends Admin_Controller
 											 $attach->type);		
 				$this->db->where('aid', $attach->aid)->delete($this->db->dbprefix('attachments'));
 				echo 'ok';
-			}
+
+			} else {
+                echo 'ok';
+            }
 		}
 	}
 
