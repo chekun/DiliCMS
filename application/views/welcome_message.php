@@ -86,6 +86,10 @@
 
 		<p>QQ讨论群</p>
 		<code>185074106</code>
+        <p>扫描二维码进入DiliCMS讨论群</p>
+        <code>
+            <img src="install/public/static/images/dilicms-qun-qrcode.png" width="120">
+        </code>
 
 		<p>如果您是第一次使用DiliCMS或者有任何疑问, 请到<a target="_blank" href="http://codeigniter.org.cn/forums/forum-dilicms-1.html">DiliCMS讨论区</a>或QQ群进行讨论资讯.</p>
 	</div>
