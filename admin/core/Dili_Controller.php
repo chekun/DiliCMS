@@ -48,10 +48,34 @@ abstract class Admin_Controller extends CI_Controller
 		$this->load->library('session');
 		$this->settings->load('backend');
 		$this->load->switch_theme(setting('backend_theme'));
+        $this->_check_http_auth();
 		$this->_check_login();
 		$this->load->library('acl');
 		$this->load->library('plugin_manager');
 	}
+
+    // ------------------------------------------------------------------------
+
+    /**
+     * 检查http auth
+     *
+     * @access  protected
+     * @return  void
+     */
+    protected function _check_http_auth()
+    {
+        if (setting('backend_http_auth_on'))
+        {
+            $user = $this->input->server('PHP_AUTH_USER');
+            $passwword = $this->input->server('PHP_AUTH_PW');
+            if (! $user or ! $passwword or $user != setting('backend_http_auth_user') or $passwword != setting('backend_http_auth_password')) {
+                header('WWW-Authenticate: Basic realm="Welcome to this Private DiliCMS Realm!"');
+                header('HTTP/1.0 401 Unauthorized');
+                echo '您没有权限访问这里.';
+                exit;
+            }
+        }
+    }
 		
 	// ------------------------------------------------------------------------
 

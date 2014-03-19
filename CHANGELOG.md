@@ -5,13 +5,35 @@
 > TBD Time 更新内容
 
 - 分类模型新增【自动更新缓存选项】
+
+  ```
   ALTER TABLE `dili_cate_models` ADD `auto_update` TINYINT(1)  UNSIGNED  NULL  DEFAULT '0'  AFTER `built_in`;
+  ```
+
 - 站点设置增加预设缩略图配置
+
+  ```
   ALTER TABLE `dili_site_settings` ADD `thumbs_preferences` VARCHAR(500)  NULL  DEFAULT '[]'  AFTER `attachment_maxupload`;
+  ```
+
 - 内容模型和分类模型增加缩略图配置
+
+  ```
   ALTER TABLE `dili_models` ADD `thumb_preferences` TEXT  NULL  AFTER `built_in`;
   ALTER TABLE `dili_cate_models` ADD `thumb_preferences` TEXT  NULL  AFTER `auto_update`;
+  ```
 
+- 新增缩略图功能(该版本此功能依赖[php-imagick](http://www.php.net/manual/zh/book.imagick.php)扩展)
+
+- 增加 HTTP BASIC AUTH 认证设置
+
+  ```
+  ALTER TABLE `dili_backend_settings` ADD `backend_http_auth_on`  TINYINT(1)  NULL  DEFAULT 0;
+  ALTER TABLE `dili_backend_settings` ADD `backend_http_auth_user` VARCHAR(20)  NULL  DEFAULT NULL;
+  ALTER TABLE `dili_backend_settings` ADD `backend_http_auth_password` VARCHAR(20)  NULL  DEFAULT NULL;
+  ```
+
+- 增加登录throttle, 密码输入三次后将会被冻结2小时
 
 
 ## 版本号 2.2.0
