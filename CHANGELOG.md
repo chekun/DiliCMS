@@ -2,38 +2,17 @@
 
 ## 版本号 2.3.0
 
-> TBD Time 更新内容
+> 2014年3月20日 更新内容
 
 - 分类模型新增【自动更新缓存选项】
 
-  ```
-  ALTER TABLE `dili_cate_models` ADD `auto_update` TINYINT(1)  UNSIGNED  NULL  DEFAULT '0'  AFTER `built_in`;
-  ```
-
 - 站点设置增加预设缩略图配置
-
-  ```
-  ALTER TABLE `dili_site_settings` ADD `thumbs_preferences` VARCHAR(500)  NULL  DEFAULT '[]'  AFTER `attachment_maxupload`;
-  ```
-
 - 内容模型和分类模型增加缩略图配置
-
-  ```
-  ALTER TABLE `dili_models` ADD `thumb_preferences` TEXT  NULL  AFTER `built_in`;
-  ALTER TABLE `dili_cate_models` ADD `thumb_preferences` TEXT  NULL  AFTER `auto_update`;
-  ```
-
 - 新增缩略图功能(该版本此功能依赖[php-imagick](http://www.php.net/manual/zh/book.imagick.php)扩展)
-
 - 增加 HTTP BASIC AUTH 认证设置
-
-  ```
-  ALTER TABLE `dili_backend_settings` ADD `backend_http_auth_on`  TINYINT(1)  NULL  DEFAULT 0;
-  ALTER TABLE `dili_backend_settings` ADD `backend_http_auth_user` VARCHAR(20)  NULL  DEFAULT NULL;
-  ALTER TABLE `dili_backend_settings` ADD `backend_http_auth_password` VARCHAR(20)  NULL  DEFAULT NULL;
-  ```
-
-- 增加登录throttle, 密码输入三次后将会被冻结2小时
+- 增加登录throttle, 密码输入四次后将会被冻结2小时
+- 欢迎页面加入讨论群二维码
+-
 
 
 ## 版本号 2.2.0
@@ -42,14 +21,14 @@
 
 ## 版本号 2.2.0-rc.2
 
-> 2013年1月4日  更新内容
+> 2014年1月4日  更新内容
 
 - 修复分类管理没有兼容新插件结构的错误
 - 修复分类path错乱，以及其引起的级别限制无效和删除不全的错误
 
 ## 版本号 2.2.0-rc.1
 
-> 2013年12月29日  更新内容
+> 2014年12月29日  更新内容
 
 - 1.全新的插件系统,每个插件都已HMVC组织实现
 - 2.二级菜单[插件管理]改名为[扩展管理]

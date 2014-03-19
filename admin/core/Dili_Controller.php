@@ -124,7 +124,8 @@ abstract class Admin_Controller extends CI_Controller
      * 检查权限
      *
      * @access  protected
-     * @param   string
+     * @param string $action
+     * @param string $folder
      * @return  void
      */
 	protected function _check_permit($action = '', $folder = '')
@@ -141,10 +142,11 @@ abstract class Admin_Controller extends CI_Controller
      * 信息提示
      *
      * @access  public
-     * @param   string
-     * @param   string
-     * @param   bool
-     * @param   string
+     * @param $msg
+     * @param string $goto
+     * @param bool $auto
+     * @param string $fix
+     * @param int $pause
      * @return  void
      */
 	public function _message($msg, $goto = '', $auto = TRUE, $fix = '', $pause = 3000)

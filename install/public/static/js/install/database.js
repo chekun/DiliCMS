@@ -137,7 +137,8 @@ define(["jquery", 'jquery-ui', "text!templates/database.html"], function($, ui, 
                 'roles',
                 'sessions',
                 'site_settings',
-                'validations'
+                'validations',
+                'throttles'
             );
             var $this = this;
             var $logList = this.$console.find('ol');
