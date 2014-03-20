@@ -112,7 +112,7 @@
                     <th>缩略图尺寸预设：</th>
                     <td>
                         <ul id="thumbs-preferences" data-url="<?php echo site_url('setting/thumbs'); ?>"></ul>
-                        <ul id="thumbs-preferences-form" style="display: none" data-enabled="<?php echo ! extension_loaded('imagick') ? 'true' : 'false' ?>">
+                        <ul id="thumbs-preferences-form" style="display: none" data-enabled="<?php echo extension_loaded('imagick') ? 'true' : 'false' ?>">
                             <li style="padding:4px 0;">
                                 <input type="text" class="small" value="" id="new-size">
                                 <select id="new-rule">
