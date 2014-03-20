@@ -62,11 +62,14 @@
         <p align="center">
             <a target="_blank" href="http://www.dilicms.com/">DiliCMS</a> <code><?php echo DILICMS_VERSION; ?></code>
             Installer <br/>
-            ©<?php echo date('Y'); ?> <a target="_blank" href="http://www.dilicms.com/">DiliCMS</a> & <a target="_blank"
-                                                                                                         href="http://chekun.me">chekun</a>
+            ©<?php echo date('Y'); ?> code with heart by <a href="https://github.com/chekun">CheKun</a>
         </p>
     </footer>
 </div>
 <script src="static/js/require.js" data-main="static/js/main"></script>
+<script type="text/javascript">
+    var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+    document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F12fc28a048b3367aa46f20380b6678ff' type='text/javascript'%3E%3C/script%3E"));
+</script>
 </body>
 </html>
