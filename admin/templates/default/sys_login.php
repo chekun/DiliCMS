@@ -6,6 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title><?php echo setting('backend_title');  ?>----Powered By DiliCMS</title>
 <link rel="stylesheet" href="images/admin.css"  type="text/css" />
+<link rel="stylesheet" href="images/font-ux/css.css" />
 </head>
 <body id="login">
 	<div class="container">
@@ -37,7 +38,7 @@
 				</div>
 			</div>
 		</div>
-		<div id="footer">Power by <a href="http://www.dilicms.com/">DiliCMS</a> <b><?php echo DILICMS_VERSION; ?></b> Copyright &copy; 2011 - 2012
+		<div id="footer"><i class="iconfont">㑥</i><i class="iconfont">㑤</i> with <i class="iconfont">󰀄</i> By <a href="http://www.dilicms.com/">DiliCMS</a> Copyright &copy; <?php echo date('Y'); ?>
         </div>
 	</div>
 </body>

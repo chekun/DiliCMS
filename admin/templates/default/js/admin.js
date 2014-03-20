@@ -110,6 +110,22 @@ jQuery(function(){
             });
         });
     }
+
+    //缩略图设置
+    if ($('.thumb-control').length == 1) {
+
+        (function() {
+            var thumbControl = $('#thumb-preferences');
+            $('input[name="hasattach"]').change(function() {
+                if ($(this).val() == 1) {
+                    thumbControl.show();
+                } else {
+                    thumbControl.hide();
+                }
+            });
+        })();
+
+    }
 });
 
 //全选全不选

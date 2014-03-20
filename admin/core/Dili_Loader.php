@@ -56,5 +56,11 @@ class Dili_Loader extends CI_Loader
 
 }
 
+function CI()
+{
+    $CI = & get_instance();
+    return $CI;
+}
+
 /* End of file Dili_Loader.php */
 /* Location: ./admin/core/Dili_Loader.php */

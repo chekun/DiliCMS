@@ -97,6 +97,84 @@ class Setting extends Admin_Controller
 	}
 		
 	// ------------------------------------------------------------------------
+
+    /**
+     * 缩略图尺寸预设
+     *
+     * @access  public
+     * @return  void
+     */
+    public function thumbs()
+    {
+        $thumbs = json_decode($this->db->get('site_settings')->row()->thumbs_preferences);
+        if (is_null($thumbs)) {
+            $thumbs = array();
+        }
+        foreach ($thumbs  as $thumb) {
+            $thumb->id = $thumb->size;
+        }
+        echo json_encode($thumbs);
+    }
+
+    // ------------------------------------------------------------------------
+
+    /**
+     * 新增缩略图尺寸预设
+     *
+     * @access  public
+     * @return  void
+     */
+    public function _thumbs_put()
+    {
+        $thumb = json_decode(file_get_contents("php://input"), true);
+        $thumbs = json_decode($this->db->get('site_settings')->row()->thumbs_preferences);
+        if (is_null($thumbs)) {
+            $thumbs = array();
+        }
+        $is_existed = false;
+        foreach ($thumbs as $th) {
+            if ($th->size == $thumb['size'] and $th->rule == $thumb['rule']) {
+                $is_existed = true;
+            }
+        }
+        if (! $is_existed) {
+            $thumbs[] = array(
+                'size' => $thumb['size'],
+                'rule' => $thumb['rule'],
+            );
+            $this->db->set('thumbs_preferences', json_encode($thumbs))->update('site_settings');
+        }
+        update_cache('site');
+        echo 'ok';
+    }
+
+    // ------------------------------------------------------------------------
+
+    /**
+     * 缩略图尺寸预设删除
+     *
+     * @access  public
+     * @return  void
+     */
+    public function _thumbs_delete($id = '')
+    {
+        $thumbs = json_decode($this->db->get('site_settings')->row()->thumbs_preferences);
+        if (is_null($thumbs)) {
+            $thumbs = array();
+        }
+
+        foreach ($thumbs as $key => $thumb) {
+            if ($thumb->size == $id){
+                unset($thumbs[$key]);
+                break;
+            }
+        }
+        $this->db->set('thumbs_preferences', json_encode($thumbs))->update('site_settings');
+        update_cache('site');
+        echo 'ok';
+    }
+
+    // ------------------------------------------------------------------------
 	
 }
 

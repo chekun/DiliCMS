@@ -6,6 +6,7 @@
 <base href="<?php echo base_url().'templates/'.setting('backend_theme').'/'; ?>" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" href="images/admin.css" />
+<link rel="stylesheet" href="images/font-ux/css.css" />
 <script language="javascript" src="js/jquery.js"></script>
 <script language="javascript" src="js/admin.js"></script>
 </head>

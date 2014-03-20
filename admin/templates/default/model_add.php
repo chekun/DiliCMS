@@ -27,6 +27,36 @@
                         <label>是否使用上传控件，根据实际需求选择。</label>
                     </td>
 				</tr>
+                <tr id="thumb-preferences" class="thumb-control" style="display: none">
+                    <th> 缩略图设置：</th>
+                    <td>
+                        <table style="width:300px;text-align: center">
+                            <?php $preferences = json_decode(setting('thumbs_preferences')); ?>
+                            <?php if ($preferences and is_array($preferences) and count($preferences) > 1): ?>
+                                <tr>
+                                    <td>启用</td>
+                                    <td>尺寸</td>
+                                    <td>默认</td>
+                                </tr>
+                                <?php foreach ($preferences as $pref): ?>
+                                    <tr>
+                                        <td>
+                                            <input type="checkbox" name="thumbnail[<?php echo $pref->size; ?>]" value="1">
+                                        </td>
+                                        <td><?php echo $pref->size; ?></td>
+                                        <td><input type="radio" value="<?php echo $pref->size; ?>" name="thumb_default"></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <tr>
+                                    <td colspan="3">
+                                        还没有缩略图预设设置，<a href="<?php echo site_url('setting/site?tab=site_attachment'); ?>">立即去设置</a>
+                                    </td>
+                                </tr>
+                            <?php endif; ?>
+                        </table>
+                    </td>
+                </tr>
 				<tr>
 					<th></th>
 					<td>

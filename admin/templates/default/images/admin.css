@@ -298,7 +298,7 @@ body#login{background-position:0 36px;}
 	.login_box,.login_title,.login_cont input.normal,.login_cont input.submit,.login_cont a.pwd{background:#fff url(loginbox_bg.gif) no-repeat}
 	.login_box{position:absolute;top: 50%;left:50%;width:334px;height:220px;margin: -132px 0 0 -167px;padding-bottom:30px;background-position:0 -15px;_background:none;}
 	.login_title{height:37px;padding-left:35px;color:#fff;text-align:left;font:bold 14px/37px Arial, Helvetica, sans-serif;}
-	.login_cont{height:152px;padding-top:30px;border:1px solid #b8b7b7;background:#fff}
+	.login_cont{height:180px;padding-top:30px;border:1px solid #b8b7b7;background:#fff}
 		.login_cont input.normal{width:175px;height:22px;padding:0 3px;border:1px solid #ccc;background-position:0 -66px;}
 		.login_cont .form_table th{font-size:14px; background:none}
 		.login_cont input.submit{width:82px;height:29px;margin:10px 14px 0 0;background-position:0 -37px;}
