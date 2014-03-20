@@ -30,8 +30,10 @@
         <?php endif; ?>
     </ul>
 
-    <script language="javascript">
+    <script>
         var base_url = '<?php echo base_url(); ?>' ,backend_url = '<?php echo backend_url().$this->uri->segment(1); ?>/',attachment_url = '<?php echo $this->platform->file_url(); ?>';
+        var thumbDefaultSize = '<?php echo $thumb_default_size; ?>';
+
     </script>
     <link rel="stylesheet" href="js/contextMenu/jquery.contextMenu.css" />
     <script src="js/contextMenu/jquery.contextMenu.js"></script>

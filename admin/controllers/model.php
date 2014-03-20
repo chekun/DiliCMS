@@ -46,6 +46,7 @@ class Model extends Admin_Controller
 		parent::__construct();
 		$this->_check_permit();
 		$this->load->model('model_mdl');
+        $this->load->helper('thumb');
 	}
 	
 	/**
@@ -94,6 +95,8 @@ class Model extends Admin_Controller
 			$data['description'] = $this->input->post('description', TRUE);
 			$data['perpage'] = $this->input->post('perpage', TRUE);
 			$data['hasattach'] = $this->input->post('hasattach', TRUE);
+            //处理缩略图设置
+            create_thumb_preferences($data);
 			//新增内容模型
 			$this->model_mdl->add_new_model($data);
 			//更新缓存
@@ -172,6 +175,8 @@ class Model extends Admin_Controller
 			$data['description'] = $this->input->post('description', TRUE);
 			$data['perpage'] = $this->input->post('perpage', TRUE);
 			$data['hasattach'] = $this->input->post('hasattach', TRUE);
+            //处理缩略图设置
+            create_thumb_preferences($data);
 			$this->model_mdl->edit_model($target_model, $data);
 			update_cache('model', $data['name']);
 			update_cache('menu');
@@ -180,6 +185,7 @@ class Model extends Admin_Controller
 		else
 		{
 			$data['model'] = $target_model;
+            $data['model']->thumb_preferences = json_decode($target_model->thumb_preferences);
 			$data['bread'] = make_bread(Array(
 				'模型管理' => '',
 				'内容模型管理' => site_url('model/view'),

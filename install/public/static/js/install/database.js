@@ -74,7 +74,7 @@ define(["jquery", 'jquery-ui', "text!templates/database.html"], function($, ui, 
         }
 
         Database.prototype.isPassed = function() {
-            return this.$console.find('span.label-info').length == 17;
+            return this.$console.find('span.label-info').length == 18;
         }
 
         Database.prototype.checkConnection = function() {
@@ -137,7 +137,8 @@ define(["jquery", 'jquery-ui', "text!templates/database.html"], function($, ui, 
                 'roles',
                 'sessions',
                 'site_settings',
-                'validations'
+                'validations',
+                'throttles'
             );
             var $this = this;
             var $logList = this.$console.find('ol');

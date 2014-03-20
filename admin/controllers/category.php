@@ -46,6 +46,7 @@ class Category extends Admin_Controller
 		parent::__construct();
 		$this->_check_permit();
 		$this->load->model('category_mdl');
+        $this->load->helper('thumb');
 	}
 	
 	// ------------------------------------------------------------------------
@@ -97,6 +98,9 @@ class Category extends Admin_Controller
 			$data['perpage'] = $this->input->post('perpage', TRUE);
 			$data['level'] = $this->input->post('level', TRUE);
 			$data['hasattach'] = $this->input->post('hasattach', TRUE);
+            $data['auto_update'] = $this->input->post('auto_update', TRUE);
+            //处理缩略图设置
+            create_thumb_preferences($data);
 			//新增分类模型
 			$this->category_mdl->add_new_category($data);
 			//更新缓存
@@ -178,6 +182,9 @@ class Category extends Admin_Controller
 			$data['perpage'] = $this->input->post('perpage', TRUE);
 			$data['level'] = $this->input->post('level', TRUE);
 			$data['hasattach'] = $this->input->post('hasattach', TRUE);
+            $data['auto_update'] = $this->input->post('auto_update', TRUE);
+            //处理缩略图设置
+            create_thumb_preferences($data);
 			$this->category_mdl->edit_category_model($target_model, $data);
 			update_cache('category', $data['name']);
 			update_cache('menu');
@@ -187,6 +194,7 @@ class Category extends Admin_Controller
 		else
 		{
 			$data['model'] = $target_model;
+            $data['model']->thumb_preferences = json_decode($target_model->thumb_preferences);
 			$data['bread'] = make_bread(Array(
 				'模型管理' => '',
 				'分类模型管理' => site_url('category/view'),
