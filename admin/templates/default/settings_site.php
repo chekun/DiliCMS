@@ -112,7 +112,7 @@
                     <th>缩略图尺寸预设：</th>
                     <td>
                         <ul id="thumbs-preferences" data-url="<?php echo site_url('setting/thumbs'); ?>"></ul>
-                        <ul id="thumbs-preferences-form">
+                        <ul id="thumbs-preferences-form" style="display: none" data-enabled="<?php echo ! extension_loaded('imagick') ? 'true' : 'false' ?>">
                             <li style="padding:4px 0;">
                                 <input type="text" class="small" value="" id="new-size">
                                 <select id="new-rule">
@@ -121,9 +121,10 @@
                                     <option value="fill">Fill策略</option>
                                     <option value="fitWidth">FitWidth策略</option>
                                 </select>
-                                <button class="submit" id="add-new-preference" type='button'><span>添加</span></button>
+                                <button class="submit"  id="add-new-preference" type='button'><span>添加</span></button>
                             </li>
                         </ul>
+                        <div class="red_box" style="display: none" id="thumb-warning"><img src="images/error.gif">对不起，必须启用<a href="http://www.php.net/manual/zh/book.imagick.php" target="_blank"><b>php-imagick</b></a>扩展方可使用本功能!</div>
                     </td>
                 </tr>
 				<tr>
@@ -261,6 +262,13 @@
             },
             initialize: function() {
                 this.$newSize = $('#new-size');
+                if (this.$el.data('enabled') == true) {
+                    this.$el.show();
+                    $('#thumb-warning').hide();
+                } else {
+                    this.$el.hide();
+                    $('#thumb-warning').show();
+                }
             },
             addNew: function() {
                 var newSize = this.$('#new-size').val();
