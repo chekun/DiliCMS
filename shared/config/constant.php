@@ -11,7 +11,7 @@
 
 	define('IN_DILICMS', TRUE);
 
-    define('DILICMS_VERSION', 'V2.3.0');
+    define('DILICMS_VERSION', 'V2.3.1');
     
     define('DILICMS_SHARE_PATH', BASEPATH . '../shared/');
     
