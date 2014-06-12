@@ -1,5 +1,7 @@
 ﻿# DiliCMS 
 
+## This Project is no longer maintained! 此项目已停止更新。
+
 欢迎使用DiliCMS,DiliCMS是无业务逻辑的，面向CodeIgniter开发者的自由灵活的系统，致力于为开发者提供最简单，灵活，实用的后台CMS系统。
 
 ## 安装方法
