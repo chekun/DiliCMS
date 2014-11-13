@@ -117,14 +117,6 @@ class Install extends CI_Controller
                         ));
                         return;
                     }
-                    $database_config = str_replace("get_instance()->platform->get_type()", "PLATFORM", $database_config);
-                    if (FALSE === file_put_contents(BASEPATH.'../install/config/database.php', $database_config)) {
-                        echo json_encode(array(
-                            'status' => 0,
-                            'messages' => array('额，没有权限将数据写入install/config/database.php文件!')
-                        ));
-                        return;
-                    }
                 }
 
                 echo json_encode(array(
