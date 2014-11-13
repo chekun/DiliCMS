@@ -1,6 +1,6 @@
 <?php if ( ! defined('IN_DILICMS')) exit('No direct script access allowed');
 
-class Install extends CI_Controller 
+class Install extends CI_Controller
 {
 
     public function __construct()
@@ -16,7 +16,7 @@ class Install extends CI_Controller
 
 	public function index()
 	{
-        
+
         date_default_timezone_set('PRC');
 		$this->load->view('install');
 	}
@@ -25,8 +25,8 @@ class Install extends CI_Controller
     {
         $data['is_config_ok'] = FALSE;
         @include BASEPATH.'../shared/config/platform.php';
-        if (isset($running_platform) AND 
-            is_array($running_platform) AND 
+        if (isset($running_platform) AND
+            is_array($running_platform) AND
             isset($running_platform['type']) AND
             isset($running_platform['storage']))
         {
@@ -63,7 +63,7 @@ class Install extends CI_Controller
 
     public function database()
     {
-        $step = $this->input->post('step', TRUE);   
+        $step = $this->input->post('step', TRUE);
         $platform = '普通平台';
         if (is_sae())
         {
@@ -100,13 +100,25 @@ class Install extends CI_Controller
                 {
                     $search_array = array('{HOSTNAME}', '{USERNAME}', '{PASSWORD}', '{DATABASE}', '{PREFIX}');
                     $replace_array = array($config['hostname'], $config['username'], $config['password'], $config['database'], $config['dbprefix']);
-                    $database_config = str_replace($search_array, $replace_array, @file_get_contents(BASEPATH.'../admin/config/database_template.php'));
-                    @file_put_contents(BASEPATH.'../admin/config/database.php', $database_config);
-                    @file_put_contents(BASEPATH.'../application/config/database.php', $database_config);
-                    $database_config = str_replace("get_instance()->platform->get_type()", "PLATFORM", $database_config);
-                    @file_put_contents(BASEPATH.'../install/config/database.php', $database_config);
+                    $database_config = str_replace($search_array, $replace_array, @file_get_contents(BASEPATH.'../shared/config/database.example.php'));
+                    //创建database.php
+                    $database_config_file = BASEPATH.'../shared/config/database.php';
+                    if (! file_exists($database_config_file) and ! touch($database_config_file)) {
+                        echo json_encode(array(
+                            'status' => 0,
+                            'messages' => array('额，没有权限创建shared/config/database.php文件!')
+                        ));
+                        return;
+                    }
+                    if (FALSE === file_put_contents($database_config_file, $database_config)) {
+                        echo json_encode(array(
+                            'status' => 0,
+                            'messages' => array('额，没有权限将数据写入shared/config/database.php文件!')
+                        ));
+                        return;
+                    }
                 }
-                
+
                 echo json_encode(array(
                     'status' => 1,
                     'messages' => array('所在平台: '.$platform, '数据库连接: Success')

@@ -37,7 +37,7 @@
 |
 */
 
-$autoload['packages'] = array();
+$autoload['packages'] = array(DILICMS_SHARE_PATH);
 
 
 /*
