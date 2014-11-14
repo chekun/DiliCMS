@@ -32,15 +32,35 @@
  * 读取配置数据
  *
  * @access	public
- * @param	string	
+ * @param	string
  * @return	mixed
  */
 if ( ! function_exists('setting'))
 {
-	function setting($key)
+	function setting($key, $default = null)
 	{
 		$ci = &get_instance();
-		return 	$ci->settings->item($key);
+
+    	$sequences = explode('.', $key);
+
+		$key = array_shift($sequences);
+
+    	$tmp_result = $ci->settings->item($key);
+
+	    for ($i = 0, $total = count($sequences); $i < $total; )
+		{
+
+	        if (isset($tmp_result[$sequences[$i]]))
+			{
+	            $tmp_result = $tmp_result[$sequences[$i]];
+	            $i ++;
+	        } else {
+	            return $default;
+	        }
+
+	    }
+
+    	return $tmp_result;
 	}
 }
 
@@ -83,8 +103,8 @@ if ( ! function_exists('array_to_cache'))
 {
 	function array_to_cache($name, $array)
 	{
-		return '<?php if ( ! defined(\'IN_DILICMS\')) exit(\'No direct script access allowed\');' . PHP_EOL . 
-			   '$' . $name . '=' . var_export($array, TRUE) . ';'; 
+		return '<?php if ( ! defined(\'IN_DILICMS\')) exit(\'No direct script access allowed\');' . PHP_EOL .
+			   '$' . $name . '=' . var_export($array, TRUE) . ';';
 	}
 }
 
@@ -119,7 +139,7 @@ if ( ! function_exists('plugin_url'))
 	function plugin_url($plugin, $controller, $method = 'index', $qs = array())
 	{
 	    $ci = &get_instance();
-		if (false and $ci->config->item('index_page') === '') 
+		if (false and $ci->config->item('index_page') === '')
 	    {
 	        return backend_url("plugin/$name/$controller/$method", http_build_query($qs));
 	    }
