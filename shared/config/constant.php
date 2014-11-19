@@ -9,12 +9,12 @@
 |
 */
 
-	define('IN_DILICMS', TRUE);
+    define('IN_DILICMS', TRUE);
 
-    define('DILICMS_VERSION', 'V2.3.1');
-    
+    define('DILICMS_VERSION', 'V2.4.0');
+
     define('DILICMS_SHARE_PATH', BASEPATH . '../shared/');
-    
+
     define('DILICMS_EXTENSION_PATH', BASEPATH . '../extensions/');
 
 /* End of file constant.php */
