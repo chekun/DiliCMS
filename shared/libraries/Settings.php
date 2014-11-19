@@ -64,7 +64,7 @@ class Settings
      * @access  private
      **/
 	private $_setting_paths = array();
-	
+
 	/**
      * 构造函数
      *
@@ -77,7 +77,7 @@ class Settings
 		$this->_setting_paths = array(DILICMS_SHARE_PATH . 'settings/');
 		$this->load('site', FALSE, TRUE);
 	}
-	
+
 	// ------------------------------------------------------------------------
 
     /**
